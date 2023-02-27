@@ -1,0 +1,84 @@
+[tool.poetry]
+name = "quakesaver-client"
+version = "0.1.0"
+description = ""
+authors = ["Maximilian Dolling <maximilian.dolling@quakesaver.net>"]
+license = "BSD-3-Clause"
+readme = "README.md"
+packages = [{include = "quakesaver_client"}]
+
+[tool.poetry.dependencies]
+python = ">=3.9, <3.12"
+pydantic = "~=1.10.5"
+requests = "~=2.28.2"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.2.0"
+pytest-asyncio = "^0.20.3"
+pytest-cov = "^4.0.0"
+recommonmark = "^0.7.1"
+Sphinx = "^4.3.1"
+sphinx-material = "^0.0.35"
+sphinx-rtd-theme = "^1.0.0"
+sphinxcontrib-mermaid = "^0.7.1"
+pre-commit = "^2.21.0"
+
+[tool.pytest.ini_options]
+log_cli = "True"
+log_cli_level = "WARNING"
+asyncio_mode= "auto"
+
+[tool.black]
+line-length = 88
+include = '\.pyi?$'
+
+[tool.vulture]
+make_whitelist = true
+min_confidence = 70
+paths = ["quakesaver_client"]
+sort_by_size = true
+verbose = false
+
+[tool.ruff]
+select = [
+    "B",  # flake8-bugbear
+    "C",  # flake8-comprehensions
+    "E",  # pycodestyle errors
+    "F",  # pyflakes
+    "I",  # isort
+    "W",  # pycodestyle warnings
+]
+
+# Exclude a variety of commonly ignored directories.
+exclude = [
+    ".bzr",
+    ".direnv",
+    ".eggs",
+    ".git",
+    ".hg",
+    ".mypy_cache",
+    ".nox",
+    ".pants.d",
+    ".pytype",
+    ".ruff_cache",
+    ".svn",
+    ".tox",
+    ".venv",
+    "__pypackages__",
+    "_build",
+    "buck-out",
+    "build",
+    "dist",
+    "node_modules",
+    "venv",
+]
+per-file-ignores = {}
+line-length = 88
+target-version = "py310"
+
+[tool.ruff.mccabe]
+max-complexity = 10
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

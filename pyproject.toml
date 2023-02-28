@@ -43,34 +43,27 @@ verbose = false
 select = [
     "B",  # flake8-bugbear
     "C",  # flake8-comprehensions
+    "D",  # pydocstyle
     "E",  # pycodestyle errors
     "F",  # pyflakes
     "I",  # isort
+    "N",  # naming
     "W",  # pycodestyle warnings
+]
+ignore = [
+    "D203", # no-blank-line-before-class
+    "D213", # multi-line-summary-second-line
 ]
 
 # Exclude a variety of commonly ignored directories.
 exclude = [
-    ".bzr",
-    ".direnv",
     ".eggs",
     ".git",
-    ".hg",
-    ".mypy_cache",
-    ".nox",
-    ".pants.d",
     ".pytype",
     ".ruff_cache",
-    ".svn",
-    ".tox",
-    ".venv",
     "__pypackages__",
-    "_build",
-    "buck-out",
     "build",
     "dist",
-    "node_modules",
-    "venv",
 ]
 per-file-ignores = {}
 line-length = 88
@@ -78,6 +71,9 @@ target-version = "py310"
 
 [tool.ruff.mccabe]
 max-complexity = 10
+
+[tool.ruff.pydocstyle]
+convention = "google"
 
 [build-system]
 requires = ["poetry-core"]

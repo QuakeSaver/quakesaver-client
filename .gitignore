@@ -130,3 +130,6 @@ dmypy.json
 
 # ide stuff
 .idea/
+
+# quick testing stuff
+foo.py

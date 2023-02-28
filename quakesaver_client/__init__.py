@@ -7,15 +7,13 @@ from typing import Callable
 
 import requests
 from pydantic import ValidationError
-from requests import Response
 
 from quakesaver_client.errors import (
     CorruptedDataError,
-    UnknownError,
-    WrongAuthenticationError,
 )
 from quakesaver_client.models.sensor import Sensor
 from quakesaver_client.models.token import Token
+from quakesaver_client.util import handle_response
 
 
 class QSClient:
@@ -53,19 +51,6 @@ class QSClient:
         self.fdsn_base_url = f"https://fdsnws.{base_domain}/fdsnws"
 
     @staticmethod
-    def _handle_response(response: Response) -> dict:
-        if response.status_code == 200:
-            try:
-                return response.json()
-            except Exception as e:
-                raise CorruptedDataError() from e
-        if response.status_code == 401:
-            raise WrongAuthenticationError()
-        if response.status_code == 422:
-            raise CorruptedDataError()
-        raise UnknownError()
-
-    @staticmethod
     def _needs_token(function: Callable):
         @wraps(function)
         def request_token_if_needed(self: QSClient, *args, **kwargs):
@@ -76,7 +61,7 @@ class QSClient:
                     data=f"username={self.email}&password={self.password}",
                     headers={"Content-Type": "application/x-www-form-urlencoded"},
                 )
-                response_data = self._handle_response(response)
+                response_data = handle_response(response)
                 try:
                     token = Token(**response_data)
                 except ValidationError as e:
@@ -103,7 +88,7 @@ class QSClient:
             url=f"{self.api_base_url}/user/me/sensors",
             headers=self._get_authorization_headers(),
         )
-        response_data = self._handle_response(response)
+        response_data = handle_response(response)
         return list(response_data.keys())
 
     def get_sensor(self, sensor_uid) -> Sensor:
@@ -121,9 +106,13 @@ class QSClient:
             url=f"{self.api_base_url}/sensors/{sensor_uid}",
             headers=self._get_authorization_headers(),
         )
-        response_data = self._handle_response(response)
+        response_data = handle_response(response)
         try:
-            sensor = Sensor(**response_data)
+            sensor = Sensor(
+                api_base_url=self.api_base_url,
+                headers=self._get_authorization_headers(),
+                **response_data,
+            )
         except ValidationError as e:
             raise CorruptedDataError from e
         return sensor

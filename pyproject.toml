@@ -53,6 +53,7 @@ select = [
 ignore = [
     "D203", # no-blank-line-before-class
     "D213", # multi-line-summary-second-line
+    "N805", # First argument of a method should be named `self`
 ]
 
 # Exclude a variety of commonly ignored directories.

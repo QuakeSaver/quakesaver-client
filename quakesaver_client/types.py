@@ -1,6 +1,7 @@
 """Module containing enums for various purposes."""
 
 from enum import IntFlag
+from typing import Literal
 
 
 class PermissionLevel(IntFlag):
@@ -14,3 +15,6 @@ class PermissionLevel(IntFlag):
     READ_OWN = 5
     EDIT_OWN = 6
     ALL = 7
+
+
+StationDetailLevel = Literal["network", "station", "channel", "response"]

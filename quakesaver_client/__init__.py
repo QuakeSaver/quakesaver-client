@@ -19,14 +19,14 @@ from quakesaver_client.util import handle_response
 class QSClient:
     """A class representing a client to the backend."""
 
-    base_domain: str
+    _base_domain: str
 
-    email: str
-    password: str
-    token: Token | None
+    _email: str
+    _password: str
+    _token: Token | None
 
-    api_base_url: str
-    fdsn_base_url: str
+    _api_base_url: str
+    _fdsn_base_url: str
 
     def __init__(
         self,
@@ -37,28 +37,28 @@ class QSClient:
         """Create an instance of the class.
 
         Args:
-            email: The email address used to authenticate at the backend.
-            password: The password used to authenticate at the backend.
+            email: The _email address used to authenticate at the backend.
+            password: The _password used to authenticate at the backend.
             base_domain: The base domain for the remote connection.
         """
-        self.email = email
-        self.password = password
-        self.token = None
+        self._email = email
+        self._password = password
+        self._token = None
 
-        self.base_domain = base_domain
+        self._base_domain = base_domain
 
-        self.api_base_url = f"https://api.{base_domain}/api/v1"
-        self.fdsn_base_url = f"https://fdsnws.{base_domain}/fdsnws"
+        self._api_base_url = f"https://api.{base_domain}/api/v1"
+        self._fdsn_base_url = f"https://fdsnws.{base_domain}/fdsnws"
 
     @staticmethod
     def _needs_token(function: Callable):
         @wraps(function)
         def request_token_if_needed(self: QSClient, *args, **kwargs):
-            if not self.token:
-                logging.debug("QSClient requesting user token.")
+            if not self._token:
+                logging.debug("QSClient requesting user _token.")
                 response = requests.post(
-                    url=f"{self.api_base_url}/user/get_token",
-                    data=f"username={self.email}&password={self.password}",
+                    url=f"{self._api_base_url}/user/get_token",
+                    data=f"username={self._email}&password={self._password}",
                     headers={"Content-Type": "application/x-www-form-urlencoded"},
                 )
                 response_data = handle_response(response)
@@ -66,7 +66,7 @@ class QSClient:
                     token = Token(**response_data)
                 except ValidationError as e:
                     raise CorruptedDataError() from e
-                self.token = token
+                self._token = token
 
             return function(self, *args, **kwargs)
 
@@ -74,7 +74,7 @@ class QSClient:
 
     @_needs_token
     def _get_authorization_headers(self) -> dict:
-        return {"Authorization": f"{self.token.token_type} {self.token.access_token}"}
+        return {"Authorization": f"{self._token.token_type} {self._token.access_token}"}
 
     def get_sensor_ids(self) -> list[str]:
         """Fetch all sensor UIDs the user has access to.
@@ -85,7 +85,7 @@ class QSClient:
         """
         logging.debug("QSClient requesting sensor ids.")
         response = requests.get(
-            url=f"{self.api_base_url}/user/me/sensors",
+            url=f"{self._api_base_url}/user/me/sensors",
             headers=self._get_authorization_headers(),
         )
         response_data = handle_response(response)
@@ -103,13 +103,14 @@ class QSClient:
         """
         logging.debug("QSClient requesting sensor %s.", sensor_uid)
         response = requests.get(
-            url=f"{self.api_base_url}/sensors/{sensor_uid}",
+            url=f"{self._api_base_url}/sensors/{sensor_uid}",
             headers=self._get_authorization_headers(),
         )
         response_data = handle_response(response)
         try:
             sensor = Sensor(
-                api_base_url=self.api_base_url,
+                api_base_url=self._api_base_url,
+                fdsn_base_url=self._fdsn_base_url,
                 headers=self._get_authorization_headers(),
                 **response_data,
             )

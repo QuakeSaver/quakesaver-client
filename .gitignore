@@ -133,3 +133,7 @@ dmypy.json
 
 # quick testing stuff
 foo.py
+
+# demo data
+*.xml
+*.mseed

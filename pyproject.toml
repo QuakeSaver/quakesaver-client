@@ -43,14 +43,15 @@ ignore_names=["cls"]
 
 [tool.ruff]
 select = [
-    "B",  # flake8-bugbear
-    "C",  # flake8-comprehensions
-    "D",  # pydocstyle
-    "E",  # pycodestyle errors
-    "F",  # pyflakes
-    "I",  # isort
-    "N",  # naming
-    "W",  # pycodestyle warnings
+    "ANN", # flake8-bugbear
+    "B",   # flake8-bugbear
+    "C",   # flake8-comprehensions
+    "D",   # pydocstyle
+    "E",   # pycodestyle errors
+    "F",   # pyflakes
+    "I",   # isort
+    "N",   # naming
+    "W",   # pycodestyle warnings
 ]
 ignore = [
     "D203", # no-blank-line-before-class

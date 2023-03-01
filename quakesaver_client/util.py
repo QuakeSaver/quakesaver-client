@@ -1,5 +1,5 @@
 """Shared utility functions."""
-from requests import Response
+from requests import HTTPError, Response
 
 from quakesaver_client.errors import (
     CorruptedDataError,
@@ -17,13 +17,16 @@ def handle_response(response: Response) -> dict:
     Returns:
         dict: The loaded JSON response.
     """
-    if response.status_code == 200:
-        try:
-            return response.json()
-        except Exception as e:
+    try:
+        response.raise_for_status()
+    except HTTPError as e:
+        if e.response.status_code == 401:
+            raise WrongAuthenticationError() from e
+        if e.response.status_code == 422:
             raise CorruptedDataError() from e
-    if response.status_code == 401:
-        raise WrongAuthenticationError()
-    if response.status_code == 422:
-        raise CorruptedDataError()
-    raise UnknownError()
+        raise UnknownError() from e
+
+    try:
+        return response.json()
+    except Exception as e:
+        raise CorruptedDataError() from e

@@ -5,6 +5,7 @@ from datetime import datetime, timedelta
 from typing import Literal, Optional
 
 from pydantic import BaseModel, constr, root_validator
+from pydantic.main import ModelMetaclass
 
 InfluxAggregator = Literal[
     "median",
@@ -29,7 +30,7 @@ class MeasurementQuery(BaseModel):
     aggregator: Optional[InfluxAggregator] = None
 
     @root_validator(pre=True)
-    def validate_interval_aggregator(cls, values: dict):
+    def validate_interval_aggregator(cls: ModelMetaclass, values: dict) -> dict:
         """Assure that aggregators and intervals are only used together."""
         if "aggregator" in values and "interval" not in values:
             raise ValueError("aggregators need an interval")

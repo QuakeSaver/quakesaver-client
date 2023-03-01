@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import logging
 from functools import wraps
-from typing import Callable
+from typing import Any, Callable, TypeVar
 
 import requests
 from pydantic import ValidationError
@@ -14,6 +14,8 @@ from quakesaver_client.errors import (
 from quakesaver_client.models.sensor import Sensor
 from quakesaver_client.models.token import Token
 from quakesaver_client.util import handle_response
+
+DecoratedFunction = TypeVar("DecoratedFunction", bound=Callable[..., Any])
 
 
 class QSClient:
@@ -29,11 +31,11 @@ class QSClient:
     _fdsn_base_url: str
 
     def __init__(
-        self,
+        self: QSClient,
         email: str,
         password: str,
         base_domain: str | None = "network.quakesaver.net",
-    ):
+    ) -> None:
         """Create an instance of the class.
 
         Args:
@@ -51,9 +53,11 @@ class QSClient:
         self._fdsn_base_url = f"https://fdsnws.{base_domain}/fdsnws"
 
     @staticmethod
-    def _needs_token(function: Callable):
+    def _needs_token(function: DecoratedFunction) -> DecoratedFunction:
         @wraps(function)
-        def request_token_if_needed(self: QSClient, *args, **kwargs):
+        def request_token_if_needed(
+            self: QSClient, *args: list, **kwargs: dict
+        ) -> DecoratedFunction:
             if not self._token:
                 logging.debug("QSClient requesting user _token.")
                 response = requests.post(
@@ -73,10 +77,10 @@ class QSClient:
         return request_token_if_needed
 
     @_needs_token
-    def _get_authorization_headers(self) -> dict:
+    def _get_authorization_headers(self: QSClient) -> dict:
         return {"Authorization": f"{self._token.token_type} {self._token.access_token}"}
 
-    def get_sensor_ids(self) -> list[str]:
+    def get_sensor_ids(self: QSClient) -> list[str]:
         """Fetch all sensor UIDs the user has access to.
 
         Returns:
@@ -91,7 +95,7 @@ class QSClient:
         response_data = handle_response(response)
         return list(response_data.keys())
 
-    def get_sensor(self, sensor_uid) -> Sensor:
+    def get_sensor(self: QSClient, sensor_uid: str) -> Sensor:
         """Fetch sensor data.
 
         Args:

@@ -32,18 +32,20 @@ class Sensor(BaseModel):
     warnings: SensorWarnings
     max_data_product_count: int
 
-    def __init__(self, api_base_url: str, fdsn_base_url: str, headers: dict, **data):
+    def __init__(
+        self: Sensor, api_base_url: str, fdsn_base_url: str, headers: dict, **data: dict
+    ) -> None:
         """Create an instance of the class."""
         super().__init__(**data)
         self._headers = headers
         self._api_base_url = api_base_url
         self._fdsn_base_url = fdsn_base_url
 
-    def get_data_product(self):
+    def get_data_product(self: Sensor) -> None:
         """Request data products of the sensor."""
         pass
 
-    def get_measurement(self, query: MeasurementQuery) -> MeasurementResult:
+    def get_measurement(self: Sensor, query: MeasurementQuery) -> MeasurementResult:
         """Request measurements of the sensor."""
         logging.debug("QSClient requesting measurement for sensor %s.", self.uid)
         response = requests.post(
@@ -59,7 +61,7 @@ class Sensor(BaseModel):
         return result
 
     def get_waveform_data(
-        self,
+        self: Sensor,
         starttime: datetime,
         endtime: datetime,
         location_to_store: Path = None,
@@ -87,7 +89,7 @@ class Sensor(BaseModel):
         return storage_path
 
     def get_stationxml(
-        self,
+        self: Sensor,
         starttime: datetime,
         endtime: datetime,
         minlatitude: float = -90,

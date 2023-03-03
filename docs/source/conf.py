@@ -16,7 +16,7 @@ pyproject_toml = toml.load("../../pyproject.toml")
 
 project = pyproject_toml["tool"]["poetry"]["packages"][0]["include"]
 author = pyproject_toml["tool"]["poetry"]["authors"][0]
-copyright = f"2020-now, {author}"
+copyright = f"2023-now, {author}"
 
 # The full version, including alpha/beta/rc tags
 release = pyproject_toml["tool"]["poetry"]["version"]
@@ -33,6 +33,6 @@ exclude_patterns = []
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
-html_theme = "alabaster"
+html_theme = "sphinx_rtd_theme"
 html_static_path = ["_static"]
 html_logo = "_static/images/qs_logo.svg"

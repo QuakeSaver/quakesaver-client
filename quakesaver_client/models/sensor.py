@@ -13,7 +13,7 @@ from quakesaver_client.models.measurement import MeasurementQuery, MeasurementRe
 from quakesaver_client.models.permission import Permission
 from quakesaver_client.models.warnings import SensorWarnings
 from quakesaver_client.types import StationDetailLevel
-from quakesaver_client.util import handle_response
+from quakesaver_client.util import assure_output_path, handle_response
 
 
 class Sensor(BaseModel):
@@ -64,13 +64,12 @@ class Sensor(BaseModel):
         self: Sensor,
         starttime: datetime,
         endtime: datetime,
-        location_to_store: Path = None,
+        location_to_store: Path | str = None,
     ) -> Path | None:
         """Request FDSN waveform dat of the sensor."""
         logging.debug("QSClient requesting waveform data for sensor %s.", self.uid)
 
-        if not location_to_store:
-            location_to_store = Path(".")
+        location_to_store = assure_output_path(location_to_store)
 
         params = {"starttime": starttime, "endtime": endtime, "sensor_uids": self.uid}
         response = requests.get(
@@ -97,13 +96,12 @@ class Sensor(BaseModel):
         minlongitude: float = -180,
         maxlongitude: float = 180,
         level: StationDetailLevel = "station",
-        location_to_store: Path = None,
+        location_to_store: Path | str = None,
     ) -> Path:
         """Request FDSN StationXML metadata of the sensor."""
         logging.debug("QSClient requesting stationxml for sensor %s.", self.uid)
 
-        if not location_to_store:
-            location_to_store = Path(".")
+        location_to_store = assure_output_path(location_to_store)
 
         params = {
             "starttime": starttime,

@@ -11,6 +11,7 @@ Welcome to quakesaver-client's documentation!
    :caption: Contents:
 
    pages/installation
+   pages/getting_started
 
 
 

@@ -1,4 +1,8 @@
 """Shared utility functions."""
+from __future__ import annotations
+
+from pathlib import Path
+
 from requests import HTTPError, Response
 
 from quakesaver_client.errors import (
@@ -30,3 +34,21 @@ def handle_response(response: Response) -> dict:
         return response.json()
     except Exception as e:
         raise CorruptedDataError() from e
+
+
+def assure_output_path(location_to_store: Path | str = None) -> Path:
+    """Assure an output path is set and created.
+
+    Args:
+        location_to_store: The output path.
+
+    Returns:
+        Path: An existent path to store data.
+    """
+    if not location_to_store:
+        location_to_store = Path(".")
+    else:
+        if isinstance(location_to_store, str):
+            location_to_store = Path(location_to_store)
+        location_to_store.mkdir(parents=True, exist_ok=True)
+    return location_to_store

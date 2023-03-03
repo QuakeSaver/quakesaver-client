@@ -32,5 +32,5 @@ test:
 
 docs: clean
 	poetry run sphinx-apidoc -o ./docs/source/modules $(PROJ_SLUG)
-	cd docs && poetry run make html
+	poetry dynamic-versioning && cd docs && poetry run make html
 	${BROWSER} './docs/build/html/index.html'

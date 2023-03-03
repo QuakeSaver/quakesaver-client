@@ -37,10 +37,10 @@ client = QSClient(email=EMAIL, password=PASSWORD)
 ########################################################################################
 sensor_ids = client.get_sensor_ids()
 pp(sensor_ids)
+
 ########################################################################################
 #                          Get sensor to work with                                     #
 ########################################################################################
-
 if len(sensor_ids) == 0:
     print("No sensors available")
     sys.exit()

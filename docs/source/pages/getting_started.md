@@ -14,6 +14,8 @@ client = QSClient(email=EMAIL, password=PASSWORD)
 ## Full example script
 
 ```python
+"""Example script for quakesaver_client usage."""
+
 import sys
 from datetime import datetime, timedelta, timezone
 from pprint import pp
@@ -59,7 +61,7 @@ query = MeasurementQuery(
     measurement="rms_amplitude",
     field="rms_amplitude",
     interval=timedelta(minutes=10),
-    aggregator="mean"
+    aggregator="mean",
 )
 result = sensor.get_measurement(query)
 print(result)
@@ -73,7 +75,7 @@ file_path = sensor.get_stationxml(
     starttime=start_time,
     endtime=end_time,
     level="response",
-    location_to_store=DATA_PATH
+    location_to_store=DATA_PATH,
 )
 with open(file_path, "r") as file:
     print(file.read())
@@ -84,9 +86,7 @@ with open(file_path, "r") as file:
 end_time = datetime.now(tz=timezone.utc)
 start_time = end_time - timedelta(hours=5)
 file_path = sensor.get_waveform_data(
-    starttime=start_time,
-    endtime=end_time,
-    location_to_store=DATA_PATH
+    starttime=start_time, endtime=end_time, location_to_store=DATA_PATH
 )
 stream: Stream = obspy.read(file_path)
 for trace in stream.traces:

@@ -84,7 +84,6 @@ class QSClient:
         """Fetch all sensor UIDs the user has access to.
 
         Returns:
-        -------
             list[str]: The list of sensor UIDs.
         """
         logging.debug("QSClient requesting sensor ids.")
@@ -102,7 +101,6 @@ class QSClient:
             sensor_uid: The UID to request data from.
 
         Returns:
-        -------
             Sensor: A sensor model to work with.
         """
         logging.debug("QSClient requesting sensor %s.", sensor_uid)

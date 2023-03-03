@@ -9,6 +9,8 @@ repos:
     hooks:
     -   id: check-added-large-files
     -   id: trailing-whitespace
+        args:
+            - --markdown-linebreak-ext=md
     -   id: end-of-file-fixer
     -   id: check-json
     -   id: check-toml
@@ -26,11 +28,14 @@ repos:
     rev: 'v0.0.252'
     hooks:
     -   id: ruff
-        args: [--fix, --exit-non-zero-on-fix]
+        args:
+        -   "--fix"
+        -   "--exit-non-zero-on-fix"
 -   repo: https://github.com/codespell-project/codespell
     rev: v2.1.0
     hooks:
     -   id: codespell
         name: codespell
-        args: ["--write-changes"]
+        args:
+        -   "--write-changes"
         exclude: \.(jinja2|js)$

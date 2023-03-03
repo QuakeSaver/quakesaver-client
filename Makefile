@@ -9,8 +9,8 @@ PROJ_SLUG = quakesaver_client
 clean:
 	rm -rf .pytest_cache
 	rm -rf build
-	rm -rf docs/_build
-	rm -rf docs/modules
+	rm -rf docs/build
+	rm -rf docs/source/modules
 	rm -rf dist
 	rm -rf quakesaver_client.egg-info
 	rm -rf htmlcov
@@ -31,6 +31,6 @@ test:
 	${BROWSER} htmlcov/index.html
 
 docs: clean
-	poetry run sphinx-apidoc -o ./docs/modules $(PROJ_SLUG)
+	poetry run sphinx-apidoc -o ./docs/source/modules $(PROJ_SLUG)
 	cd docs && poetry run make html
-	$(info You can find the docs in './docs/_build/html/index.html')
+	${BROWSER} './docs/build/html/index.html'

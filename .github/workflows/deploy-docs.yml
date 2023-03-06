@@ -39,7 +39,7 @@ jobs:
       - name: Set up poetry
         uses: Gr1N/setup-poetry@v8
       - name: Add poetry plugin
-        uses: poetry self add "poetry-dynamic-versioning[plugin]"
+        uses: "poetry self add 'poetry-dynamic-versioning[plugin]'"
       - name: Install dependencies
         run: make install
       - name: Build docs

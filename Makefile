@@ -33,3 +33,11 @@ test:
 docs: clean
 	poetry run sphinx-apidoc -o ./docs/source/modules $(PROJ_SLUG)
 	poetry dynamic-versioning && cd docs && poetry run make html
+
+generate_models:
+	# can be deleted no usage
+	rm pydantic_schemas/sensor_actions.schema.json || true
+	# can be deleted due to state includes config
+	rm pydantic_schemas/sensor_configs.schema.json || true
+	poetry run datamodel-codegen --input-file-type jsonschema --input pydantic_schemas/data_products.schema.json --output quakesaver_client/models/data_products.py
+	poetry run datamodel-codegen --input-file-type jsonschema --input pydantic_schemas/sensor_state.schema.json --output quakesaver_client/models/sensor_state.py

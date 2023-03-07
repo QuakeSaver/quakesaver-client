@@ -1,0 +1,385 @@
+{
+  "title": "DataProducts",
+  "type": "object",
+  "properties": {
+    "WaveformRequestResponse": {
+      "$ref": "#/definitions/WaveformRequestResponse"
+    },
+    "WaveformData": {
+      "$ref": "#/definitions/WaveformData"
+    },
+    "NoiseAutocorrelation": {
+      "$ref": "#/definitions/NoiseAutocorrelation"
+    },
+    "HVSpectra": {
+      "$ref": "#/definitions/HVSpectra"
+    },
+    "EventRecord": {
+      "$ref": "#/definitions/EventRecord"
+    }
+  },
+  "required": [
+    "WaveformRequestResponse",
+    "WaveformData",
+    "NoiseAutocorrelation",
+    "HVSpectra",
+    "EventRecord"
+  ],
+  "definitions": {
+    "TraceModel": {
+      "title": "TraceModel",
+      "description": "Waveform trace schema for data serialisation.\n\nAll channels in this context have the same number of samples.\n\nData type mapping of base64 encoded data:\n\n    data_unit: \"counts\": -> data type int32\n    data_unit: \"m/s\" -> data type float32\n    data_unit: \"m/s2\" -> data type float32",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "title": "Uid",
+          "type": "string"
+        },
+        "endtime": {
+          "title": "Endtime",
+          "type": "string",
+          "format": "date-time"
+        },
+        "delta_t": {
+          "title": "Delta T",
+          "type": "number"
+        },
+        "data": {
+          "title": "Data",
+          "type": "object",
+          "additionalProperties": {
+            "type": "string",
+            "format": "binary"
+          }
+        },
+        "data_unit": {
+          "title": "Data Unit",
+          "default": "counts",
+          "enum": [
+            "counts",
+            "m/s",
+            "m/s2"
+          ],
+          "type": "string"
+        },
+        "compressed": {
+          "title": "Compressed",
+          "default": false,
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "endtime",
+        "delta_t",
+        "data"
+      ]
+    },
+    "WaveformRequestResponse": {
+      "title": "WaveformRequestResponse",
+      "description": "A model to respond with for a waveform request.\n\nrequest_id: is sent via the request.",
+      "type": "object",
+      "properties": {
+        "name": {
+          "title": "Name",
+          "default": "WaveformRequestResponse",
+          "minLength": 1,
+          "type": "string"
+        },
+        "persistent": {
+          "title": "Persistent",
+          "default": true,
+          "type": "boolean"
+        },
+        "timestamp": {
+          "title": "Timestamp",
+          "type": "string",
+          "format": "date-time"
+        },
+        "sensor_uid": {
+          "title": "Sensor Uid",
+          "type": "string"
+        },
+        "uid": {
+          "title": "Uid",
+          "type": "string",
+          "format": "uuid"
+        },
+        "request_id": {
+          "title": "Request Id",
+          "type": "string",
+          "format": "uuid"
+        },
+        "traces": {
+          "$ref": "#/definitions/TraceModel"
+        }
+      },
+      "required": [
+        "request_id"
+      ]
+    },
+    "WaveformData": {
+      "title": "WaveformData",
+      "description": "A `DataProduct` encapsulates the result of a waveform analysis.\n\nBy convention data products are named with `Data` appended to the\nclass that carries out the analysis.\n\nArguments:\n    persistent (bool): Weather or not to store data in the backend\n    timestamp: datatime associated with the data product\n\n    sensor_uid: Will be set automatically\n    uid: Will be set automatically",
+      "type": "object",
+      "properties": {
+        "name": {
+          "title": "Name",
+          "default": "WaveformData",
+          "minLength": 1,
+          "type": "string"
+        },
+        "persistent": {
+          "title": "Persistent",
+          "default": true,
+          "type": "boolean"
+        },
+        "timestamp": {
+          "title": "Timestamp",
+          "type": "string",
+          "format": "date-time"
+        },
+        "sensor_uid": {
+          "title": "Sensor Uid",
+          "type": "string"
+        },
+        "uid": {
+          "title": "Uid",
+          "type": "string",
+          "format": "uuid"
+        },
+        "traces": {
+          "$ref": "#/definitions/TraceModel"
+        },
+        "sequence_number": {
+          "title": "Sequence Number",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "traces",
+        "sequence_number"
+      ]
+    },
+    "NoiseAutocorrelation": {
+      "title": "NoiseAutocorrelation",
+      "description": "A `DataProduct` encapsulates the result of a waveform analysis.\n\nBy convention data products are named with `Data` appended to the\nclass that carries out the analysis.\n\nArguments:\n    persistent (bool): Weather or not to store data in the backend\n    timestamp: datatime associated with the data product\n\n    sensor_uid: Will be set automatically\n    uid: Will be set automatically",
+      "type": "object",
+      "properties": {
+        "name": {
+          "title": "Name",
+          "default": "NoiseAutocorrelation",
+          "minLength": 1,
+          "type": "string"
+        },
+        "persistent": {
+          "title": "Persistent",
+          "default": true,
+          "type": "boolean"
+        },
+        "timestamp": {
+          "title": "Timestamp",
+          "type": "string",
+          "format": "date-time"
+        },
+        "sensor_uid": {
+          "title": "Sensor Uid",
+          "type": "string"
+        },
+        "uid": {
+          "title": "Uid",
+          "type": "string",
+          "format": "uuid"
+        },
+        "correlogram": {
+          "title": "Correlogram",
+          "type": "array",
+          "items": {
+            "type": "number"
+          }
+        },
+        "deltat": {
+          "title": "Deltat",
+          "type": "number"
+        },
+        "max_lagtime": {
+          "title": "Max Lagtime",
+          "type": "number"
+        },
+        "stacking_method": {
+          "title": "Stacking Method",
+          "type": "string"
+        }
+      },
+      "required": [
+        "correlogram",
+        "deltat",
+        "max_lagtime",
+        "stacking_method"
+      ]
+    },
+    "HVSpectra": {
+      "title": "HVSpectra",
+      "description": "A `DataProduct` encapsulates the result of a waveform analysis.\n\nBy convention data products are named with `Data` appended to the\nclass that carries out the analysis.\n\nArguments:\n    persistent (bool): Weather or not to store data in the backend\n    timestamp: datatime associated with the data product\n\n    sensor_uid: Will be set automatically\n    uid: Will be set automatically",
+      "type": "object",
+      "properties": {
+        "name": {
+          "title": "Name",
+          "default": "HVSpectra",
+          "minLength": 1,
+          "type": "string"
+        },
+        "persistent": {
+          "title": "Persistent",
+          "default": true,
+          "type": "boolean"
+        },
+        "timestamp": {
+          "title": "Timestamp",
+          "type": "string",
+          "format": "date-time"
+        },
+        "sensor_uid": {
+          "title": "Sensor Uid",
+          "type": "string"
+        },
+        "uid": {
+          "title": "Uid",
+          "type": "string",
+          "format": "uuid"
+        },
+        "frequencies": {
+          "title": "Frequencies",
+          "type": "array",
+          "items": {
+            "type": "number"
+          }
+        },
+        "spectrum": {
+          "title": "Spectrum",
+          "type": "array",
+          "items": {
+            "type": "number"
+          }
+        },
+        "spectrum_std": {
+          "title": "Spectrum Std",
+          "type": "array",
+          "items": {
+            "type": "number"
+          }
+        },
+        "stack_duration": {
+          "title": "Stack Duration",
+          "type": "number"
+        },
+        "window_length": {
+          "title": "Window Length",
+          "type": "number"
+        }
+      },
+      "required": [
+        "frequencies",
+        "spectrum",
+        "spectrum_std",
+        "stack_duration",
+        "window_length"
+      ]
+    },
+    "EventAttibute": {
+      "title": "EventAttibute",
+      "type": "object",
+      "properties": {
+        "name": {
+          "title": "Name",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name"
+      ]
+    },
+    "EventTrigger": {
+      "title": "EventTrigger",
+      "description": "Actions trigger one-shot functionatlity.\n\nExample implementation:\n\n```python\nclass TriggerMe(Action):\n    a: bool = True\n    b: float = 1.0\n```",
+      "type": "object",
+      "properties": {
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "time": {
+          "title": "Time",
+          "type": "string",
+          "format": "date-time"
+        },
+        "value": {
+          "title": "Value",
+          "type": "number"
+        }
+      },
+      "required": [
+        "name"
+      ]
+    },
+    "EventRecord": {
+      "title": "EventRecord",
+      "description": "A `DataProduct` encapsulates the result of a waveform analysis.\n\nBy convention data products are named with `Data` appended to the\nclass that carries out the analysis.\n\nArguments:\n    persistent (bool): Weather or not to store data in the backend\n    timestamp: datatime associated with the data product\n\n    sensor_uid: Will be set automatically\n    uid: Will be set automatically",
+      "type": "object",
+      "properties": {
+        "name": {
+          "title": "Name",
+          "default": "EventRecord",
+          "minLength": 1,
+          "type": "string"
+        },
+        "persistent": {
+          "title": "Persistent",
+          "default": true,
+          "type": "boolean"
+        },
+        "timestamp": {
+          "title": "Timestamp",
+          "type": "string",
+          "format": "date-time"
+        },
+        "sensor_uid": {
+          "title": "Sensor Uid",
+          "type": "string"
+        },
+        "uid": {
+          "title": "Uid",
+          "type": "string",
+          "format": "uuid"
+        },
+        "attributes": {
+          "title": "Attributes",
+          "default": [],
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/EventAttibute"
+          }
+        },
+        "trigger_time": {
+          "title": "Trigger Time",
+          "type": "string",
+          "format": "date-time"
+        },
+        "recording_length": {
+          "title": "Recording Length",
+          "type": "number"
+        },
+        "traces": {
+          "$ref": "#/definitions/TraceModel"
+        },
+        "trigger": {
+          "$ref": "#/definitions/EventTrigger"
+        }
+      },
+      "required": [
+        "trigger_time",
+        "recording_length",
+        "traces"
+      ]
+    }
+  }
+}

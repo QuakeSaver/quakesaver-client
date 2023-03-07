@@ -6,26 +6,34 @@ from datetime import datetime
 from pathlib import Path
 
 import requests
-from pydantic import BaseModel, Extra, ValidationError
+from pydantic import Extra, ValidationError
 
 from quakesaver_client.errors import CorruptedDataError
-from quakesaver_client.models.measurement import MeasurementQuery, MeasurementResult
+from quakesaver_client.models.data_product_query import (
+    DataProductQuery,
+    EventRecordQueryResult,
+    HVSpectraQueryResult,
+    NoiseAutocorrelationQueryResult,
+)
+from quakesaver_client.models.measurement import (
+    MeasurementQuery,
+    MeasurementQueryFull,
+    MeasurementResult,
+)
 from quakesaver_client.models.permission import Permission
+from quakesaver_client.models.sensor_state import SensorState
 from quakesaver_client.models.warnings import SensorWarnings
 from quakesaver_client.types import StationDetailLevel
 from quakesaver_client.util import assure_output_path, handle_response
 
 
-class Sensor(BaseModel):
+class Sensor(SensorState):
     """A base schema for other schemas to derive from."""
 
     _headers: dict
     _api_base_url: str
     _fdsn_base_url: str
 
-    uid: str
-    software_version: str
-    hardware_revision: str
     first_seen: datetime
     last_updated: datetime
     permission: Permission
@@ -41,11 +49,84 @@ class Sensor(BaseModel):
         self._api_base_url = api_base_url
         self._fdsn_base_url = fdsn_base_url
 
-    def get_data_product(self: Sensor) -> None:
+    def _get_data_product(
+        self: Sensor,
+        data_product_name: str,
+        query: DataProductQuery,
+    ) -> dict:
         """Request data products of the sensor."""
-        pass
+        logging.debug(
+            "QSClient requesting data product %s for sensor %s.",
+            data_product_name,
+            self.uid,
+        )
+        response = requests.post(
+            url=f"{self._api_base_url}/sensors/{self.uid}/data_products/{data_product_name}",
+            headers=self._headers,
+            params=query.dict(),
+            data=[],
+        )
+        response_data = handle_response(response)
+        return response_data
 
-    def get_measurement(self: Sensor, query: MeasurementQuery) -> MeasurementResult:
+    def get_event_records(
+        self: Sensor, query: DataProductQuery
+    ) -> EventRecordQueryResult:
+        """Get Event Records of the sensor.
+
+        Args:
+            query: The query parameters like time limit and time frame.
+
+        Returns:
+            EventRecordQueryResult: The queried data products.
+        """
+        result = self._get_data_product("EventRecord", query)
+
+        try:
+            result = EventRecordQueryResult.parse_obj(result)
+        except ValidationError as e:
+            raise CorruptedDataError() from e
+        return result
+
+    def get_hv_spectres(self: Sensor, query: DataProductQuery) -> HVSpectraQueryResult:
+        """Get HV Spectres of the sensor.
+
+        Args:
+            query: The query parameters like time limit and time frame.
+
+        Returns:
+            HVSpectraQueryResult: The queried data products.
+        """
+        result = self._get_data_product("HVSpectra", query)
+
+        try:
+            result = HVSpectraQueryResult.parse_obj(result)
+        except ValidationError as e:
+            raise CorruptedDataError() from e
+        return result
+
+    def get_noise_autocorrelations(
+        self: Sensor, query: DataProductQuery
+    ) -> NoiseAutocorrelationQueryResult:
+        """Get the Event Records of the sensor.
+
+        Args:
+            query: The query parameters like time limit and time frame.
+
+        Returns:
+            NoiseAutocorrelationQueryResult: The queried data products.
+        """
+        result = self._get_data_product("NoiseAutocorrelation", query)
+
+        try:
+            result = NoiseAutocorrelationQueryResult.parse_obj(result)
+        except ValidationError as e:
+            raise CorruptedDataError() from e
+        return result
+
+    def _get_measurement(
+        self: Sensor, query: MeasurementQueryFull
+    ) -> MeasurementResult:
         """Request measurements of the sensor."""
         logging.debug("QSClient requesting measurement for sensor %s.", self.uid)
         response = requests.post(
@@ -59,6 +140,82 @@ class Sensor(BaseModel):
         except ValidationError as e:
             raise CorruptedDataError() from e
         return result
+
+    def get_peak_horizontal_acceleration(
+        self: Sensor, query: MeasurementQuery
+    ) -> MeasurementResult:
+        """Get the PGA measurement of the sensor.
+
+        Args:
+            query: The query parameters like time frame and aggregator.
+
+        Returns:
+            MeasurementQuery: The queried data (if exists) as time series.
+        """
+        full_query = MeasurementQueryFull(
+            **query.dict(), field="pga", measurement="rt_peak_ground_motion"
+        )
+        return self._get_measurement(query=full_query)
+
+    def get_jma_intensity(self: Sensor, query: MeasurementQuery) -> MeasurementResult:
+        """Get the JMA Intensity measurement of the sensor.
+
+        Args:
+            query: The query parameters like time frame and aggregator.
+
+        Returns:
+            MeasurementQuery: The queried data (if exists) as time series.
+        """
+        full_query = MeasurementQueryFull(
+            **query.dict(), field="intensity", measurement="rt_jma_intensity"
+        )
+        return self._get_measurement(query=full_query)
+
+    def get_rms_amplitude(self: Sensor, query: MeasurementQuery) -> MeasurementResult:
+        """Get the RMS Amplitude measurement of the sensor.
+
+        Args:
+            query: The query parameters like time frame and aggregator.
+
+        Returns:
+            MeasurementQuery: The queried data (if exists) as time series.
+        """
+        full_query = MeasurementQueryFull(
+            **query.dict(), field="rms_amplitude", measurement="rms_amplitude"
+        )
+        return self._get_measurement(query=full_query)
+
+    def get_spectral_intensity(
+        self: Sensor, query: MeasurementQuery
+    ) -> MeasurementResult:
+        """Get the Spectral Intensity measurement of the sensor.
+
+        Args:
+            query: The query parameters like time frame and aggregator.
+
+        Returns:
+            MeasurementQuery: The queried data (if exists) as time series.
+        """
+        full_query = MeasurementQueryFull(
+            **query.dict(),
+            field="spectral_intensity",
+            measurement="rt_spectral_intensity",
+        )
+        return self._get_measurement(query=full_query)
+
+    def get_rms_offset(self: Sensor, query: MeasurementQuery) -> MeasurementResult:
+        """Get the RMS Offset measurement of the sensor.
+
+        Args:
+            query: The query parameters like time frame and aggregator.
+
+        Returns:
+            MeasurementQuery: The queried data (if exists) as time series.
+        """
+        full_query = MeasurementQueryFull(
+            **query.dict(), field="rms_offset", measurement="chrony"
+        )
+        return self._get_measurement(query=full_query)
 
     def get_waveform_data(
         self: Sensor,

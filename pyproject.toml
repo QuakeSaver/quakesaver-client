@@ -26,6 +26,7 @@ myst-parser = "^0.19.1"
 toml = "^0.10.2"
 sphinx-autodoc-typehints = "^1.22"
 furo = "^2022.12.7"
+datamodel-code-generator = "^0.17.1"
 
 [tool.poetry-dynamic-versioning]
 enable = true
@@ -77,9 +78,14 @@ exclude = [
     "build",
     "dist",
 ]
-per-file-ignores = {}
 line-length = 88
 target-version = "py310"
+
+[tool.ruff.per-file-ignores]
+# due to autogeneration
+"quakesaver_client/models/data_products.py" = ["D100", "D101", "D106", "F722", "F821"]
+"quakesaver_client/models/sensor_configs.py" = ["D100", "D101", "D106", "F722", "F821"]
+"quakesaver_client/models/sensor_state.py" = ["D100", "D101", "D106", "F722", "F821"]
 
 [tool.ruff.mccabe]
 max-complexity = 10

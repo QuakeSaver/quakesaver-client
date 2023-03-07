@@ -24,6 +24,24 @@ class MeasurementQuery(BaseModel):
 
     start_time: datetime
     end_time: datetime
+    interval: Optional[timedelta] = None
+    aggregator: Optional[InfluxAggregator] = None
+
+    @root_validator(pre=True)
+    def validate_interval_aggregator(cls: ModelMetaclass, values: dict) -> dict:
+        """Assure that aggregators and intervals are only used together."""
+        if "aggregator" in values and "interval" not in values:
+            raise ValueError("aggregators need an interval")
+        if "interval" in values and "aggregator" not in values:
+            raise ValueError("intervals only work with aggregators")
+        return values
+
+
+class MeasurementQueryFull(BaseModel):
+    """A schema for querying measurements."""
+
+    start_time: datetime
+    end_time: datetime
     measurement: constr(regex="^[a-zA-Z_-]*$")  # noqa: F722
     field: constr(regex="^[a-zA-Z_-]*$")  # noqa: F722
     interval: Optional[timedelta] = None
@@ -55,5 +73,5 @@ class MeasurementResult(BaseModel):
 
     sensor_uid: str
     query_time_seconds: float
-    query: MeasurementQuery
+    query: MeasurementQueryFull
     data: InfluxData

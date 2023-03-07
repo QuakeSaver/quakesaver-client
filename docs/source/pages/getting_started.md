@@ -26,6 +26,7 @@ import obspy
 from obspy import Stream
 
 from quakesaver_client import QSClient
+from quakesaver_client.models.data_product_query import DataProductQuery
 from quakesaver_client.models.measurement import MeasurementQuery
 
 EMAIL = "user@yourorganisation.net"
@@ -49,12 +50,14 @@ sensor_uid_to_get = sensor_ids[0]
 sensor = client.get_sensor(sensor_uid_to_get)
 pp(sensor.dict())
 
-# Queries such as waveforms, station metadata and measurements (data products calculated on the sensor)
+# Queries such as waveforms, station metadata and measurements (data products calculated
+# on the sensor)
 # require that you select a time window. We use that last 5 hours of data
 end_time = datetime.utcnow()
 start_time = end_time - timedelta(hours=5)
 
-# Query RMS Amplitudes. In this case we calculate a rolling `mean` over 10 minutes time windows.
+# Query various Measurements. In this case we calculate a rolling `mean` over 10 minutes
+# time windows.
 # Other `aggregators` are:
 #  * None (default)
 #  * max
@@ -62,12 +65,34 @@ start_time = end_time - timedelta(hours=5)
 query = MeasurementQuery(
     start_time=start_time,
     end_time=end_time,
-    measurement="rms_amplitude",
-    field="rms_amplitude",
     interval=timedelta(minutes=10),
     aggregator="mean",
 )
-result = sensor.get_measurement(query)
+result = sensor.get_jma_intensity(query)
+print(result)
+result = sensor.get_peak_ground_acceleration(query)
+print(result)
+result = sensor.get_spectral_intensity(query)
+print(result)
+result = sensor.get_rms_offset(query)
+print(result)
+
+# Query various Data Products. You can only get 100 results at once, which is why there
+# are limit and skip values. You can get data products from a specific time frame, by
+# specifying start and end times.
+end_time = datetime.utcnow()
+start_time = end_time - timedelta(hours=5)
+query = DataProductQuery(
+    start_time=start_time,
+    end_time=end_time,
+    limit=100,
+    skip=0,
+)
+result = sensor.get_event_records(query)
+print(result)
+result = sensor.get_hv_spectres(query)
+print(result)
+result = sensor.get_noise_autocorrelations(query)
 print(result)
 
 # Download station meta data as StationXML and store them in a local directory.
@@ -80,8 +105,8 @@ file_path = sensor.get_stationxml(
 with open(file_path, "r") as file:
     print(file.read())
 
-# Download raw full waveforms from the sensor. Note that you can only query what is in the sensor's
-# ringbuffer (usually the last ~ 48 hours). 
+# Download raw full waveforms from the sensor. Note that you can only query what is in
+# the sensor's ringbuffer (usually the last ~ 48 hours).
 file_path = sensor.get_waveform_data(
     starttime=start_time, endtime=end_time, location_to_store=DATA_PATH
 )

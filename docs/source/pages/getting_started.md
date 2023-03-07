@@ -15,6 +15,10 @@ client = QSClient(email=EMAIL, password=PASSWORD)
 
 ## Full example script
 
+Authenticate against the quakesaver server and download raw, as well as processed data.
+
+Please note, that for security reasons each login session is only valid for 15 minutes. Thus, the client is not designed for long-term connections but for repeated queries.
+
 ```python
 """Example script for quakesaver_client usage."""
 

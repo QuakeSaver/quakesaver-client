@@ -127,3 +127,14 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# ide stuff
+.idea/
+
+# quick testing stuff
+example_script.py
+data/
+
+# demo data
+*.xml
+*.mseed

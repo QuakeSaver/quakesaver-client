@@ -1,0 +1,92 @@
+[tool.poetry]
+name = "quakesaver-client"
+version = "0.0.0"
+description = ""
+authors = ["QuakeSaver <info@quakesaver.net>"]
+license = "BSD-3-Clause"
+readme = "README.md"
+packages = [{include = "quakesaver_client"}]
+homepage = "https://quakesaver.net/"
+repository = "https://github.com/QuakeSaver/quakesaver-client"
+documentation = "https://quakesaver.github.io/quakesaver-client/"
+
+[tool.poetry.dependencies]
+python = ">=3.9, <3.12"
+pydantic = "~=1.10.5"
+requests = "~=2.28.2"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.2.0"
+pytest-asyncio = "^0.20.3"
+pytest-cov = "^4.0.0"
+Sphinx = "^6.1.0"
+pre-commit = "^3.1.0"
+obspy = "^1.4.0"
+myst-parser = "^0.19.1"
+toml = "^0.10.2"
+sphinx-autodoc-typehints = "^1.22"
+furo = "^2022.12.7"
+
+[tool.poetry-dynamic-versioning]
+enable = true
+vcs = "git"
+style = "semver"
+
+[tool.pytest.ini_options]
+log_cli = "True"
+log_cli_level = "WARNING"
+asyncio_mode= "auto"
+
+[tool.black]
+line-length = 88
+include = '\.pyi?$'
+
+[tool.vulture]
+make_whitelist = true
+min_confidence = 70
+paths = ["quakesaver_client"]
+sort_by_size = true
+verbose = false
+ignore_names=["cls"]
+
+[tool.ruff]
+select = [
+    "ANN", # flake8-bugbear
+    "B",   # flake8-bugbear
+    "C",   # flake8-comprehensions
+    "D",   # pydocstyle
+    "E",   # pycodestyle errors
+    "F",   # pyflakes
+    "I",   # isort
+    "N",   # naming
+    "W",   # pycodestyle warnings
+]
+ignore = [
+    "D203", # no-blank-line-before-class
+    "D213", # multi-line-summary-second-line
+    "N805", # First argument of a method should be named `self`
+]
+
+# Exclude a variety of commonly ignored directories.
+exclude = [
+    ".eggs",
+    ".git",
+    ".pytype",
+    ".ruff_cache",
+    "__pypackages__",
+    "build",
+    "dist",
+]
+per-file-ignores = {}
+line-length = 88
+target-version = "py310"
+
+[tool.ruff.mccabe]
+max-complexity = 10
+
+[tool.ruff.pydocstyle]
+convention = "google"
+
+[build-system]
+requires = ["poetry-core>=1.0.0", "poetry-dynamic-versioning"]
+build-backend = "poetry_dynamic_versioning.backend"

@@ -24,4 +24,5 @@ jobs:
         env:
           TEST_CLIENT_EMAIL: '${{ secrets.TEST_USER_EMAIL }}'
           TEST_CLIENT_PASSWORD: '${{ secrets.TEST_USER_PASSWORD }}'
+          TEST_CLIENT_DOMAIN: '${{ secrets.TEST_CLIENT_DOMAIN }}'
         run: make test

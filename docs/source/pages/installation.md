@@ -3,17 +3,17 @@
 ## pip
 
 ```shell
-pip install quakesaver_client
+pip install quakesaver-client
 ```
 
 ## poetry
 
 ```shell
-poetry add quakesaver_client
+poetry add quakesaver-client
 ```
 
 ## pipenv
 
 ```shell
-pipenv install quakesaver_client
+pipenv install quakesaver-client
 ```

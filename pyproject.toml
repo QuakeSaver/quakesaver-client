@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "quakesaver-client"
-version = "0.1.0-pre1"
+version = "0.0.0"
 description = ""
 authors = ["QuakeSaver <info@quakesaver.net>"]
 license = "BSD-3-Clause"
@@ -28,7 +28,7 @@ sphinx-autodoc-typehints = "^1.22"
 furo = "^2022.12.7"
 
 [tool.poetry-dynamic-versioning]
-enable = false
+enable = true
 vcs = "git"
 style = "semver"
 

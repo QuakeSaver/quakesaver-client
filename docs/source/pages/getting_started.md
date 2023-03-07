@@ -94,7 +94,7 @@ query = DataProductQuery(
 )
 result = sensor.get_event_records(query)
 print(result)
-result = sensor.get_hv_spectres(query)
+result = sensor.get_hv_spectra(query)
 print(result)
 result = sensor.get_noise_autocorrelations(query)
 print(result)

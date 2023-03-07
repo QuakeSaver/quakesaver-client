@@ -54,7 +54,7 @@ pp(sensor.dict())
 end_time = datetime.utcnow()
 start_time = end_time - timedelta(hours=5)
 
-# Query RMS Amplitudes. In this case we calculate a rolling `mean` over 10 minutes time windows.
+# Query various Measurements. In this case we calculate a rolling `mean` over 10 minutes time windows.
 # Other `aggregators` are:
 #  * None (default)
 #  * max
@@ -62,12 +62,16 @@ start_time = end_time - timedelta(hours=5)
 query = MeasurementQuery(
     start_time=start_time,
     end_time=end_time,
-    measurement="rms_amplitude",
-    field="rms_amplitude",
     interval=timedelta(minutes=10),
     aggregator="mean",
 )
-result = sensor.get_measurement(query)
+result = sensor.get_jma_intensity(query)
+print(result)
+result = sensor.get_peak_ground_acceleration(query)
+print(result)
+result = sensor.get_spectral_intensity(query)
+print(result)
+result = sensor.get_rms_offset(query)
 print(result)
 
 # Download station meta data as StationXML and store them in a local directory.
@@ -81,7 +85,7 @@ with open(file_path, "r") as file:
     print(file.read())
 
 # Download raw full waveforms from the sensor. Note that you can only query what is in the sensor's
-# ringbuffer (usually the last ~ 48 hours). 
+# ringbuffer (usually the last ~ 48 hours).
 file_path = sensor.get_waveform_data(
     starttime=start_time, endtime=end_time, location_to_store=DATA_PATH
 )

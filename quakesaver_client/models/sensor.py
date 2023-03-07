@@ -6,26 +6,28 @@ from datetime import datetime
 from pathlib import Path
 
 import requests
-from pydantic import BaseModel, Extra, ValidationError
+from pydantic import Extra, ValidationError
 
 from quakesaver_client.errors import CorruptedDataError
-from quakesaver_client.models.measurement import MeasurementQuery, MeasurementResult
+from quakesaver_client.models.measurement import (
+    MeasurementQuery,
+    MeasurementQueryFull,
+    MeasurementResult,
+)
 from quakesaver_client.models.permission import Permission
+from quakesaver_client.models.sensor_state import SensorState
 from quakesaver_client.models.warnings import SensorWarnings
 from quakesaver_client.types import StationDetailLevel
 from quakesaver_client.util import assure_output_path, handle_response
 
 
-class Sensor(BaseModel):
+class Sensor(SensorState):
     """A base schema for other schemas to derive from."""
 
     _headers: dict
     _api_base_url: str
     _fdsn_base_url: str
 
-    uid: str
-    software_version: str
-    hardware_revision: str
     first_seen: datetime
     last_updated: datetime
     permission: Permission
@@ -45,7 +47,9 @@ class Sensor(BaseModel):
         """Request data products of the sensor."""
         pass
 
-    def get_measurement(self: Sensor, query: MeasurementQuery) -> MeasurementResult:
+    def _get_measurement(
+        self: Sensor, query: MeasurementQueryFull
+    ) -> MeasurementResult:
         """Request measurements of the sensor."""
         logging.debug("QSClient requesting measurement for sensor %s.", self.uid)
         response = requests.post(
@@ -59,6 +63,82 @@ class Sensor(BaseModel):
         except ValidationError as e:
             raise CorruptedDataError() from e
         return result
+
+    def get_peak_ground_acceleration(
+        self: Sensor, query: MeasurementQuery
+    ) -> MeasurementResult:
+        """Get the PGA measurement of the sensor.
+
+        Args:
+            query: The query parameters like time frame and aggregator.
+
+        Returns:
+            MeasurementQuery: The queried data (if exists) as time series.
+        """
+        full_query = MeasurementQueryFull(
+            **query.dict(), field="pga", measurement="rt_peak_ground_motion"
+        )
+        return self._get_measurement(query=full_query)
+
+    def get_jma_intensity(self: Sensor, query: MeasurementQuery) -> MeasurementResult:
+        """Get the JMA Intensity measurement of the sensor.
+
+        Args:
+            query: The query parameters like time frame and aggregator.
+
+        Returns:
+            MeasurementQuery: The queried data (if exists) as time series.
+        """
+        full_query = MeasurementQueryFull(
+            **query.dict(), field="intensity", measurement="rt_jma_intensity"
+        )
+        return self._get_measurement(query=full_query)
+
+    def get_rms_amplitude(self: Sensor, query: MeasurementQuery) -> MeasurementResult:
+        """Get the RMS Amplitude measurement of the sensor.
+
+        Args:
+            query: The query parameters like time frame and aggregator.
+
+        Returns:
+            MeasurementQuery: The queried data (if exists) as time series.
+        """
+        full_query = MeasurementQueryFull(
+            **query.dict(), field="rms_amplitude", measurement="rms_amplitude"
+        )
+        return self._get_measurement(query=full_query)
+
+    def get_spectral_intensity(
+        self: Sensor, query: MeasurementQuery
+    ) -> MeasurementResult:
+        """Get the Spectral Intensity measurement of the sensor.
+
+        Args:
+            query: The query parameters like time frame and aggregator.
+
+        Returns:
+            MeasurementQuery: The queried data (if exists) as time series.
+        """
+        full_query = MeasurementQueryFull(
+            **query.dict(),
+            field="spectral_intensity",
+            measurement="rt_spectral_intensity",
+        )
+        return self._get_measurement(query=full_query)
+
+    def get_rms_offset(self: Sensor, query: MeasurementQuery) -> MeasurementResult:
+        """Get the RMS Offset measurement of the sensor.
+
+        Args:
+            query: The query parameters like time frame and aggregator.
+
+        Returns:
+            MeasurementQuery: The queried data (if exists) as time series.
+        """
+        full_query = MeasurementQueryFull(
+            **query.dict(), field="rms_offset", measurement="chrony"
+        )
+        return self._get_measurement(query=full_query)
 
     def get_waveform_data(
         self: Sensor,

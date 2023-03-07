@@ -1,0 +1,4709 @@
+{
+  "title": "SensorState",
+  "type": "object",
+  "properties": {
+    "timestamp": {
+      "title": "Timestamp",
+      "type": "string",
+      "format": "date-time"
+    },
+    "uid": {
+      "title": "Uid",
+      "type": "string"
+    },
+    "hardware_revision": {
+      "title": "Hardware Revision",
+      "default": "unknown",
+      "type": "string"
+    },
+    "platform_model": {
+      "title": "Platform Model",
+      "default": "",
+      "type": "string"
+    },
+    "software_version": {
+      "title": "Software Version",
+      "default": "0.3.0+f102e7d",
+      "type": "string"
+    },
+    "AD7779State": {
+      "$ref": "#/definitions/AD7779State"
+    },
+    "ADXL355State": {
+      "$ref": "#/definitions/ADXL355State"
+    },
+    "BMA456State": {
+      "$ref": "#/definitions/BMA456State"
+    },
+    "DataProductDispatcherState": {
+      "$ref": "#/definitions/DataProductDispatcherState"
+    },
+    "EventRecorderState": {
+      "$ref": "#/definitions/EventRecorderState"
+    },
+    "HTTPServerState": {
+      "$ref": "#/definitions/HTTPServerState"
+    },
+    "HVContinuousSpectraState": {
+      "$ref": "#/definitions/HVContinuousSpectraState"
+    },
+    "JMAIntensityState": {
+      "$ref": "#/definitions/JMAIntensityState"
+    },
+    "LocationState": {
+      "$ref": "#/definitions/LocationState"
+    },
+    "LoggingDequeState": {
+      "$ref": "#/definitions/LoggingDequeState"
+    },
+    "MQTTClientState": {
+      "$ref": "#/definitions/MQTTClientState"
+    },
+    "MenderInformation": {
+      "$ref": "#/definitions/MenderInformation"
+    },
+    "NetworkDispatcherState": {
+      "$ref": "#/definitions/NetworkDispatcherState"
+    },
+    "NoiseAutocorrelationState": {
+      "$ref": "#/definitions/NoiseAutocorrelationState"
+    },
+    "PeakGroundMotionState": {
+      "$ref": "#/definitions/PeakGroundMotionState"
+    },
+    "RMSAmplitudeState": {
+      "$ref": "#/definitions/RMSAmplitudeState"
+    },
+    "RingbufferState": {
+      "$ref": "#/definitions/RingbufferState"
+    },
+    "STALTAState": {
+      "$ref": "#/definitions/STALTAState"
+    },
+    "SeedLinkServerState": {
+      "$ref": "#/definitions/SeedLinkServerState"
+    },
+    "SpectralIntensityState": {
+      "$ref": "#/definitions/SpectralIntensityState"
+    },
+    "StreamWaveformsState": {
+      "$ref": "#/definitions/StreamWaveformsState"
+    },
+    "SystemEnvironmentStatus": {
+      "$ref": "#/definitions/SystemEnvironmentStatus"
+    },
+    "SystemInformation": {
+      "$ref": "#/definitions/SystemInformation"
+    },
+    "SystemPowerState": {
+      "$ref": "#/definitions/SystemPowerState"
+    },
+    "TimeMonitorState": {
+      "$ref": "#/definitions/TimeMonitorState"
+    },
+    "TmateState": {
+      "$ref": "#/definitions/TmateState"
+    },
+    "UserEnvironment": {
+      "$ref": "#/definitions/UserEnvironment"
+    },
+    "VirtualSensorState": {
+      "$ref": "#/definitions/VirtualSensorState"
+    },
+    "WatchdogState": {
+      "$ref": "#/definitions/WatchdogState"
+    },
+    "WaveformArchiveState": {
+      "$ref": "#/definitions/WaveformArchiveState"
+    },
+    "WaveformDispatcherState": {
+      "$ref": "#/definitions/WaveformDispatcherState"
+    },
+    "WaveformPolarisationState": {
+      "$ref": "#/definitions/WaveformPolarisationState"
+    },
+    "WifiAccessPointState": {
+      "$ref": "#/definitions/WifiAccessPointState"
+    },
+    "ZMQStreamState": {
+      "$ref": "#/definitions/ZMQStreamState"
+    }
+  },
+  "definitions": {
+    "AD7779Config": {
+      "title": "AD7779Config",
+      "description": "A config model based on pydantic. All parameters must have defaults.\n\nExample implementation:\n\n```python\nclass MyConfig(ModuleConfig):\n    a: bool = True\n    b: float = 1.0\n```",
+      "type": "object",
+      "properties": {
+        "sampling_rate": {
+          "title": "Sampling Rate",
+          "default": 100,
+          "enum": [
+            100,
+            200
+          ],
+          "type": "integer"
+        },
+        "gain": {
+          "title": "Gain",
+          "default": 1,
+          "enum": [
+            1,
+            2,
+            4
+          ],
+          "type": "integer"
+        },
+        "filter": {
+          "title": "Filter",
+          "default": "remez",
+          "enum": [
+            "remez",
+            "average"
+          ],
+          "type": "string"
+        }
+      }
+    },
+    "AD7779Environment": {
+      "title": "AD7779Environment",
+      "description": "Base class for settings, allowing values to be overridden by environment variables.\n\nThis is useful in production for secrets you do not wish to save in code, it plays nicely with docker(-compose),\nHeroku and any 12 factor app design.",
+      "type": "object",
+      "properties": {
+        "spi_speed": {
+          "title": "Spi Speed",
+          "default": 3600000,
+          "suffix": "Hz",
+          "env_names": [
+            "qs_spi_speed"
+          ],
+          "type": "integer"
+        },
+        "spi_port": {
+          "title": "Spi Port",
+          "default": 0,
+          "env_names": [
+            "qs_spi_port"
+          ],
+          "type": "integer"
+        },
+        "spi_chip_select": {
+          "title": "Spi Chip Select",
+          "default": 0,
+          "env_names": [
+            "qs_spi_chip_select"
+          ],
+          "type": "integer"
+        },
+        "line_drdy": {
+          "title": "Line Drdy",
+          "default": 25,
+          "env_names": [
+            "qs_line_drdy"
+          ],
+          "type": "integer"
+        },
+        "line_reset": {
+          "title": "Line Reset",
+          "default": 23,
+          "env_names": [
+            "qs_line_reset"
+          ],
+          "type": "integer"
+        },
+        "line_sync_in": {
+          "title": "Line Sync In",
+          "default": 24,
+          "env_names": [
+            "qs_line_sync_in"
+          ],
+          "type": "integer"
+        },
+        "clock_hz": {
+          "title": "Clock Hz",
+          "default": 4096000,
+          "suffix": "Hz",
+          "hint": "Frequency of the ADC oscillator.",
+          "env_names": [
+            "qs_clock_hz"
+          ],
+          "type": "integer"
+        }
+      },
+      "additionalProperties": false
+    },
+    "AD7779Statistics": {
+      "title": "AD7779Statistics",
+      "description": "A measurement model.\n\nMeasurements consist of `field` names, a tuple of `tags` and\nthe actual measurements. The fields have to be of type int/float/bool or str.\nA measurement needs to be attached to a `ModuleState` object.\n\nExample implementation:\n\n```python\nclass ExampleMeasurement(MeasurementModel):\n    measurement: str = \"foo_measurement\"\n    tags: Tuple[str] = (\"machine_a\",)\n\n    value_a: float\n    value_b: int\n    value_c: bool\n```",
+      "type": "object",
+      "properties": {
+        "timestamp": {
+          "title": "Timestamp",
+          "type": "string",
+          "format": "date-time"
+        },
+        "latitude": {
+          "title": "Latitude",
+          "type": "number"
+        },
+        "longitude": {
+          "title": "Longitude",
+          "type": "number"
+        },
+        "measurement": {
+          "title": "Measurement",
+          "default": "sensor",
+          "type": "string"
+        },
+        "tags": {
+          "title": "Tags",
+          "default": {
+            "sensor": "ad7779"
+          },
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "active": {
+          "title": "Active",
+          "default": false,
+          "type": "boolean"
+        },
+        "nsamples": {
+          "title": "Nsamples",
+          "default": 0,
+          "type": "integer"
+        },
+        "crc_errors": {
+          "title": "Crc Errors",
+          "default": 0,
+          "type": "integer"
+        },
+        "gain": {
+          "title": "Gain",
+          "default": 1,
+          "type": "integer"
+        },
+        "sampling_rate": {
+          "title": "Sampling Rate",
+          "default": 0,
+          "type": "integer"
+        },
+        "delay": {
+          "title": "Delay",
+          "default": 0.0,
+          "type": "number"
+        }
+      }
+    },
+    "AD7779State": {
+      "title": "AD7779State",
+      "description": "Reflects a module's state. Based on pydantic.\n\nExample implementation:\n\n```python\nclass MyModuleState(ModuleState):\n    config: MyConfig = MyConfig()\n\n    value_a: str = \"\"\n    value_b: int = \"\"\n    time: datetime = Field(defautl_factory=datetime.now)\n```",
+      "type": "object",
+      "properties": {
+        "config": {
+          "title": "Config",
+          "default": {
+            "sampling_rate": 100,
+            "gain": 1,
+            "filter": "remez"
+          },
+          "allOf": [
+            {
+              "$ref": "#/definitions/AD7779Config"
+            }
+          ]
+        },
+        "environment": {
+          "title": "Environment",
+          "default": {
+            "spi_speed": 3600000,
+            "spi_port": 0,
+            "spi_chip_select": 0,
+            "line_drdy": 25,
+            "line_reset": 23,
+            "line_sync_in": 24,
+            "clock_hz": 4096000
+          },
+          "allOf": [
+            {
+              "$ref": "#/definitions/AD7779Environment"
+            }
+          ]
+        },
+        "stats": {
+          "title": "Stats",
+          "default": {
+            "timestamp": "2023-03-07T09:17:51.407894+00:00",
+            "latitude": null,
+            "longitude": null,
+            "measurement": "sensor",
+            "tags": {
+              "sensor": "ad7779",
+              "uid": "SUB54I40",
+              "platform": "unknown"
+            },
+            "active": false,
+            "nsamples": 0,
+            "crc_errors": 0,
+            "gain": 1,
+            "sampling_rate": 0,
+            "delay": 0.0
+          },
+          "allOf": [
+            {
+              "$ref": "#/definitions/AD7779Statistics"
+            }
+          ]
+        },
+        "type": {
+          "title": "Type",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "ADXL355Config": {
+      "title": "ADXL355Config",
+      "description": "A config model based on pydantic. All parameters must have defaults.\n\nExample implementation:\n\n```python\nclass MyConfig(ModuleConfig):\n    a: bool = True\n    b: float = 1.0\n```",
+      "type": "object",
+      "properties": {
+        "sampling_rate": {
+          "title": "Sampling Rate",
+          "default": 100,
+          "enum": [
+            100,
+            200
+          ],
+          "type": "integer"
+        },
+        "range": {
+          "title": "Range",
+          "default": 2,
+          "enum": [
+            2,
+            4,
+            8
+          ],
+          "type": "integer"
+        },
+        "filter": {
+          "title": "Filter",
+          "default": "remez",
+          "enum": [
+            "remez",
+            "none"
+          ],
+          "type": "string"
+        }
+      }
+    },
+    "ADXL355Statistics": {
+      "title": "ADXL355Statistics",
+      "description": "A measurement model.\n\nMeasurements consist of `field` names, a tuple of `tags` and\nthe actual measurements. The fields have to be of type int/float/bool or str.\nA measurement needs to be attached to a `ModuleState` object.\n\nExample implementation:\n\n```python\nclass ExampleMeasurement(MeasurementModel):\n    measurement: str = \"foo_measurement\"\n    tags: Tuple[str] = (\"machine_a\",)\n\n    value_a: float\n    value_b: int\n    value_c: bool\n```",
+      "type": "object",
+      "properties": {
+        "timestamp": {
+          "title": "Timestamp",
+          "type": "string",
+          "format": "date-time"
+        },
+        "latitude": {
+          "title": "Latitude",
+          "type": "number"
+        },
+        "longitude": {
+          "title": "Longitude",
+          "type": "number"
+        },
+        "measurement": {
+          "title": "Measurement",
+          "default": "sensor",
+          "type": "string"
+        },
+        "tags": {
+          "title": "Tags",
+          "default": {
+            "sensor": "adxl355"
+          },
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "active": {
+          "title": "Active",
+          "default": false,
+          "type": "boolean"
+        },
+        "temperature": {
+          "title": "Temperature",
+          "default": 0.0,
+          "type": "number"
+        },
+        "nsamples": {
+          "title": "Nsamples",
+          "default": 0,
+          "type": "integer"
+        },
+        "crc_errors": {
+          "title": "Crc Errors",
+          "default": 0,
+          "type": "integer"
+        },
+        "range": {
+          "title": "Range",
+          "default": 0,
+          "type": "integer"
+        },
+        "sampling_rate": {
+          "title": "Sampling Rate",
+          "default": 0,
+          "type": "integer"
+        },
+        "delay": {
+          "title": "Delay",
+          "default": 0.0,
+          "type": "number"
+        }
+      }
+    },
+    "ADXL355Environment": {
+      "title": "ADXL355Environment",
+      "description": "Base class for settings, allowing values to be overridden by environment variables.\n\nThis is useful in production for secrets you do not wish to save in code, it plays nicely with docker(-compose),\nHeroku and any 12 factor app design.",
+      "type": "object",
+      "properties": {
+        "spi_speed": {
+          "title": "Spi Speed",
+          "default": 3600000,
+          "env_names": [
+            "qs_spi_speed"
+          ],
+          "type": "integer"
+        },
+        "port": {
+          "title": "Port",
+          "default": 0,
+          "env_names": [
+            "qs_port"
+          ],
+          "type": "integer"
+        },
+        "chip_select": {
+          "title": "Chip Select",
+          "default": 0,
+          "env_names": [
+            "qs_chip_select"
+          ],
+          "type": "integer"
+        },
+        "drdy_int": {
+          "title": "Drdy Int",
+          "default": 22,
+          "env_names": [
+            "qs_drdy_int"
+          ],
+          "type": "integer"
+        }
+      },
+      "additionalProperties": false
+    },
+    "ADXL355State": {
+      "title": "ADXL355State",
+      "description": "Reflects a module's state. Based on pydantic.\n\nExample implementation:\n\n```python\nclass MyModuleState(ModuleState):\n    config: MyConfig = MyConfig()\n\n    value_a: str = \"\"\n    value_b: int = \"\"\n    time: datetime = Field(defautl_factory=datetime.now)\n```",
+      "type": "object",
+      "properties": {
+        "config": {
+          "title": "Config",
+          "default": {
+            "sampling_rate": 100,
+            "range": 2,
+            "filter": "remez"
+          },
+          "allOf": [
+            {
+              "$ref": "#/definitions/ADXL355Config"
+            }
+          ]
+        },
+        "stats": {
+          "title": "Stats",
+          "default": {
+            "timestamp": "2023-03-07T09:17:51.410687+00:00",
+            "latitude": null,
+            "longitude": null,
+            "measurement": "sensor",
+            "tags": {
+              "sensor": "adxl355",
+              "uid": "SUB54I40",
+              "platform": "unknown"
+            },
+            "active": false,
+            "temperature": 0.0,
+            "nsamples": 0,
+            "crc_errors": 0,
+            "range": 0,
+            "sampling_rate": 0,
+            "delay": 0.0
+          },
+          "allOf": [
+            {
+              "$ref": "#/definitions/ADXL355Statistics"
+            }
+          ]
+        },
+        "environment": {
+          "title": "Environment",
+          "default": {
+            "spi_speed": 3600000,
+            "port": 0,
+            "chip_select": 0,
+            "drdy_int": 22
+          },
+          "allOf": [
+            {
+              "$ref": "#/definitions/ADXL355Environment"
+            }
+          ]
+        },
+        "type": {
+          "title": "Type",
+          "default": "adxl355",
+          "type": "string"
+        }
+      }
+    },
+    "BMA456Config": {
+      "title": "BMA456Config",
+      "description": "A config model based on pydantic. All parameters must have defaults.\n\nExample implementation:\n\n```python\nclass MyConfig(ModuleConfig):\n    a: bool = True\n    b: float = 1.0\n```",
+      "type": "object",
+      "properties": {
+        "sampling_rate": {
+          "title": "Sampling Rate",
+          "default": 100,
+          "enum": [
+            100,
+            200,
+            400
+          ],
+          "type": "integer"
+        },
+        "range": {
+          "title": "Range",
+          "default": 2,
+          "enum": [
+            2,
+            4,
+            8
+          ],
+          "type": "integer"
+        }
+      }
+    },
+    "BMA456Statistics": {
+      "title": "BMA456Statistics",
+      "description": "A measurement model.\n\nMeasurements consist of `field` names, a tuple of `tags` and\nthe actual measurements. The fields have to be of type int/float/bool or str.\nA measurement needs to be attached to a `ModuleState` object.\n\nExample implementation:\n\n```python\nclass ExampleMeasurement(MeasurementModel):\n    measurement: str = \"foo_measurement\"\n    tags: Tuple[str] = (\"machine_a\",)\n\n    value_a: float\n    value_b: int\n    value_c: bool\n```",
+      "type": "object",
+      "properties": {
+        "timestamp": {
+          "title": "Timestamp",
+          "type": "string",
+          "format": "date-time"
+        },
+        "latitude": {
+          "title": "Latitude",
+          "type": "number"
+        },
+        "longitude": {
+          "title": "Longitude",
+          "type": "number"
+        },
+        "measurement": {
+          "title": "Measurement",
+          "default": "sensor",
+          "type": "string"
+        },
+        "tags": {
+          "title": "Tags",
+          "default": {
+            "sensor": "bma456"
+          },
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "active": {
+          "title": "Active",
+          "default": false,
+          "type": "boolean"
+        },
+        "temperature": {
+          "title": "Temperature",
+          "default": 0.0,
+          "type": "number"
+        },
+        "nsamples": {
+          "title": "Nsamples",
+          "default": 0,
+          "type": "integer"
+        },
+        "crc_errors": {
+          "title": "Crc Errors",
+          "default": 0,
+          "type": "integer"
+        },
+        "range": {
+          "title": "Range",
+          "default": 0,
+          "type": "integer"
+        },
+        "sampling_rate": {
+          "title": "Sampling Rate",
+          "default": 0,
+          "type": "integer"
+        },
+        "delay": {
+          "title": "Delay",
+          "default": 0.0,
+          "type": "number"
+        },
+        "ndevices": {
+          "title": "Ndevices",
+          "default": 0,
+          "type": "integer"
+        }
+      }
+    },
+    "BMA456State": {
+      "title": "BMA456State",
+      "description": "Reflects a module's state. Based on pydantic.\n\nExample implementation:\n\n```python\nclass MyModuleState(ModuleState):\n    config: MyConfig = MyConfig()\n\n    value_a: str = \"\"\n    value_b: int = \"\"\n    time: datetime = Field(defautl_factory=datetime.now)\n```",
+      "type": "object",
+      "properties": {
+        "config": {
+          "title": "Config",
+          "default": {
+            "sampling_rate": 100,
+            "range": 2
+          },
+          "allOf": [
+            {
+              "$ref": "#/definitions/BMA456Config"
+            }
+          ]
+        },
+        "stats": {
+          "title": "Stats",
+          "default": {
+            "timestamp": "2023-03-07T09:17:51.413111+00:00",
+            "latitude": null,
+            "longitude": null,
+            "measurement": "sensor",
+            "tags": {
+              "sensor": "bma456",
+              "uid": "SUB54I40",
+              "platform": "unknown"
+            },
+            "active": false,
+            "temperature": 0.0,
+            "nsamples": 0,
+            "crc_errors": 0,
+            "range": 0,
+            "sampling_rate": 0,
+            "delay": 0.0,
+            "ndevices": 0
+          },
+          "allOf": [
+            {
+              "$ref": "#/definitions/BMA456Statistics"
+            }
+          ]
+        },
+        "type": {
+          "title": "Type",
+          "default": "",
+          "type": "string"
+        },
+        "soft_interrupt": {
+          "title": "Soft Interrupt",
+          "default": false,
+          "type": "boolean"
+        }
+      }
+    },
+    "DataProductDispatcherConfig": {
+      "title": "DataProductDispatcherConfig",
+      "description": "A config model based on pydantic. All parameters must have defaults.\n\nExample implementation:\n\n```python\nclass MyConfig(ModuleConfig):\n    a: bool = True\n    b: float = 1.0\n```",
+      "type": "object",
+      "properties": {
+        "size_max_bytes": {
+          "title": "Size Max Bytes",
+          "default": 10485760,
+          "minimum": 1048576,
+          "type": "integer"
+        },
+        "enable_gzip": {
+          "title": "Enable Gzip",
+          "default": true,
+          "type": "boolean"
+        }
+      }
+    },
+    "DataProductDispatcherStats": {
+      "title": "DataProductDispatcherStats",
+      "description": "A measurement model.\n\nMeasurements consist of `field` names, a tuple of `tags` and\nthe actual measurements. The fields have to be of type int/float/bool or str.\nA measurement needs to be attached to a `ModuleState` object.\n\nExample implementation:\n\n```python\nclass ExampleMeasurement(MeasurementModel):\n    measurement: str = \"foo_measurement\"\n    tags: Tuple[str] = (\"machine_a\",)\n\n    value_a: float\n    value_b: int\n    value_c: bool\n```",
+      "type": "object",
+      "properties": {
+        "timestamp": {
+          "title": "Timestamp",
+          "type": "string",
+          "format": "date-time"
+        },
+        "latitude": {
+          "title": "Latitude",
+          "type": "number"
+        },
+        "longitude": {
+          "title": "Longitude",
+          "type": "number"
+        },
+        "measurement": {
+          "title": "Measurement",
+          "default": "dataproduct_dispatcher",
+          "type": "string"
+        },
+        "tags": {
+          "title": "Tags",
+          "default": {},
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "database_size_bytes": {
+          "title": "Database Size Bytes",
+          "default": 0,
+          "type": "integer"
+        },
+        "dataproducts_stored": {
+          "title": "Dataproducts Stored",
+          "default": 0,
+          "type": "integer"
+        }
+      }
+    },
+    "DataProductStats": {
+      "title": "DataProductStats",
+      "type": "object",
+      "properties": {
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "nitems": {
+          "title": "Nitems",
+          "type": "integer"
+        },
+        "size_bytes": {
+          "title": "Size Bytes",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "name",
+        "nitems",
+        "size_bytes"
+      ]
+    },
+    "DataProductDispatcherState": {
+      "title": "DataProductDispatcherState",
+      "description": "Reflects a module's state. Based on pydantic.\n\nExample implementation:\n\n```python\nclass MyModuleState(ModuleState):\n    config: MyConfig = MyConfig()\n\n    value_a: str = \"\"\n    value_b: int = \"\"\n    time: datetime = Field(defautl_factory=datetime.now)\n```",
+      "type": "object",
+      "properties": {
+        "config": {
+          "title": "Config",
+          "default": {
+            "size_max_bytes": 10485760,
+            "enable_gzip": true
+          },
+          "allOf": [
+            {
+              "$ref": "#/definitions/DataProductDispatcherConfig"
+            }
+          ]
+        },
+        "statistics": {
+          "title": "Statistics",
+          "default": {
+            "timestamp": "2023-03-07T09:17:51.100329+00:00",
+            "latitude": null,
+            "longitude": null,
+            "measurement": "dataproduct_dispatcher",
+            "tags": {
+              "uid": "SUB54I40",
+              "platform": "unknown"
+            },
+            "database_size_bytes": 0,
+            "dataproducts_stored": 0
+          },
+          "allOf": [
+            {
+              "$ref": "#/definitions/DataProductDispatcherStats"
+            }
+          ]
+        },
+        "last_cleanup": {
+          "title": "Last Cleanup",
+          "type": "string",
+          "format": "date-time"
+        },
+        "dataproduct_stats": {
+          "title": "Dataproduct Stats",
+          "default": [],
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/DataProductStats"
+          }
+        }
+      }
+    },
+    "EventRecorderConfig": {
+      "title": "EventRecorderConfig",
+      "description": "A config model based on pydantic. All parameters must have defaults.\n\nExample implementation:\n\n```python\nclass MyConfig(ModuleConfig):\n    a: bool = True\n    b: float = 1.0\n```",
+      "type": "object",
+      "properties": {
+        "record_blink_led": {
+          "title": "Record Blink Led",
+          "default": true,
+          "type": "boolean"
+        },
+        "seconds_before_trigger": {
+          "title": "Seconds Before Trigger",
+          "default": 60.0,
+          "suffix": "s",
+          "exclusiveMinimum": 0,
+          "type": "number"
+        },
+        "seconds_after_trigger": {
+          "title": "Seconds After Trigger",
+          "default": 180.0,
+          "suffix": "s",
+          "exclusiveMinimum": 0,
+          "type": "number"
+        }
+      }
+    },
+    "EventRecorderState": {
+      "title": "EventRecorderState",
+      "description": "Earthquake event recorder.",
+      "type": "object",
+      "properties": {
+        "config": {
+          "title": "Config",
+          "default": {
+            "record_blink_led": true,
+            "seconds_before_trigger": 60.0,
+            "seconds_after_trigger": 180.0
+          },
+          "allOf": [
+            {
+              "$ref": "#/definitions/EventRecorderConfig"
+            }
+          ]
+        },
+        "recording": {
+          "title": "Recording",
+          "default": false,
+          "type": "boolean"
+        }
+      }
+    },
+    "HTTPServerConfig": {
+      "title": "HTTPServerConfig",
+      "description": "A config model based on pydantic. All parameters must have defaults.\n\nExample implementation:\n\n```python\nclass MyConfig(ModuleConfig):\n    a: bool = True\n    b: float = 1.0\n```",
+      "type": "object",
+      "properties": {
+        "host": {
+          "title": "Host",
+          "default": "0.0.0.0",
+          "type": "string",
+          "format": "ipv4"
+        },
+        "port": {
+          "title": "Port",
+          "default": 5533,
+          "minimum": 1000,
+          "maximum": 65535,
+          "type": "integer"
+        },
+        "update_interval": {
+          "title": "Update Interval",
+          "default": 5.0,
+          "minimum": 0.5,
+          "maximum": 10.0,
+          "type": "number"
+        }
+      }
+    },
+    "HTTPServerState": {
+      "title": "HTTPServerState",
+      "description": "Reflects a module's state. Based on pydantic.\n\nExample implementation:\n\n```python\nclass MyModuleState(ModuleState):\n    config: MyConfig = MyConfig()\n\n    value_a: str = \"\"\n    value_b: int = \"\"\n    time: datetime = Field(defautl_factory=datetime.now)\n```",
+      "type": "object",
+      "properties": {
+        "config": {
+          "title": "Config",
+          "default": {
+            "host": "0.0.0.0",
+            "port": 5533,
+            "update_interval": 5.0
+          },
+          "allOf": [
+            {
+              "$ref": "#/definitions/HTTPServerConfig"
+            }
+          ]
+        },
+        "websockets_connected": {
+          "title": "Websockets Connected",
+          "default": 0,
+          "type": "integer"
+        }
+      }
+    },
+    "HVSpectraConfig": {
+      "title": "HVSpectraConfig",
+      "description": "A config model based on pydantic. All parameters must have defaults.\n\nExample implementation:\n\n```python\nclass MyConfig(ModuleConfig):\n    a: bool = True\n    b: float = 1.0\n```",
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "title": "Enabled",
+          "default": true,
+          "type": "boolean"
+        },
+        "window_length_seconds": {
+          "title": "Window Length Seconds",
+          "default": 30.0,
+          "minimum": 20.0,
+          "maximum": 120.0,
+          "type": "number"
+        },
+        "spectra_stack_size": {
+          "title": "Spectra Stack Size",
+          "default": 20,
+          "minimum": 1,
+          "maximum": 50,
+          "type": "integer"
+        },
+        "min_frequency": {
+          "title": "Min Frequency",
+          "default": 0.05,
+          "minimum": 0.02,
+          "maximum": 10.0,
+          "type": "number"
+        },
+        "max_frequency": {
+          "title": "Max Frequency",
+          "default": 20.0,
+          "minimum": 10.0,
+          "maximum": 40.0,
+          "type": "number"
+        },
+        "smoothing_filter_bandwidth_hz": {
+          "title": "Smoothing Filter Bandwidth Hz",
+          "default": 30.0,
+          "minimum": 5.0,
+          "maximum": 40.0,
+          "type": "number"
+        },
+        "time_normalization": {
+          "title": "Time Normalization",
+          "default": "mute-median",
+          "enum": [
+            "mute-median",
+            "none"
+          ],
+          "type": "string"
+        },
+        "mute_median_level": {
+          "title": "Mute Median Level",
+          "default": 3.0,
+          "minimum": 1.0,
+          "maximum": 5.0,
+          "type": "number"
+        },
+        "spectra_nsamples": {
+          "title": "Spectra Nsamples",
+          "default": 150,
+          "minimum": 100,
+          "maximum": 200,
+          "multipleOf": 10,
+          "type": "integer"
+        },
+        "normalize_spectra": {
+          "title": "Normalize Spectra",
+          "default": true,
+          "type": "boolean"
+        }
+      }
+    },
+    "HVContinuousSpectraState": {
+      "title": "HVContinuousSpectraState",
+      "description": "Reflects a module's state. Based on pydantic.\n\nExample implementation:\n\n```python\nclass MyModuleState(ModuleState):\n    config: MyConfig = MyConfig()\n\n    value_a: str = \"\"\n    value_b: int = \"\"\n    time: datetime = Field(defautl_factory=datetime.now)\n```",
+      "type": "object",
+      "properties": {
+        "config": {
+          "title": "Config",
+          "default": {
+            "enabled": true,
+            "window_length_seconds": 30.0,
+            "spectra_stack_size": 20,
+            "min_frequency": 0.05,
+            "max_frequency": 20.0,
+            "smoothing_filter_bandwidth_hz": 30.0,
+            "time_normalization": "mute-median",
+            "mute_median_level": 3.0,
+            "spectra_nsamples": 150,
+            "normalize_spectra": true
+          },
+          "allOf": [
+            {
+              "$ref": "#/definitions/HVSpectraConfig"
+            }
+          ]
+        },
+        "spectra_calculated": {
+          "title": "Spectra Calculated",
+          "default": 0,
+          "type": "integer"
+        },
+        "coefficients_cache_size_bytes": {
+          "title": "Coefficients Cache Size Bytes",
+          "default": 0,
+          "type": "integer"
+        },
+        "status": {
+          "title": "Status",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "JMAIntensityConfig": {
+      "title": "JMAIntensityConfig",
+      "description": "A config model based on pydantic. All parameters must have defaults.\n\nExample implementation:\n\n```python\nclass MyConfig(ModuleConfig):\n    a: bool = True\n    b: float = 1.0\n```",
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "title": "Enabled",
+          "default": true,
+          "type": "boolean"
+        },
+        "window_length_seconds": {
+          "title": "Window Length Seconds",
+          "default": 60.0,
+          "suffix": "s",
+          "minimum": 10.0,
+          "maximum": 120.0,
+          "type": "number"
+        }
+      }
+    },
+    "JMAIntensityMeasurement": {
+      "title": "JMAIntensityMeasurement",
+      "description": "A measurement model.\n\nMeasurements consist of `field` names, a tuple of `tags` and\nthe actual measurements. The fields have to be of type int/float/bool or str.\nA measurement needs to be attached to a `ModuleState` object.\n\nExample implementation:\n\n```python\nclass ExampleMeasurement(MeasurementModel):\n    measurement: str = \"foo_measurement\"\n    tags: Tuple[str] = (\"machine_a\",)\n\n    value_a: float\n    value_b: int\n    value_c: bool\n```",
+      "type": "object",
+      "properties": {
+        "timestamp": {
+          "title": "Timestamp",
+          "type": "string",
+          "format": "date-time"
+        },
+        "latitude": {
+          "title": "Latitude",
+          "type": "number"
+        },
+        "longitude": {
+          "title": "Longitude",
+          "type": "number"
+        },
+        "measurement": {
+          "title": "Measurement",
+          "default": "rt_jma_intensity",
+          "type": "string"
+        },
+        "tags": {
+          "title": "Tags",
+          "default": {},
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "intensity": {
+          "title": "Intensity",
+          "default": 0.0,
+          "type": "number"
+        }
+      }
+    },
+    "JMAIntensityState": {
+      "title": "JMAIntensityState",
+      "description": "Calculation if JMA Shindo instrument intensity.",
+      "type": "object",
+      "properties": {
+        "config": {
+          "title": "Config",
+          "default": {
+            "enabled": true,
+            "window_length_seconds": 60.0
+          },
+          "allOf": [
+            {
+              "$ref": "#/definitions/JMAIntensityConfig"
+            }
+          ]
+        },
+        "measurement": {
+          "title": "Measurement",
+          "default": {
+            "timestamp": "2023-03-07T09:17:51.438078+00:00",
+            "latitude": null,
+            "longitude": null,
+            "measurement": "rt_jma_intensity",
+            "tags": {
+              "uid": "SUB54I40",
+              "platform": "unknown"
+            },
+            "intensity": 0.0
+          },
+          "allOf": [
+            {
+              "$ref": "#/definitions/JMAIntensityMeasurement"
+            }
+          ]
+        }
+      }
+    },
+    "LocationConfig": {
+      "title": "LocationConfig",
+      "description": "A config model based on pydantic. All parameters must have defaults.\n\nExample implementation:\n\n```python\nclass MyConfig(ModuleConfig):\n    a: bool = True\n    b: float = 1.0\n```",
+      "type": "object",
+      "properties": {
+        "network": {
+          "title": "Network",
+          "default": "QS",
+          "maxLength": 2,
+          "pattern": "[a-zA-Z0-9]*",
+          "type": "string"
+        },
+        "station": {
+          "title": "Station",
+          "default": "SUB54",
+          "maxLength": 5,
+          "pattern": "[A-Z0-9]*",
+          "type": "string"
+        },
+        "location": {
+          "title": "Location",
+          "default": "",
+          "maxLength": 2,
+          "pattern": "[A-Z0-9]*",
+          "type": "string"
+        },
+        "channel_mapping": {
+          "title": "Channel Mapping",
+          "default": {},
+          "type": "object",
+          "patternProperties": {
+            "[A-Z0-9]": {
+              "type": "string",
+              "minLength": 3,
+              "maxLength": 3,
+              "pattern": "[A-Z0-9]"
+            }
+          }
+        },
+        "station_name_readable": {
+          "title": "Station Name Readable",
+          "default": "",
+          "type": "string"
+        },
+        "lat": {
+          "title": "Lat",
+          "default": 0.0,
+          "minimum": -90.0,
+          "maximum": 90.0,
+          "type": "number"
+        },
+        "lon": {
+          "title": "Lon",
+          "default": 0.0,
+          "minimum": -180.0,
+          "maximum": 180.0,
+          "type": "number"
+        },
+        "elevation": {
+          "title": "Elevation",
+          "default": 0.0,
+          "type": "number"
+        },
+        "depth": {
+          "title": "Depth",
+          "default": 0.0,
+          "type": "number"
+        },
+        "floor": {
+          "title": "Floor",
+          "default": 0,
+          "type": "integer"
+        },
+        "building_type": {
+          "title": "Building Type",
+          "default": "",
+          "type": "string"
+        },
+        "address": {
+          "title": "Address",
+          "default": "",
+          "type": "string"
+        },
+        "region": {
+          "title": "Region",
+          "default": "",
+          "type": "string"
+        },
+        "country": {
+          "title": "Country",
+          "default": "",
+          "type": "string"
+        },
+        "comment": {
+          "title": "Comment",
+          "default": "",
+          "type": "string"
+        },
+        "osm_building_id": {
+          "title": "Osm Building Id",
+          "default": "",
+          "type": "string"
+        },
+        "measurement_method": {
+          "title": "Measurement Method",
+          "default": "manual",
+          "type": "string"
+        },
+        "mozilla_api_key": {
+          "title": "Mozilla Api Key",
+          "default": "test",
+          "type": "string"
+        },
+        "jitter_network_location": {
+          "title": "Jitter Network Location",
+          "default": 0.0,
+          "type": "number"
+        },
+        "last_edited": {
+          "title": "Last Edited",
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "NetworkLocation": {
+      "title": "NetworkLocation",
+      "type": "object",
+      "properties": {
+        "method": {
+          "title": "Method",
+          "enum": [
+            "wifi",
+            "geo-ip"
+          ],
+          "type": "string"
+        },
+        "lat": {
+          "title": "Lat",
+          "type": "number"
+        },
+        "lon": {
+          "title": "Lon",
+          "type": "number"
+        },
+        "accuracy": {
+          "title": "Accuracy",
+          "type": "number"
+        },
+        "timestamp": {
+          "title": "Timestamp",
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "method",
+        "lat",
+        "lon"
+      ]
+    },
+    "LocationState": {
+      "title": "LocationState",
+      "description": "Reflects a module's state. Based on pydantic.\n\nExample implementation:\n\n```python\nclass MyModuleState(ModuleState):\n    config: MyConfig = MyConfig()\n\n    value_a: str = \"\"\n    value_b: int = \"\"\n    time: datetime = Field(defautl_factory=datetime.now)\n```",
+      "type": "object",
+      "properties": {
+        "config": {
+          "title": "Config",
+          "default": {
+            "network": "QS",
+            "station": "SUB54",
+            "location": "",
+            "channel_mapping": {},
+            "station_name_readable": "",
+            "lat": 0.0,
+            "lon": 0.0,
+            "elevation": 0.0,
+            "depth": 0.0,
+            "floor": 0,
+            "building_type": "",
+            "address": "",
+            "region": "",
+            "country": "",
+            "comment": "",
+            "osm_building_id": "",
+            "measurement_method": "manual",
+            "mozilla_api_key": "test",
+            "jitter_network_location": 0.0,
+            "last_edited": "2023-03-07T09:17:51.459013+00:00"
+          },
+          "allOf": [
+            {
+              "$ref": "#/definitions/LocationConfig"
+            }
+          ]
+        },
+        "network_location": {
+          "$ref": "#/definitions/NetworkLocation"
+        }
+      }
+    },
+    "LoggingDequeConfig": {
+      "title": "LoggingDequeConfig",
+      "description": "A config model based on pydantic. All parameters must have defaults.\n\nExample implementation:\n\n```python\nclass MyConfig(ModuleConfig):\n    a: bool = True\n    b: float = 1.0\n```",
+      "type": "object",
+      "properties": {
+        "capacity": {
+          "title": "Capacity",
+          "default": 1000,
+          "exclusiveMinimum": 0,
+          "type": "integer"
+        }
+      }
+    },
+    "LoggingDequeStats": {
+      "title": "LoggingDequeStats",
+      "description": "A measurement model.\n\nMeasurements consist of `field` names, a tuple of `tags` and\nthe actual measurements. The fields have to be of type int/float/bool or str.\nA measurement needs to be attached to a `ModuleState` object.\n\nExample implementation:\n\n```python\nclass ExampleMeasurement(MeasurementModel):\n    measurement: str = \"foo_measurement\"\n    tags: Tuple[str] = (\"machine_a\",)\n\n    value_a: float\n    value_b: int\n    value_c: bool\n```",
+      "type": "object",
+      "properties": {
+        "timestamp": {
+          "title": "Timestamp",
+          "type": "string",
+          "format": "date-time"
+        },
+        "latitude": {
+          "title": "Latitude",
+          "type": "number"
+        },
+        "longitude": {
+          "title": "Longitude",
+          "type": "number"
+        },
+        "measurement": {
+          "title": "Measurement",
+          "default": "logging_deque",
+          "type": "string"
+        },
+        "tags": {
+          "title": "Tags",
+          "default": {},
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "ingested_logs": {
+          "title": "Ingested Logs",
+          "default": 0,
+          "type": "integer"
+        }
+      }
+    },
+    "LoggingDequeState": {
+      "title": "LoggingDequeState",
+      "description": "Reflects a module's state. Based on pydantic.\n\nExample implementation:\n\n```python\nclass MyModuleState(ModuleState):\n    config: MyConfig = MyConfig()\n\n    value_a: str = \"\"\n    value_b: int = \"\"\n    time: datetime = Field(defautl_factory=datetime.now)\n```",
+      "type": "object",
+      "properties": {
+        "config": {
+          "title": "Config",
+          "default": {
+            "capacity": 1000
+          },
+          "allOf": [
+            {
+              "$ref": "#/definitions/LoggingDequeConfig"
+            }
+          ]
+        },
+        "stats": {
+          "title": "Stats",
+          "default": {
+            "timestamp": "2023-03-07T09:17:51.161774+00:00",
+            "latitude": null,
+            "longitude": null,
+            "measurement": "logging_deque",
+            "tags": {
+              "uid": "SUB54I40",
+              "platform": "unknown"
+            },
+            "ingested_logs": 0
+          },
+          "allOf": [
+            {
+              "$ref": "#/definitions/LoggingDequeStats"
+            }
+          ]
+        },
+        "nlogs_stored": {
+          "title": "Nlogs Stored",
+          "default": 0,
+          "type": "integer"
+        }
+      }
+    },
+    "MQTTClientConfig": {
+      "title": "MQTTClientConfig",
+      "description": "A config model based on pydantic. All parameters must have defaults.\n\nExample implementation:\n\n```python\nclass MyConfig(ModuleConfig):\n    a: bool = True\n    b: float = 1.0\n```",
+      "type": "object",
+      "properties": {
+        "token": {
+          "title": "Token",
+          "default": "",
+          "type": "string"
+        },
+        "host": {
+          "title": "Host",
+          "default": "localhost",
+          "type": "string"
+        },
+        "port": {
+          "title": "Port",
+          "default": 1883,
+          "minimum": 1,
+          "maximum": 65535,
+          "type": "integer"
+        },
+        "protocol": {
+          "title": "Protocol",
+          "default": "mqtt",
+          "enum": [
+            "mqtt",
+            "mqtts"
+          ],
+          "type": "string"
+        },
+        "keepalive": {
+          "title": "Keepalive",
+          "default": 10,
+          "exclusiveMinimum": 0,
+          "type": "integer"
+        },
+        "message_expiry_interval": {
+          "title": "Message Expiry Interval",
+          "default": 60,
+          "exclusiveMinimum": 0,
+          "type": "integer"
+        },
+        "reconnect_retries": {
+          "title": "Reconnect Retries",
+          "default": -1,
+          "minimum": -1,
+          "type": "integer"
+        },
+        "reconnect_delay": {
+          "title": "Reconnect Delay",
+          "default": 20.0,
+          "exclusiveMinimum": 0,
+          "type": "number"
+        },
+        "mqtt_logger_enabled": {
+          "title": "Mqtt Logger Enabled",
+          "default": true,
+          "type": "boolean"
+        },
+        "mqtt_logger_level": {
+          "title": "Mqtt Logger Level",
+          "default": 20,
+          "enum": [
+            10,
+            20,
+            30,
+            40,
+            50
+          ],
+          "type": "integer"
+        },
+        "provider_url": {
+          "title": "Provider Url",
+          "minLength": 1,
+          "maxLength": 65536,
+          "format": "uri",
+          "type": "string"
+        },
+        "provider_config_received": {
+          "title": "Provider Config Received",
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "MQTTClientStatistics": {
+      "title": "MQTTClientStatistics",
+      "description": "A measurement model.\n\nMeasurements consist of `field` names, a tuple of `tags` and\nthe actual measurements. The fields have to be of type int/float/bool or str.\nA measurement needs to be attached to a `ModuleState` object.\n\nExample implementation:\n\n```python\nclass ExampleMeasurement(MeasurementModel):\n    measurement: str = \"foo_measurement\"\n    tags: Tuple[str] = (\"machine_a\",)\n\n    value_a: float\n    value_b: int\n    value_c: bool\n```",
+      "type": "object",
+      "properties": {
+        "timestamp": {
+          "title": "Timestamp",
+          "type": "string",
+          "format": "date-time"
+        },
+        "latitude": {
+          "title": "Latitude",
+          "type": "number"
+        },
+        "longitude": {
+          "title": "Longitude",
+          "type": "number"
+        },
+        "measurement": {
+          "title": "Measurement",
+          "default": "mqtt_client",
+          "type": "string"
+        },
+        "tags": {
+          "title": "Tags",
+          "default": {},
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "bytes_sent": {
+          "title": "Bytes Sent",
+          "default": 0,
+          "type": "integer"
+        },
+        "bytes_recv": {
+          "title": "Bytes Recv",
+          "default": 0,
+          "type": "integer"
+        },
+        "nmessages_sent": {
+          "title": "Nmessages Sent",
+          "default": 0,
+          "type": "integer"
+        },
+        "nmessages_recv": {
+          "title": "Nmessages Recv",
+          "default": 0,
+          "type": "integer"
+        },
+        "nmessages_failed": {
+          "title": "Nmessages Failed",
+          "default": 0,
+          "type": "integer"
+        },
+        "connect_count": {
+          "title": "Connect Count",
+          "default": 0,
+          "type": "integer"
+        },
+        "unsend_messages": {
+          "title": "Unsend Messages",
+          "default": 0,
+          "type": "integer"
+        }
+      }
+    },
+    "MQTTClientState": {
+      "title": "MQTTClientState",
+      "description": "Reflects a module's state. Based on pydantic.\n\nExample implementation:\n\n```python\nclass MyModuleState(ModuleState):\n    config: MyConfig = MyConfig()\n\n    value_a: str = \"\"\n    value_b: int = \"\"\n    time: datetime = Field(defautl_factory=datetime.now)\n```",
+      "type": "object",
+      "properties": {
+        "config": {
+          "title": "Config",
+          "default": {
+            "token": "",
+            "host": "localhost",
+            "port": 1883,
+            "protocol": "mqtt",
+            "keepalive": 10,
+            "message_expiry_interval": 60,
+            "reconnect_retries": -1,
+            "reconnect_delay": 20.0,
+            "mqtt_logger_enabled": true,
+            "mqtt_logger_level": 20,
+            "provider_url": null,
+            "provider_config_received": null
+          },
+          "allOf": [
+            {
+              "$ref": "#/definitions/MQTTClientConfig"
+            }
+          ]
+        },
+        "stats": {
+          "title": "Stats",
+          "default": {
+            "timestamp": "2023-03-07T09:17:51.300186+00:00",
+            "latitude": null,
+            "longitude": null,
+            "measurement": "mqtt_client",
+            "tags": {
+              "uid": "SUB54I40",
+              "platform": "unknown"
+            },
+            "bytes_sent": 0,
+            "bytes_recv": 0,
+            "nmessages_sent": 0,
+            "nmessages_recv": 0,
+            "nmessages_failed": 0,
+            "connect_count": 0,
+            "unsend_messages": 0
+          },
+          "allOf": [
+            {
+              "$ref": "#/definitions/MQTTClientStatistics"
+            }
+          ]
+        },
+        "latency": {
+          "title": "Latency",
+          "default": 0.0,
+          "type": "number"
+        },
+        "connected": {
+          "title": "Connected",
+          "default": false,
+          "type": "boolean"
+        },
+        "client_registered": {
+          "title": "Client Registered",
+          "default": false,
+          "type": "boolean"
+        }
+      }
+    },
+    "ModuleConfig": {
+      "title": "ModuleConfig",
+      "description": "A config model based on pydantic. All parameters must have defaults.\n\nExample implementation:\n\n```python\nclass MyConfig(ModuleConfig):\n    a: bool = True\n    b: float = 1.0\n```",
+      "type": "object",
+      "properties": {}
+    },
+    "MenderInformation": {
+      "title": "MenderInformation",
+      "description": "Reflects a module's state. Based on pydantic.\n\nExample implementation:\n\n```python\nclass MyModuleState(ModuleState):\n    config: MyConfig = MyConfig()\n\n    value_a: str = \"\"\n    value_b: int = \"\"\n    time: datetime = Field(defautl_factory=datetime.now)\n```",
+      "type": "object",
+      "properties": {
+        "config": {
+          "title": "Config",
+          "default": {},
+          "allOf": [
+            {
+              "$ref": "#/definitions/ModuleConfig"
+            }
+          ]
+        },
+        "mac": {
+          "title": "Mac",
+          "type": "string"
+        },
+        "cpu_serial": {
+          "title": "Cpu Serial",
+          "type": "string"
+        },
+        "artifact": {
+          "title": "Artifact",
+          "type": "string"
+        }
+      }
+    },
+    "NetworkDispatcherConfig": {
+      "title": "NetworkDispatcherConfig",
+      "description": "A config model based on pydantic. All parameters must have defaults.\n\nExample implementation:\n\n```python\nclass MyConfig(ModuleConfig):\n    a: bool = True\n    b: float = 1.0\n```",
+      "type": "object",
+      "properties": {
+        "send_measurements_interval": {
+          "title": "Send Measurements Interval",
+          "default": 30.0,
+          "type": "number"
+        },
+        "send_state_interval": {
+          "title": "Send State Interval",
+          "default": 300.0,
+          "type": "number"
+        },
+        "state_subscription_delay": {
+          "title": "State Subscription Delay",
+          "default": 5.0,
+          "type": "number"
+        },
+        "measurement_collection_jitter": {
+          "title": "Measurement Collection Jitter",
+          "default": 0.5,
+          "type": "number"
+        }
+      }
+    },
+    "NetworkDispatcherStats": {
+      "title": "NetworkDispatcherStats",
+      "description": "A measurement model.\n\nMeasurements consist of `field` names, a tuple of `tags` and\nthe actual measurements. The fields have to be of type int/float/bool or str.\nA measurement needs to be attached to a `ModuleState` object.\n\nExample implementation:\n\n```python\nclass ExampleMeasurement(MeasurementModel):\n    measurement: str = \"foo_measurement\"\n    tags: Tuple[str] = (\"machine_a\",)\n\n    value_a: float\n    value_b: int\n    value_c: bool\n```",
+      "type": "object",
+      "properties": {
+        "timestamp": {
+          "title": "Timestamp",
+          "type": "string",
+          "format": "date-time"
+        },
+        "latitude": {
+          "title": "Latitude",
+          "type": "number"
+        },
+        "longitude": {
+          "title": "Longitude",
+          "type": "number"
+        },
+        "measurement": {
+          "title": "Measurement",
+          "default": "network_dispatcher",
+          "type": "string"
+        },
+        "tags": {
+          "title": "Tags",
+          "default": {},
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "data_products_sent": {
+          "title": "Data Products Sent",
+          "default": 0,
+          "type": "integer"
+        },
+        "configs_received": {
+          "title": "Configs Received",
+          "default": 0,
+          "type": "integer"
+        },
+        "actions_received": {
+          "title": "Actions Received",
+          "default": 0,
+          "type": "integer"
+        }
+      }
+    },
+    "NetworkDispatcherState": {
+      "title": "NetworkDispatcherState",
+      "description": "Reflects a module's state. Based on pydantic.\n\nExample implementation:\n\n```python\nclass MyModuleState(ModuleState):\n    config: MyConfig = MyConfig()\n\n    value_a: str = \"\"\n    value_b: int = \"\"\n    time: datetime = Field(defautl_factory=datetime.now)\n```",
+      "type": "object",
+      "properties": {
+        "config": {
+          "title": "Config",
+          "default": {
+            "send_measurements_interval": 30.0,
+            "send_state_interval": 300.0,
+            "state_subscription_delay": 5.0,
+            "measurement_collection_jitter": 0.5
+          },
+          "allOf": [
+            {
+              "$ref": "#/definitions/NetworkDispatcherConfig"
+            }
+          ]
+        },
+        "stats": {
+          "title": "Stats",
+          "default": {
+            "timestamp": "2023-03-07T09:17:51.460961+00:00",
+            "latitude": null,
+            "longitude": null,
+            "measurement": "network_dispatcher",
+            "tags": {
+              "uid": "SUB54I40",
+              "platform": "unknown"
+            },
+            "data_products_sent": 0,
+            "configs_received": 0,
+            "actions_received": 0
+          },
+          "allOf": [
+            {
+              "$ref": "#/definitions/NetworkDispatcherStats"
+            }
+          ]
+        }
+      }
+    },
+    "NoiseAutocorrelationConfig": {
+      "title": "NoiseAutocorrelationConfig",
+      "description": "A config model based on pydantic. All parameters must have defaults.\n\nExample implementation:\n\n```python\nclass MyConfig(ModuleConfig):\n    a: bool = True\n    b: float = 1.0\n```",
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "title": "Enabled",
+          "default": true,
+          "type": "boolean"
+        },
+        "window_length_seconds": {
+          "title": "Window Length Seconds",
+          "default": 120.0,
+          "minimum": 60.0,
+          "maximum": 300.0,
+          "type": "number"
+        },
+        "window_taper_fraction": {
+          "title": "Window Taper Fraction",
+          "default": 0.05,
+          "minimum": 0.05,
+          "maximum": 0.1,
+          "type": "number"
+        },
+        "time_normalization": {
+          "title": "Time Normalization",
+          "default": "one-bit",
+          "enum": [
+            "one-bit",
+            "mute-median",
+            "none"
+          ],
+          "type": "string"
+        },
+        "stacking_method": {
+          "title": "Stacking Method",
+          "default": "linear",
+          "enum": [
+            "linear",
+            "phase-weighted-stack"
+          ],
+          "type": "string"
+        },
+        "stack_rms_normalization": {
+          "title": "Stack Rms Normalization",
+          "default": false,
+          "type": "boolean"
+        },
+        "max_lagtime": {
+          "title": "Max Lagtime",
+          "default": 20.0,
+          "minimum": 5.0,
+          "maximum": 60.0,
+          "type": "number"
+        },
+        "min_frequency": {
+          "title": "Min Frequency",
+          "default": 0.3,
+          "minimum": 0.05,
+          "maximum": 1.0,
+          "type": "number"
+        },
+        "max_frequency": {
+          "title": "Max Frequency",
+          "default": 1.0,
+          "exclusiveMinimum": 0.5,
+          "maximum": 6.0,
+          "type": "number"
+        },
+        "correlation_stack_size": {
+          "title": "Correlation Stack Size",
+          "default": 50,
+          "minimum": 1,
+          "maximum": 50,
+          "type": "integer"
+        }
+      }
+    },
+    "NoiseAutocorrelationState": {
+      "title": "NoiseAutocorrelationState",
+      "description": "Reflects a module's state. Based on pydantic.\n\nExample implementation:\n\n```python\nclass MyModuleState(ModuleState):\n    config: MyConfig = MyConfig()\n\n    value_a: str = \"\"\n    value_b: int = \"\"\n    time: datetime = Field(defautl_factory=datetime.now)\n```",
+      "type": "object",
+      "properties": {
+        "config": {
+          "title": "Config",
+          "default": {
+            "enabled": true,
+            "window_length_seconds": 120.0,
+            "window_taper_fraction": 0.05,
+            "time_normalization": "one-bit",
+            "stacking_method": "linear",
+            "stack_rms_normalization": false,
+            "max_lagtime": 20.0,
+            "min_frequency": 0.3,
+            "max_frequency": 1.0,
+            "correlation_stack_size": 50
+          },
+          "allOf": [
+            {
+              "$ref": "#/definitions/NoiseAutocorrelationConfig"
+            }
+          ]
+        }
+      }
+    },
+    "PeakGroundMotionConfig": {
+      "title": "PeakGroundMotionConfig",
+      "description": "Real-time Peak Ground Acceleration (PGA) Configuration\n\nAttributes:\n    enabled (bool): Select if module should be enabled for continuous analysis\n    window_length_seconds (float): window within which PGA is evaluated repeatedly",
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "title": "Enabled",
+          "default": true,
+          "type": "boolean"
+        },
+        "window_length_seconds": {
+          "title": "Window Length Seconds",
+          "default": 30.0,
+          "suffix": "s",
+          "minimum": 5.0,
+          "maximum": 60.0,
+          "type": "number"
+        },
+        "pga_lowpass": {
+          "title": "Pga Lowpass",
+          "default": 10.0,
+          "suffix": "Hz",
+          "minimum": 1.0,
+          "maximum": 20.0,
+          "type": "number"
+        },
+        "pgv_highpass": {
+          "title": "Pgv Highpass",
+          "default": 0.075,
+          "suffix": "Hz",
+          "minimum": 0.0,
+          "maximum": 20.0,
+          "type": "number"
+        },
+        "pga_trigger_enabled": {
+          "title": "Pga Trigger Enabled",
+          "default": false,
+          "type": "boolean"
+        },
+        "pga_trigger_threshold": {
+          "title": "Pga Trigger Threshold",
+          "default": 0.5,
+          "suffix": "m/s^2",
+          "exclusiveMinimum": 0,
+          "type": "number"
+        }
+      }
+    },
+    "PGMMeasurement": {
+      "title": "PGMMeasurement",
+      "description": "A measurement model.\n\nMeasurements consist of `field` names, a tuple of `tags` and\nthe actual measurements. The fields have to be of type int/float/bool or str.\nA measurement needs to be attached to a `ModuleState` object.\n\nExample implementation:\n\n```python\nclass ExampleMeasurement(MeasurementModel):\n    measurement: str = \"foo_measurement\"\n    tags: Tuple[str] = (\"machine_a\",)\n\n    value_a: float\n    value_b: int\n    value_c: bool\n```",
+      "type": "object",
+      "properties": {
+        "timestamp": {
+          "title": "Timestamp",
+          "type": "string",
+          "format": "date-time"
+        },
+        "latitude": {
+          "title": "Latitude",
+          "type": "number"
+        },
+        "longitude": {
+          "title": "Longitude",
+          "type": "number"
+        },
+        "measurement": {
+          "title": "Measurement",
+          "default": "rt_peak_ground_motion",
+          "type": "string"
+        },
+        "tags": {
+          "title": "Tags",
+          "default": {},
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "pga": {
+          "title": "Peak ground acceleration",
+          "default": 0.0,
+          "suffix": "m/s/s",
+          "type": "number"
+        },
+        "pha": {
+          "title": "Peak horizontal acceleration",
+          "default": 0.0,
+          "suffix": "m/s/s",
+          "type": "number"
+        },
+        "pgv": {
+          "title": "Peak ground velocity",
+          "default": 0.0,
+          "suffix": "m/s",
+          "type": "number"
+        },
+        "mod_mercalli_intensity": {
+          "title": "Modified mercalli intensity",
+          "default": 0.0,
+          "type": "number"
+        },
+        "cwb_intensity": {
+          "title": "CWB intensity",
+          "default": 0,
+          "type": "integer"
+        },
+        "jma_intensity": {
+          "title": "JMA intensity",
+          "default": 0.0,
+          "type": "number"
+        }
+      }
+    },
+    "PeakGroundMotionState": {
+      "title": "PeakGroundMotionState",
+      "description": "Real-time calculation of Peak Ground Acceleration (PGA).",
+      "type": "object",
+      "properties": {
+        "config": {
+          "title": "Config",
+          "default": {
+            "enabled": true,
+            "window_length_seconds": 30.0,
+            "pga_lowpass": 10.0,
+            "pgv_highpass": 0.075,
+            "pga_trigger_enabled": false,
+            "pga_trigger_threshold": 0.5
+          },
+          "allOf": [
+            {
+              "$ref": "#/definitions/PeakGroundMotionConfig"
+            }
+          ]
+        },
+        "measurement": {
+          "title": "Measurement",
+          "default": {
+            "timestamp": "2023-03-07T09:17:51.445752+00:00",
+            "latitude": null,
+            "longitude": null,
+            "measurement": "rt_peak_ground_motion",
+            "tags": {
+              "uid": "SUB54I40",
+              "platform": "unknown"
+            },
+            "pga": 0.0,
+            "pha": 0.0,
+            "pgv": 0.0,
+            "mod_mercalli_intensity": 0.0,
+            "cwb_intensity": 0,
+            "jma_intensity": 0.0
+          },
+          "allOf": [
+            {
+              "$ref": "#/definitions/PGMMeasurement"
+            }
+          ]
+        }
+      }
+    },
+    "RMSAmplitudeConfig": {
+      "title": "RMSAmplitudeConfig",
+      "description": "A config model based on pydantic. All parameters must have defaults.\n\nExample implementation:\n\n```python\nclass MyConfig(ModuleConfig):\n    a: bool = True\n    b: float = 1.0\n```",
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "title": "Enabled",
+          "default": true,
+          "type": "boolean"
+        },
+        "window_length_seconds": {
+          "title": "Window Length Seconds",
+          "default": 10.0,
+          "suffix": "s",
+          "minimum": 1.0,
+          "maximum": 30.0,
+          "type": "number"
+        }
+      }
+    },
+    "RMSAmplitudeMeasurement": {
+      "title": "RMSAmplitudeMeasurement",
+      "description": "A measurement model.\n\nMeasurements consist of `field` names, a tuple of `tags` and\nthe actual measurements. The fields have to be of type int/float/bool or str.\nA measurement needs to be attached to a `ModuleState` object.\n\nExample implementation:\n\n```python\nclass ExampleMeasurement(MeasurementModel):\n    measurement: str = \"foo_measurement\"\n    tags: Tuple[str] = (\"machine_a\",)\n\n    value_a: float\n    value_b: int\n    value_c: bool\n```",
+      "type": "object",
+      "properties": {
+        "timestamp": {
+          "title": "Timestamp",
+          "type": "string",
+          "format": "date-time"
+        },
+        "latitude": {
+          "title": "Latitude",
+          "type": "number"
+        },
+        "longitude": {
+          "title": "Longitude",
+          "type": "number"
+        },
+        "measurement": {
+          "title": "Measurement",
+          "default": "rms_amplitude",
+          "type": "string"
+        },
+        "tags": {
+          "title": "Tags",
+          "default": {},
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "rms_amplitude": {
+          "title": "Rms Amplitude",
+          "default": 0.0,
+          "type": "number"
+        }
+      }
+    },
+    "RMSAmplitudeState": {
+      "title": "RMSAmplitudeState",
+      "description": "Real-time calculation of the Root-Mean-Square (RMS) amplitude.",
+      "type": "object",
+      "properties": {
+        "config": {
+          "title": "Config",
+          "default": {
+            "enabled": true,
+            "window_length_seconds": 10.0
+          },
+          "allOf": [
+            {
+              "$ref": "#/definitions/RMSAmplitudeConfig"
+            }
+          ]
+        },
+        "measurement": {
+          "$ref": "#/definitions/RMSAmplitudeMeasurement"
+        }
+      }
+    },
+    "RingbufferStatistics": {
+      "title": "RingbufferStatistics",
+      "description": "A measurement model.\n\nMeasurements consist of `field` names, a tuple of `tags` and\nthe actual measurements. The fields have to be of type int/float/bool or str.\nA measurement needs to be attached to a `ModuleState` object.\n\nExample implementation:\n\n```python\nclass ExampleMeasurement(MeasurementModel):\n    measurement: str = \"foo_measurement\"\n    tags: Tuple[str] = (\"machine_a\",)\n\n    value_a: float\n    value_b: int\n    value_c: bool\n```",
+      "type": "object",
+      "properties": {
+        "timestamp": {
+          "title": "Timestamp",
+          "type": "string",
+          "format": "date-time"
+        },
+        "latitude": {
+          "title": "Latitude",
+          "type": "number"
+        },
+        "longitude": {
+          "title": "Longitude",
+          "type": "number"
+        },
+        "measurement": {
+          "title": "Measurement",
+          "default": "ringbuffer",
+          "type": "string"
+        },
+        "tags": {
+          "title": "Tags",
+          "default": {},
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "ready": {
+          "title": "Ready",
+          "default": false,
+          "type": "boolean"
+        },
+        "deltat_input": {
+          "title": "Deltat Input",
+          "default": 0.0,
+          "type": "number"
+        },
+        "nsamples": {
+          "title": "Nsamples",
+          "default": 0,
+          "type": "integer"
+        },
+        "percent_used": {
+          "title": "Percent Used",
+          "default": 0.0,
+          "type": "number"
+        },
+        "nsamples_buffer": {
+          "title": "Nsamples Buffer",
+          "default": 0,
+          "type": "integer"
+        },
+        "bytes_used": {
+          "title": "Bytes Used",
+          "default": 0,
+          "type": "integer"
+        },
+        "bytes_capacity": {
+          "title": "Bytes Capacity",
+          "default": 0,
+          "type": "integer"
+        },
+        "pos_head": {
+          "title": "Pos Head",
+          "default": 0,
+          "type": "integer"
+        },
+        "tmin": {
+          "title": "Tmin",
+          "default": 0.0,
+          "type": "number"
+        },
+        "tmax": {
+          "title": "Tmax",
+          "default": 0.0,
+          "type": "number"
+        },
+        "nlisteners": {
+          "title": "Nlisteners",
+          "default": 0,
+          "type": "integer"
+        }
+      }
+    },
+    "RingbufferState": {
+      "title": "RingbufferState",
+      "description": "Reflects a module's state. Based on pydantic.\n\nExample implementation:\n\n```python\nclass MyModuleState(ModuleState):\n    config: MyConfig = MyConfig()\n\n    value_a: str = \"\"\n    value_b: int = \"\"\n    time: datetime = Field(defautl_factory=datetime.now)\n```",
+      "type": "object",
+      "properties": {
+        "config": {
+          "title": "Config",
+          "default": {},
+          "allOf": [
+            {
+              "$ref": "#/definitions/ModuleConfig"
+            }
+          ]
+        },
+        "stats": {
+          "title": "Stats",
+          "default": {
+            "timestamp": "2023-03-07T09:17:51.415085+00:00",
+            "latitude": null,
+            "longitude": null,
+            "measurement": "ringbuffer",
+            "tags": {
+              "uid": "SUB54I40",
+              "platform": "unknown"
+            },
+            "ready": false,
+            "deltat_input": 0.0,
+            "nsamples": 0,
+            "percent_used": 0.0,
+            "nsamples_buffer": 0,
+            "bytes_used": 0,
+            "bytes_capacity": 0,
+            "pos_head": 0,
+            "tmin": 0.0,
+            "tmax": 0.0,
+            "nlisteners": 0
+          },
+          "allOf": [
+            {
+              "$ref": "#/definitions/RingbufferStatistics"
+            }
+          ]
+        },
+        "window": {
+          "title": "Window",
+          "type": "string"
+        },
+        "window_size": {
+          "title": "Window Size",
+          "type": "integer"
+        },
+        "filter_length": {
+          "title": "Filter Length",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "window",
+        "window_size",
+        "filter_length"
+      ]
+    },
+    "STALTAConfig": {
+      "title": "STALTAConfig",
+      "description": "A config model based on pydantic. All parameters must have defaults.\n\nExample implementation:\n\n```python\nclass MyConfig(ModuleConfig):\n    a: bool = True\n    b: float = 1.0\n```",
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "title": "Enabled",
+          "default": false,
+          "type": "boolean"
+        },
+        "trigger_enabled": {
+          "title": "Trigger Enabled",
+          "default": false,
+          "type": "boolean"
+        },
+        "trigger_threshold": {
+          "title": "Trigger Threshold",
+          "default": 1.2,
+          "exclusiveMinimum": 0,
+          "type": "number"
+        },
+        "nsta": {
+          "title": "Nsta",
+          "default": 50,
+          "minimum": 20,
+          "maximum": 300,
+          "type": "integer"
+        },
+        "nlta": {
+          "title": "Nlta",
+          "default": 300,
+          "minimum": 50,
+          "maximum": 900,
+          "type": "integer"
+        },
+        "overlap_percent": {
+          "title": "Overlap Percent",
+          "default": 20,
+          "minimum": 10,
+          "maximum": 90,
+          "type": "integer"
+        }
+      }
+    },
+    "STALTAMeasurement": {
+      "title": "STALTAMeasurement",
+      "description": "A measurement model.\n\nMeasurements consist of `field` names, a tuple of `tags` and\nthe actual measurements. The fields have to be of type int/float/bool or str.\nA measurement needs to be attached to a `ModuleState` object.\n\nExample implementation:\n\n```python\nclass ExampleMeasurement(MeasurementModel):\n    measurement: str = \"foo_measurement\"\n    tags: Tuple[str] = (\"machine_a\",)\n\n    value_a: float\n    value_b: int\n    value_c: bool\n```",
+      "type": "object",
+      "properties": {
+        "timestamp": {
+          "title": "Timestamp",
+          "type": "string",
+          "format": "date-time"
+        },
+        "latitude": {
+          "title": "Latitude",
+          "type": "number"
+        },
+        "longitude": {
+          "title": "Longitude",
+          "type": "number"
+        },
+        "measurement": {
+          "title": "Measurement",
+          "default": "sta_lta",
+          "type": "string"
+        },
+        "tags": {
+          "title": "Tags",
+          "default": {},
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "sta_lta": {
+          "title": "Current STA/LTA",
+          "default": 0.0,
+          "suffix": "counts",
+          "type": "number"
+        }
+      }
+    },
+    "STALTAState": {
+      "title": "STALTAState",
+      "description": "Reflects a module's state. Based on pydantic.\n\nExample implementation:\n\n```python\nclass MyModuleState(ModuleState):\n    config: MyConfig = MyConfig()\n\n    value_a: str = \"\"\n    value_b: int = \"\"\n    time: datetime = Field(defautl_factory=datetime.now)\n```",
+      "type": "object",
+      "properties": {
+        "config": {
+          "title": "Config",
+          "default": {
+            "enabled": false,
+            "trigger_enabled": false,
+            "trigger_threshold": 1.2,
+            "nsta": 50,
+            "nlta": 300,
+            "overlap_percent": 20
+          },
+          "allOf": [
+            {
+              "$ref": "#/definitions/STALTAConfig"
+            }
+          ]
+        },
+        "measurement": {
+          "title": "Measurement",
+          "default": {
+            "timestamp": "2023-03-07T09:17:51.455563+00:00",
+            "latitude": null,
+            "longitude": null,
+            "measurement": "sta_lta",
+            "tags": {
+              "uid": "SUB54I40",
+              "platform": "unknown"
+            },
+            "sta_lta": 0.0
+          },
+          "allOf": [
+            {
+              "$ref": "#/definitions/STALTAMeasurement"
+            }
+          ]
+        }
+      }
+    },
+    "SeedLinkServerConfig": {
+      "title": "SeedLinkServerConfig",
+      "description": "A config model based on pydantic. All parameters must have defaults.\n\nExample implementation:\n\n```python\nclass MyConfig(ModuleConfig):\n    a: bool = True\n    b: float = 1.0\n```",
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "title": "Enabled",
+          "default": false,
+          "type": "boolean"
+        },
+        "host": {
+          "title": "Host",
+          "default": "0.0.0.0",
+          "type": "string",
+          "format": "ipv4"
+        },
+        "port": {
+          "title": "Port",
+          "default": 18000,
+          "minimum": 1000,
+          "maximum": 65335,
+          "type": "integer"
+        },
+        "nsamples": {
+          "title": "Nsamples",
+          "default": 50,
+          "minimum": 50,
+          "maximum": 1000,
+          "type": "integer"
+        }
+      }
+    },
+    "SeedLinkServerStatistics": {
+      "title": "SeedLinkServerStatistics",
+      "description": "A measurement model.\n\nMeasurements consist of `field` names, a tuple of `tags` and\nthe actual measurements. The fields have to be of type int/float/bool or str.\nA measurement needs to be attached to a `ModuleState` object.\n\nExample implementation:\n\n```python\nclass ExampleMeasurement(MeasurementModel):\n    measurement: str = \"foo_measurement\"\n    tags: Tuple[str] = (\"machine_a\",)\n\n    value_a: float\n    value_b: int\n    value_c: bool\n```",
+      "type": "object",
+      "properties": {
+        "timestamp": {
+          "title": "Timestamp",
+          "type": "string",
+          "format": "date-time"
+        },
+        "latitude": {
+          "title": "Latitude",
+          "type": "number"
+        },
+        "longitude": {
+          "title": "Longitude",
+          "type": "number"
+        },
+        "measurement": {
+          "title": "Measurement",
+          "default": "seedlink_server",
+          "type": "string"
+        },
+        "tags": {
+          "title": "Tags",
+          "default": {},
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "latency": {
+          "title": "Latency",
+          "default": 0.0,
+          "type": "number"
+        },
+        "packet_efficiency": {
+          "title": "Packet Efficiency",
+          "default": 0.0,
+          "type": "number"
+        },
+        "clients_connected": {
+          "title": "Clients Connected",
+          "default": 0,
+          "type": "integer"
+        },
+        "bytes_sent": {
+          "title": "Bytes Sent",
+          "default": 0,
+          "type": "integer"
+        },
+        "end_sequence": {
+          "title": "End Sequence",
+          "default": 0,
+          "type": "integer"
+        },
+        "begin_sequence": {
+          "title": "Begin Sequence",
+          "default": 0,
+          "type": "integer"
+        }
+      }
+    },
+    "SeedLinkServerState": {
+      "title": "SeedLinkServerState",
+      "description": "Reflects a module's state. Based on pydantic.\n\nExample implementation:\n\n```python\nclass MyModuleState(ModuleState):\n    config: MyConfig = MyConfig()\n\n    value_a: str = \"\"\n    value_b: int = \"\"\n    time: datetime = Field(defautl_factory=datetime.now)\n```",
+      "type": "object",
+      "properties": {
+        "config": {
+          "title": "Config",
+          "default": {
+            "enabled": false,
+            "host": "0.0.0.0",
+            "port": 18000,
+            "nsamples": 50
+          },
+          "allOf": [
+            {
+              "$ref": "#/definitions/SeedLinkServerConfig"
+            }
+          ]
+        },
+        "stats": {
+          "title": "Stats",
+          "default": {
+            "timestamp": "2023-03-07T09:17:51.184306+00:00",
+            "latitude": null,
+            "longitude": null,
+            "measurement": "seedlink_server",
+            "tags": {
+              "uid": "SUB54I40",
+              "platform": "unknown"
+            },
+            "latency": 0.0,
+            "packet_efficiency": 0.0,
+            "clients_connected": 0,
+            "bytes_sent": 0,
+            "end_sequence": 0,
+            "begin_sequence": 0
+          },
+          "allOf": [
+            {
+              "$ref": "#/definitions/SeedLinkServerStatistics"
+            }
+          ]
+        }
+      }
+    },
+    "SpectralIntensityConfig": {
+      "title": "SpectralIntensityConfig",
+      "description": "A config model based on pydantic. All parameters must have defaults.\n\nExample implementation:\n\n```python\nclass MyConfig(ModuleConfig):\n    a: bool = True\n    b: float = 1.0\n```",
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "title": "Enabled",
+          "default": true,
+          "type": "boolean"
+        },
+        "window_length_seconds": {
+          "title": "Window Length Seconds",
+          "default": 60.0,
+          "suffix": "s",
+          "minimum": 10.0,
+          "maximum": 120.0,
+          "type": "number"
+        },
+        "duration_fade": {
+          "title": "Duration Fade",
+          "default": 0.5,
+          "suffix": "s",
+          "minimum": 0.0,
+          "type": "number"
+        },
+        "fmin": {
+          "title": "Min. Frequency",
+          "default": 0.1,
+          "suffix": "Hz",
+          "minimum": 0.0,
+          "maximum": 20.0,
+          "type": "number"
+        },
+        "fmax": {
+          "title": "Max. Frequency",
+          "default": 0.4,
+          "suffix": "Hz",
+          "minimum": 0.0,
+          "maximum": 20.0,
+          "type": "number"
+        }
+      }
+    },
+    "SpectralIntensityMeasurement": {
+      "title": "SpectralIntensityMeasurement",
+      "description": "A measurement model.\n\nMeasurements consist of `field` names, a tuple of `tags` and\nthe actual measurements. The fields have to be of type int/float/bool or str.\nA measurement needs to be attached to a `ModuleState` object.\n\nExample implementation:\n\n```python\nclass ExampleMeasurement(MeasurementModel):\n    measurement: str = \"foo_measurement\"\n    tags: Tuple[str] = (\"machine_a\",)\n\n    value_a: float\n    value_b: int\n    value_c: bool\n```",
+      "type": "object",
+      "properties": {
+        "timestamp": {
+          "title": "Timestamp",
+          "type": "string",
+          "format": "date-time"
+        },
+        "latitude": {
+          "title": "Latitude",
+          "type": "number"
+        },
+        "longitude": {
+          "title": "Longitude",
+          "type": "number"
+        },
+        "measurement": {
+          "title": "Measurement",
+          "default": "rt_spectral_intensity",
+          "type": "string"
+        },
+        "tags": {
+          "title": "Tags",
+          "default": {},
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "spectral_intensity": {
+          "title": "Spectral Intensity",
+          "default": 0.0,
+          "type": "number"
+        }
+      }
+    },
+    "SpectralIntensityState": {
+      "title": "SpectralIntensityState",
+      "description": "Real-time calculation of spectral intensity (SI).",
+      "type": "object",
+      "properties": {
+        "config": {
+          "title": "Config",
+          "default": {
+            "enabled": true,
+            "window_length_seconds": 60.0,
+            "duration_fade": 0.5,
+            "fmin": 0.1,
+            "fmax": 0.4
+          },
+          "allOf": [
+            {
+              "$ref": "#/definitions/SpectralIntensityConfig"
+            }
+          ]
+        },
+        "measurement": {
+          "$ref": "#/definitions/SpectralIntensityMeasurement"
+        }
+      }
+    },
+    "StreamWaveformsTrigger": {
+      "title": "StreamWaveformsTrigger",
+      "description": "Actions trigger one-shot functionatlity.\n\nExample implementation:\n\n```python\nclass TriggerMe(Action):\n    a: bool = True\n    b: float = 1.0\n```",
+      "type": "object",
+      "properties": {
+        "nsamples": {
+          "title": "Nsamples",
+          "default": 50,
+          "minimum": 50,
+          "maximum": 1000,
+          "type": "integer"
+        }
+      }
+    },
+    "StreamWaveformsState": {
+      "title": "StreamWaveformsState",
+      "description": "Reflects a module's state. Based on pydantic.\n\nExample implementation:\n\n```python\nclass MyModuleState(ModuleState):\n    config: MyConfig = MyConfig()\n\n    value_a: str = \"\"\n    value_b: int = \"\"\n    time: datetime = Field(defautl_factory=datetime.now)\n```",
+      "type": "object",
+      "properties": {
+        "config": {
+          "title": "Config",
+          "default": {},
+          "allOf": [
+            {
+              "$ref": "#/definitions/ModuleConfig"
+            }
+          ]
+        },
+        "trigger": {
+          "$ref": "#/definitions/StreamWaveformsTrigger"
+        },
+        "streaming": {
+          "title": "Streaming",
+          "default": false,
+          "type": "boolean"
+        },
+        "latency": {
+          "title": "Latency",
+          "default": 0.0,
+          "type": "number"
+        },
+        "packet_efficiency": {
+          "title": "Packet Efficiency",
+          "default": 0.0,
+          "type": "number"
+        },
+        "current_sequence_number": {
+          "title": "Current Sequence Number",
+          "default": 0,
+          "type": "integer"
+        }
+      }
+    },
+    "SystemEnvironmentConfig": {
+      "title": "SystemEnvironmentConfig",
+      "description": "Base class for settings, allowing values to be overridden by environment variables.\n\nThis is useful in production for secrets you do not wish to save in code, it plays nicely with docker(-compose),\nHeroku and any 12 factor app design.",
+      "type": "object",
+      "properties": {
+        "BME280_PORT": {
+          "title": "Bme280 Port",
+          "default": 1,
+          "env_names": [
+            "qs_bme280_port"
+          ],
+          "exclusiveMinimum": 0,
+          "type": "integer"
+        },
+        "BME280_ADDRESS": {
+          "title": "Bme280 Address",
+          "default": 118,
+          "env_names": [
+            "qs_bme280_address"
+          ],
+          "exclusiveMinimum": 0,
+          "type": "integer"
+        }
+      },
+      "additionalProperties": false
+    },
+    "SystemEnvironmentMeasurement": {
+      "title": "SystemEnvironmentMeasurement",
+      "description": "A measurement model.\n\nMeasurements consist of `field` names, a tuple of `tags` and\nthe actual measurements. The fields have to be of type int/float/bool or str.\nA measurement needs to be attached to a `ModuleState` object.\n\nExample implementation:\n\n```python\nclass ExampleMeasurement(MeasurementModel):\n    measurement: str = \"foo_measurement\"\n    tags: Tuple[str] = (\"machine_a\",)\n\n    value_a: float\n    value_b: int\n    value_c: bool\n```",
+      "type": "object",
+      "properties": {
+        "timestamp": {
+          "title": "Timestamp",
+          "type": "string",
+          "format": "date-time"
+        },
+        "latitude": {
+          "title": "Latitude",
+          "type": "number"
+        },
+        "longitude": {
+          "title": "Longitude",
+          "type": "number"
+        },
+        "measurement": {
+          "title": "Measurement",
+          "default": "system_environment",
+          "type": "string"
+        },
+        "tags": {
+          "title": "Tags",
+          "default": {},
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "pressure": {
+          "title": "Pressure",
+          "default": 0.0,
+          "type": "number"
+        },
+        "humidity": {
+          "title": "Humidity",
+          "default": 0.0,
+          "type": "number"
+        },
+        "temperature": {
+          "title": "Temperature",
+          "default": 0.0,
+          "type": "number"
+        }
+      }
+    },
+    "SystemEnvironmentStatus": {
+      "title": "SystemEnvironmentStatus",
+      "description": "Reflects a module's state. Based on pydantic.\n\nExample implementation:\n\n```python\nclass MyModuleState(ModuleState):\n    config: MyConfig = MyConfig()\n\n    value_a: str = \"\"\n    value_b: int = \"\"\n    time: datetime = Field(defautl_factory=datetime.now)\n```",
+      "type": "object",
+      "properties": {
+        "config": {
+          "title": "Config",
+          "default": {},
+          "allOf": [
+            {
+              "$ref": "#/definitions/ModuleConfig"
+            }
+          ]
+        },
+        "chip_config": {
+          "title": "Chip Config",
+          "default": {
+            "BME280_PORT": 1,
+            "BME280_ADDRESS": 118
+          },
+          "allOf": [
+            {
+              "$ref": "#/definitions/SystemEnvironmentConfig"
+            }
+          ]
+        },
+        "environment": {
+          "title": "Environment",
+          "default": {
+            "timestamp": "2023-03-07T09:17:51.189377+00:00",
+            "latitude": null,
+            "longitude": null,
+            "measurement": "system_environment",
+            "tags": {
+              "uid": "SUB54I40",
+              "platform": "unknown"
+            },
+            "pressure": 0.0,
+            "humidity": 0.0,
+            "temperature": 0.0
+          },
+          "allOf": [
+            {
+              "$ref": "#/definitions/SystemEnvironmentMeasurement"
+            }
+          ]
+        }
+      }
+    },
+    "MemoryStatistics": {
+      "title": "MemoryStatistics",
+      "description": "A measurement model.\n\nMeasurements consist of `field` names, a tuple of `tags` and\nthe actual measurements. The fields have to be of type int/float/bool or str.\nA measurement needs to be attached to a `ModuleState` object.\n\nExample implementation:\n\n```python\nclass ExampleMeasurement(MeasurementModel):\n    measurement: str = \"foo_measurement\"\n    tags: Tuple[str] = (\"machine_a\",)\n\n    value_a: float\n    value_b: int\n    value_c: bool\n```",
+      "type": "object",
+      "properties": {
+        "timestamp": {
+          "title": "Timestamp",
+          "type": "string",
+          "format": "date-time"
+        },
+        "latitude": {
+          "title": "Latitude",
+          "type": "number"
+        },
+        "longitude": {
+          "title": "Longitude",
+          "type": "number"
+        },
+        "measurement": {
+          "title": "Measurement",
+          "default": "memory",
+          "type": "string"
+        },
+        "tags": {
+          "title": "Tags",
+          "default": {},
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "total": {
+          "title": "Total",
+          "default": 0,
+          "type": "integer"
+        },
+        "available": {
+          "title": "Available",
+          "default": 0,
+          "type": "integer"
+        },
+        "percent": {
+          "title": "Percent",
+          "default": 0.0,
+          "type": "number"
+        },
+        "used": {
+          "title": "Used",
+          "default": 0,
+          "type": "integer"
+        },
+        "free": {
+          "title": "Free",
+          "default": 0,
+          "type": "integer"
+        },
+        "active": {
+          "title": "Active",
+          "default": 0,
+          "type": "integer"
+        },
+        "inactive": {
+          "title": "Inactive",
+          "default": 0,
+          "type": "integer"
+        },
+        "buffers": {
+          "title": "Buffers",
+          "default": 0,
+          "type": "integer"
+        },
+        "cached": {
+          "title": "Cached",
+          "default": 0,
+          "type": "integer"
+        },
+        "shared": {
+          "title": "Shared",
+          "default": 0,
+          "type": "integer"
+        },
+        "slab": {
+          "title": "Slab",
+          "default": 0,
+          "type": "integer"
+        }
+      }
+    },
+    "CPUStatistics": {
+      "title": "CPUStatistics",
+      "description": "A measurement model.\n\nMeasurements consist of `field` names, a tuple of `tags` and\nthe actual measurements. The fields have to be of type int/float/bool or str.\nA measurement needs to be attached to a `ModuleState` object.\n\nExample implementation:\n\n```python\nclass ExampleMeasurement(MeasurementModel):\n    measurement: str = \"foo_measurement\"\n    tags: Tuple[str] = (\"machine_a\",)\n\n    value_a: float\n    value_b: int\n    value_c: bool\n```",
+      "type": "object",
+      "properties": {
+        "timestamp": {
+          "title": "Timestamp",
+          "type": "string",
+          "format": "date-time"
+        },
+        "latitude": {
+          "title": "Latitude",
+          "type": "number"
+        },
+        "longitude": {
+          "title": "Longitude",
+          "type": "number"
+        },
+        "measurement": {
+          "title": "Measurement",
+          "default": "cpu",
+          "type": "string"
+        },
+        "tags": {
+          "title": "Tags",
+          "default": {},
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "user": {
+          "title": "User",
+          "default": 0.0,
+          "type": "number"
+        },
+        "nice": {
+          "title": "Nice",
+          "default": 0.0,
+          "type": "number"
+        },
+        "system": {
+          "title": "System",
+          "default": 0.0,
+          "type": "number"
+        },
+        "idle": {
+          "title": "Idle",
+          "default": 0.0,
+          "type": "number"
+        },
+        "iowait": {
+          "title": "Iowait",
+          "default": 0.0,
+          "type": "number"
+        },
+        "irq": {
+          "title": "Irq",
+          "default": 0.0,
+          "type": "number"
+        },
+        "softirq": {
+          "title": "Softirq",
+          "default": 0.0,
+          "type": "number"
+        },
+        "steal": {
+          "title": "Steal",
+          "default": 0.0,
+          "type": "number"
+        },
+        "guest": {
+          "title": "Guest",
+          "default": 0.0,
+          "type": "number"
+        },
+        "guest_nice": {
+          "title": "Guest Nice",
+          "default": 0.0,
+          "type": "number"
+        },
+        "cpu_usage_percent": {
+          "title": "Cpu Usage Percent",
+          "default": 0.0,
+          "type": "number"
+        },
+        "cpu_temperature": {
+          "title": "Cpu Temperature",
+          "default": 0.0,
+          "type": "number"
+        }
+      }
+    },
+    "ProcessMemoryStatistics": {
+      "title": "ProcessMemoryStatistics",
+      "description": "A measurement model.\n\nMeasurements consist of `field` names, a tuple of `tags` and\nthe actual measurements. The fields have to be of type int/float/bool or str.\nA measurement needs to be attached to a `ModuleState` object.\n\nExample implementation:\n\n```python\nclass ExampleMeasurement(MeasurementModel):\n    measurement: str = \"foo_measurement\"\n    tags: Tuple[str] = (\"machine_a\",)\n\n    value_a: float\n    value_b: int\n    value_c: bool\n```",
+      "type": "object",
+      "properties": {
+        "timestamp": {
+          "title": "Timestamp",
+          "type": "string",
+          "format": "date-time"
+        },
+        "latitude": {
+          "title": "Latitude",
+          "type": "number"
+        },
+        "longitude": {
+          "title": "Longitude",
+          "type": "number"
+        },
+        "measurement": {
+          "title": "Measurement",
+          "default": "process_memory",
+          "type": "string"
+        },
+        "tags": {
+          "title": "Tags",
+          "default": {},
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "rss": {
+          "title": "Rss",
+          "default": 0,
+          "type": "integer"
+        },
+        "vms": {
+          "title": "Vms",
+          "default": 0,
+          "type": "integer"
+        },
+        "shared": {
+          "title": "Shared",
+          "default": 0,
+          "type": "integer"
+        },
+        "text": {
+          "title": "Text",
+          "default": 0,
+          "type": "integer"
+        },
+        "lib": {
+          "title": "Lib",
+          "default": 0,
+          "type": "integer"
+        },
+        "data": {
+          "title": "Data",
+          "default": 0,
+          "type": "integer"
+        },
+        "dirty": {
+          "title": "Dirty",
+          "default": 0,
+          "type": "integer"
+        },
+        "uss": {
+          "title": "Uss",
+          "default": 0,
+          "type": "integer"
+        },
+        "pss": {
+          "title": "Pss",
+          "default": 0,
+          "type": "integer"
+        },
+        "swap": {
+          "title": "Swap",
+          "default": 0,
+          "type": "integer"
+        }
+      }
+    },
+    "ProcessStatistics": {
+      "title": "ProcessStatistics",
+      "description": "A measurement model.\n\nMeasurements consist of `field` names, a tuple of `tags` and\nthe actual measurements. The fields have to be of type int/float/bool or str.\nA measurement needs to be attached to a `ModuleState` object.\n\nExample implementation:\n\n```python\nclass ExampleMeasurement(MeasurementModel):\n    measurement: str = \"foo_measurement\"\n    tags: Tuple[str] = (\"machine_a\",)\n\n    value_a: float\n    value_b: int\n    value_c: bool\n```",
+      "type": "object",
+      "properties": {
+        "timestamp": {
+          "title": "Timestamp",
+          "type": "string",
+          "format": "date-time"
+        },
+        "latitude": {
+          "title": "Latitude",
+          "type": "number"
+        },
+        "longitude": {
+          "title": "Longitude",
+          "type": "number"
+        },
+        "measurement": {
+          "title": "Measurement",
+          "default": "process",
+          "type": "string"
+        },
+        "tags": {
+          "title": "Tags",
+          "default": {},
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "pid": {
+          "title": "Pid",
+          "default": 0,
+          "type": "integer"
+        },
+        "fds": {
+          "title": "Fds",
+          "default": 0,
+          "type": "integer"
+        },
+        "cpu_percent": {
+          "title": "Cpu Percent",
+          "default": 0.0,
+          "type": "number"
+        },
+        "create_time": {
+          "title": "Create Time",
+          "default": 0.0,
+          "type": "number"
+        },
+        "num_threads": {
+          "title": "Num Threads",
+          "default": 0,
+          "type": "integer"
+        },
+        "connections": {
+          "title": "Connections",
+          "default": 0,
+          "type": "integer"
+        }
+      }
+    },
+    "DiskStatistics": {
+      "title": "DiskStatistics",
+      "description": "A measurement model.\n\nMeasurements consist of `field` names, a tuple of `tags` and\nthe actual measurements. The fields have to be of type int/float/bool or str.\nA measurement needs to be attached to a `ModuleState` object.\n\nExample implementation:\n\n```python\nclass ExampleMeasurement(MeasurementModel):\n    measurement: str = \"foo_measurement\"\n    tags: Tuple[str] = (\"machine_a\",)\n\n    value_a: float\n    value_b: int\n    value_c: bool\n```",
+      "type": "object",
+      "properties": {
+        "timestamp": {
+          "title": "Timestamp",
+          "type": "string",
+          "format": "date-time"
+        },
+        "latitude": {
+          "title": "Latitude",
+          "type": "number"
+        },
+        "longitude": {
+          "title": "Longitude",
+          "type": "number"
+        },
+        "measurement": {
+          "title": "Measurement",
+          "default": "disk",
+          "type": "string"
+        },
+        "tags": {
+          "title": "Tags",
+          "default": {},
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "total": {
+          "title": "Total",
+          "default": 0,
+          "type": "integer"
+        },
+        "used": {
+          "title": "Used",
+          "default": 0,
+          "type": "integer"
+        },
+        "free": {
+          "title": "Free",
+          "default": 0,
+          "type": "integer"
+        },
+        "percent": {
+          "title": "Percent",
+          "default": 0.0,
+          "type": "number"
+        }
+      }
+    },
+    "NetworkStatistics": {
+      "title": "NetworkStatistics",
+      "description": "A measurement model.\n\nMeasurements consist of `field` names, a tuple of `tags` and\nthe actual measurements. The fields have to be of type int/float/bool or str.\nA measurement needs to be attached to a `ModuleState` object.\n\nExample implementation:\n\n```python\nclass ExampleMeasurement(MeasurementModel):\n    measurement: str = \"foo_measurement\"\n    tags: Tuple[str] = (\"machine_a\",)\n\n    value_a: float\n    value_b: int\n    value_c: bool\n```",
+      "type": "object",
+      "properties": {
+        "timestamp": {
+          "title": "Timestamp",
+          "type": "string",
+          "format": "date-time"
+        },
+        "latitude": {
+          "title": "Latitude",
+          "type": "number"
+        },
+        "longitude": {
+          "title": "Longitude",
+          "type": "number"
+        },
+        "measurement": {
+          "title": "Measurement",
+          "default": "network",
+          "type": "string"
+        },
+        "tags": {
+          "title": "Tags",
+          "default": {},
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "bytes_sent": {
+          "title": "Bytes Sent",
+          "default": 0,
+          "type": "integer"
+        },
+        "bytes_recv": {
+          "title": "Bytes Recv",
+          "default": 0,
+          "type": "integer"
+        },
+        "packets_sent": {
+          "title": "Packets Sent",
+          "default": 0,
+          "type": "integer"
+        },
+        "packets_recv": {
+          "title": "Packets Recv",
+          "default": 0,
+          "type": "integer"
+        },
+        "errin": {
+          "title": "Errin",
+          "default": 0,
+          "type": "integer"
+        },
+        "errout": {
+          "title": "Errout",
+          "default": 0,
+          "type": "integer"
+        },
+        "dropin": {
+          "title": "Dropin",
+          "default": 0,
+          "type": "integer"
+        },
+        "dropout": {
+          "title": "Dropout",
+          "default": 0,
+          "type": "integer"
+        },
+        "ip_address": {
+          "title": "Ip Address",
+          "default": "",
+          "type": "string"
+        },
+        "ssid": {
+          "title": "Ssid",
+          "type": "string"
+        }
+      }
+    },
+    "ChronyStatistics": {
+      "title": "ChronyStatistics",
+      "description": "A measurement model.\n\nMeasurements consist of `field` names, a tuple of `tags` and\nthe actual measurements. The fields have to be of type int/float/bool or str.\nA measurement needs to be attached to a `ModuleState` object.\n\nExample implementation:\n\n```python\nclass ExampleMeasurement(MeasurementModel):\n    measurement: str = \"foo_measurement\"\n    tags: Tuple[str] = (\"machine_a\",)\n\n    value_a: float\n    value_b: int\n    value_c: bool\n```",
+      "type": "object",
+      "properties": {
+        "timestamp": {
+          "title": "Timestamp",
+          "type": "string",
+          "format": "date-time"
+        },
+        "latitude": {
+          "title": "Latitude",
+          "type": "number"
+        },
+        "longitude": {
+          "title": "Longitude",
+          "type": "number"
+        },
+        "measurement": {
+          "title": "Measurement",
+          "default": "chrony",
+          "type": "string"
+        },
+        "tags": {
+          "title": "Tags",
+          "default": {},
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "reference_id": {
+          "title": "Reference Id",
+          "default": "",
+          "type": "string"
+        },
+        "server_ip": {
+          "title": "Server Ip",
+          "default": "",
+          "type": "string"
+        },
+        "stratum": {
+          "title": "Stratum",
+          "default": 0,
+          "type": "integer"
+        },
+        "ref_time_utc": {
+          "title": "Ref Time Utc",
+          "default": 0.0,
+          "type": "number"
+        },
+        "system_time": {
+          "title": "System Time",
+          "default": 0.0,
+          "type": "number"
+        },
+        "last_offset": {
+          "title": "Last Offset",
+          "default": 0.0,
+          "type": "number"
+        },
+        "rms_offset": {
+          "title": "Rms Offset",
+          "default": 0.0,
+          "type": "number"
+        },
+        "frequency": {
+          "title": "Frequency",
+          "default": 0.0,
+          "type": "number"
+        },
+        "residual_freq": {
+          "title": "Residual Freq",
+          "default": 0.0,
+          "type": "number"
+        },
+        "skew": {
+          "title": "Skew",
+          "default": 0.0,
+          "type": "number"
+        },
+        "root_delay": {
+          "title": "Root Delay",
+          "default": 0.0,
+          "type": "number"
+        },
+        "root_dispersion": {
+          "title": "Root Dispersion",
+          "default": 0.0,
+          "type": "number"
+        },
+        "update_interval": {
+          "title": "Update Interval",
+          "default": 0.0,
+          "type": "number"
+        },
+        "leap_status": {
+          "title": "Leap Status",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "KernelStatistics": {
+      "title": "KernelStatistics",
+      "description": "A measurement model.\n\nMeasurements consist of `field` names, a tuple of `tags` and\nthe actual measurements. The fields have to be of type int/float/bool or str.\nA measurement needs to be attached to a `ModuleState` object.\n\nExample implementation:\n\n```python\nclass ExampleMeasurement(MeasurementModel):\n    measurement: str = \"foo_measurement\"\n    tags: Tuple[str] = (\"machine_a\",)\n\n    value_a: float\n    value_b: int\n    value_c: bool\n```",
+      "type": "object",
+      "properties": {
+        "timestamp": {
+          "title": "Timestamp",
+          "type": "string",
+          "format": "date-time"
+        },
+        "latitude": {
+          "title": "Latitude",
+          "type": "number"
+        },
+        "longitude": {
+          "title": "Longitude",
+          "type": "number"
+        },
+        "measurement": {
+          "title": "Measurement",
+          "default": "kernel",
+          "type": "string"
+        },
+        "tags": {
+          "title": "Tags",
+          "default": {},
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "load1": {
+          "title": "Load1",
+          "default": 0.0,
+          "type": "number"
+        },
+        "load5": {
+          "title": "Load5",
+          "default": 0.0,
+          "type": "number"
+        },
+        "load15": {
+          "title": "Load15",
+          "default": 0.0,
+          "type": "number"
+        },
+        "boot_time": {
+          "title": "Boot Time",
+          "default": 0.0,
+          "type": "number"
+        },
+        "ctx_switches": {
+          "title": "Ctx Switches",
+          "default": 0,
+          "type": "integer"
+        },
+        "interrupts": {
+          "title": "Interrupts",
+          "default": 0,
+          "type": "integer"
+        },
+        "soft_interrupts": {
+          "title": "Soft Interrupts",
+          "default": 0,
+          "type": "integer"
+        },
+        "syscalls": {
+          "title": "Syscalls",
+          "default": 0,
+          "type": "integer"
+        }
+      }
+    },
+    "SystemInformation": {
+      "title": "SystemInformation",
+      "description": "Reflects a module's state. Based on pydantic.\n\nExample implementation:\n\n```python\nclass MyModuleState(ModuleState):\n    config: MyConfig = MyConfig()\n\n    value_a: str = \"\"\n    value_b: int = \"\"\n    time: datetime = Field(defautl_factory=datetime.now)\n```",
+      "type": "object",
+      "properties": {
+        "config": {
+          "title": "Config",
+          "default": {},
+          "allOf": [
+            {
+              "$ref": "#/definitions/ModuleConfig"
+            }
+          ]
+        },
+        "platform_model": {
+          "title": "Platform Model",
+          "type": "string"
+        },
+        "software_version": {
+          "title": "Software Version",
+          "default": "0.3.0+f102e7d",
+          "type": "string"
+        },
+        "boot_time": {
+          "title": "Boot Time",
+          "type": "string",
+          "format": "date-time"
+        },
+        "memory_stats": {
+          "title": "Memory Stats",
+          "default": {
+            "timestamp": "2023-03-07T09:17:51.204524+00:00",
+            "latitude": null,
+            "longitude": null,
+            "measurement": "memory",
+            "tags": {
+              "uid": "SUB54I40",
+              "platform": "unknown"
+            },
+            "total": 0,
+            "available": 0,
+            "percent": 0.0,
+            "used": 0,
+            "free": 0,
+            "active": 0,
+            "inactive": 0,
+            "buffers": 0,
+            "cached": 0,
+            "shared": 0,
+            "slab": 0
+          },
+          "allOf": [
+            {
+              "$ref": "#/definitions/MemoryStatistics"
+            }
+          ]
+        },
+        "cpu_stats": {
+          "title": "Cpu Stats",
+          "default": {
+            "timestamp": "2023-03-07T09:17:51.204582+00:00",
+            "latitude": null,
+            "longitude": null,
+            "measurement": "cpu",
+            "tags": {
+              "uid": "SUB54I40",
+              "platform": "unknown"
+            },
+            "user": 0.0,
+            "nice": 0.0,
+            "system": 0.0,
+            "idle": 0.0,
+            "iowait": 0.0,
+            "irq": 0.0,
+            "softirq": 0.0,
+            "steal": 0.0,
+            "guest": 0.0,
+            "guest_nice": 0.0,
+            "cpu_usage_percent": 0.0,
+            "cpu_temperature": 0.0
+          },
+          "allOf": [
+            {
+              "$ref": "#/definitions/CPUStatistics"
+            }
+          ]
+        },
+        "process_memory_stats": {
+          "title": "Process Memory Stats",
+          "default": {
+            "timestamp": "2023-03-07T09:17:51.204608+00:00",
+            "latitude": null,
+            "longitude": null,
+            "measurement": "process_memory",
+            "tags": {
+              "uid": "SUB54I40",
+              "platform": "unknown"
+            },
+            "rss": 0,
+            "vms": 0,
+            "shared": 0,
+            "text": 0,
+            "lib": 0,
+            "data": 0,
+            "dirty": 0,
+            "uss": 0,
+            "pss": 0,
+            "swap": 0
+          },
+          "allOf": [
+            {
+              "$ref": "#/definitions/ProcessMemoryStatistics"
+            }
+          ]
+        },
+        "process_stats": {
+          "title": "Process Stats",
+          "default": {
+            "timestamp": "2023-03-07T09:17:51.204630+00:00",
+            "latitude": null,
+            "longitude": null,
+            "measurement": "process",
+            "tags": {
+              "uid": "SUB54I40",
+              "platform": "unknown"
+            },
+            "pid": 0,
+            "fds": 0,
+            "cpu_percent": 0.0,
+            "create_time": 0.0,
+            "num_threads": 0,
+            "connections": 0
+          },
+          "allOf": [
+            {
+              "$ref": "#/definitions/ProcessStatistics"
+            }
+          ]
+        },
+        "disk_stats": {
+          "title": "Disk Stats",
+          "default": {
+            "timestamp": "2023-03-07T09:17:51.204650+00:00",
+            "latitude": null,
+            "longitude": null,
+            "measurement": "disk",
+            "tags": {
+              "uid": "SUB54I40",
+              "platform": "unknown"
+            },
+            "total": 0,
+            "used": 0,
+            "free": 0,
+            "percent": 0.0
+          },
+          "allOf": [
+            {
+              "$ref": "#/definitions/DiskStatistics"
+            }
+          ]
+        },
+        "network_stats": {
+          "title": "Network Stats",
+          "default": {
+            "timestamp": "2023-03-07T09:17:51.204668+00:00",
+            "latitude": null,
+            "longitude": null,
+            "measurement": "network",
+            "tags": {
+              "uid": "SUB54I40",
+              "platform": "unknown"
+            },
+            "bytes_sent": 0,
+            "bytes_recv": 0,
+            "packets_sent": 0,
+            "packets_recv": 0,
+            "errin": 0,
+            "errout": 0,
+            "dropin": 0,
+            "dropout": 0,
+            "ip_address": "",
+            "ssid": null
+          },
+          "allOf": [
+            {
+              "$ref": "#/definitions/NetworkStatistics"
+            }
+          ]
+        },
+        "chrony_stats": {
+          "title": "Chrony Stats",
+          "default": {
+            "timestamp": "2023-03-07T09:17:51.204691+00:00",
+            "latitude": null,
+            "longitude": null,
+            "measurement": "chrony",
+            "tags": {
+              "uid": "SUB54I40",
+              "platform": "unknown"
+            },
+            "reference_id": "",
+            "server_ip": "",
+            "stratum": 0,
+            "ref_time_utc": 0.0,
+            "system_time": 0.0,
+            "last_offset": 0.0,
+            "rms_offset": 0.0,
+            "frequency": 0.0,
+            "residual_freq": 0.0,
+            "skew": 0.0,
+            "root_delay": 0.0,
+            "root_dispersion": 0.0,
+            "update_interval": 0.0,
+            "leap_status": ""
+          },
+          "allOf": [
+            {
+              "$ref": "#/definitions/ChronyStatistics"
+            }
+          ]
+        },
+        "kernel_stats": {
+          "title": "Kernel Stats",
+          "default": {
+            "timestamp": "2023-03-07T09:17:51.204712+00:00",
+            "latitude": null,
+            "longitude": null,
+            "measurement": "kernel",
+            "tags": {
+              "uid": "SUB54I40",
+              "platform": "unknown"
+            },
+            "load1": 0.0,
+            "load5": 0.0,
+            "load15": 0.0,
+            "boot_time": 0.0,
+            "ctx_switches": 0,
+            "interrupts": 0,
+            "soft_interrupts": 0,
+            "syscalls": 0
+          },
+          "allOf": [
+            {
+              "$ref": "#/definitions/KernelStatistics"
+            }
+          ]
+        }
+      }
+    },
+    "SystemPowerConfig": {
+      "title": "SystemPowerConfig",
+      "description": "Base class for settings, allowing values to be overridden by environment variables.\n\nThis is useful in production for secrets you do not wish to save in code, it plays nicely with docker(-compose),\nHeroku and any 12 factor app design.",
+      "type": "object",
+      "properties": {
+        "LTC4151_PORT": {
+          "title": "Ltc4151 Port",
+          "default": 1,
+          "env_names": [
+            "qs_ltc4151_port"
+          ],
+          "exclusiveMinimum": 0,
+          "type": "integer"
+        },
+        "LTC4151_ADDRESS": {
+          "title": "Ltc4151 Address",
+          "default": 103,
+          "env_names": [
+            "qs_ltc4151_address"
+          ],
+          "exclusiveMinimum": 0,
+          "type": "integer"
+        },
+        "RESISTOR": {
+          "title": "Resistor",
+          "default": 0.02,
+          "env_names": [
+            "qs_resistor"
+          ],
+          "exclusiveMinimum": 0,
+          "type": "number"
+        }
+      },
+      "additionalProperties": false
+    },
+    "SystemPowerSupply": {
+      "title": "SystemPowerSupply",
+      "description": "A measurement model.\n\nMeasurements consist of `field` names, a tuple of `tags` and\nthe actual measurements. The fields have to be of type int/float/bool or str.\nA measurement needs to be attached to a `ModuleState` object.\n\nExample implementation:\n\n```python\nclass ExampleMeasurement(MeasurementModel):\n    measurement: str = \"foo_measurement\"\n    tags: Tuple[str] = (\"machine_a\",)\n\n    value_a: float\n    value_b: int\n    value_c: bool\n```",
+      "type": "object",
+      "properties": {
+        "timestamp": {
+          "title": "Timestamp",
+          "type": "string",
+          "format": "date-time"
+        },
+        "latitude": {
+          "title": "Latitude",
+          "type": "number"
+        },
+        "longitude": {
+          "title": "Longitude",
+          "type": "number"
+        },
+        "measurement": {
+          "title": "Measurement",
+          "default": "system_power",
+          "type": "string"
+        },
+        "tags": {
+          "title": "Tags",
+          "default": {},
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "supply_voltage": {
+          "title": "Supply Voltage",
+          "default": 0.0,
+          "type": "number"
+        },
+        "current": {
+          "title": "Current",
+          "default": 0.0,
+          "type": "number"
+        },
+        "voltage_ext": {
+          "title": "Voltage Ext",
+          "default": 0.0,
+          "type": "number"
+        }
+      }
+    },
+    "SystemPowerState": {
+      "title": "SystemPowerState",
+      "description": "Reflects a module's state. Based on pydantic.\n\nExample implementation:\n\n```python\nclass MyModuleState(ModuleState):\n    config: MyConfig = MyConfig()\n\n    value_a: str = \"\"\n    value_b: int = \"\"\n    time: datetime = Field(defautl_factory=datetime.now)\n```",
+      "type": "object",
+      "properties": {
+        "config": {
+          "title": "Config",
+          "default": {},
+          "allOf": [
+            {
+              "$ref": "#/definitions/ModuleConfig"
+            }
+          ]
+        },
+        "chip_config": {
+          "title": "Chip Config",
+          "default": {
+            "LTC4151_PORT": 1,
+            "LTC4151_ADDRESS": 103,
+            "RESISTOR": 0.02
+          },
+          "allOf": [
+            {
+              "$ref": "#/definitions/SystemPowerConfig"
+            }
+          ]
+        },
+        "power": {
+          "title": "Power",
+          "default": {
+            "timestamp": "2023-03-07T09:17:51.208061+00:00",
+            "latitude": null,
+            "longitude": null,
+            "measurement": "system_power",
+            "tags": {
+              "uid": "SUB54I40",
+              "platform": "unknown"
+            },
+            "supply_voltage": 0.0,
+            "current": 0.0,
+            "voltage_ext": 0.0
+          },
+          "allOf": [
+            {
+              "$ref": "#/definitions/SystemPowerSupply"
+            }
+          ]
+        }
+      }
+    },
+    "TimeMonitorConfig": {
+      "title": "TimeMonitorConfig",
+      "description": "A config model based on pydantic. All parameters must have defaults.\n\nExample implementation:\n\n```python\nclass MyConfig(ModuleConfig):\n    a: bool = True\n    b: float = 1.0\n```",
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "title": "Enabled",
+          "default": true,
+          "type": "boolean"
+        },
+        "blink_interval": {
+          "title": "Blink Interval",
+          "default": 5.0,
+          "minimum": 1.0,
+          "maximum": 120.0,
+          "type": "number"
+        },
+        "flash_duration": {
+          "title": "Flash Duration",
+          "default": 0.1,
+          "minimum": 0.05,
+          "maximum": 1.0,
+          "type": "number"
+        }
+      }
+    },
+    "TimeMonitorState": {
+      "title": "TimeMonitorState",
+      "description": "Reflects a module's state. Based on pydantic.\n\nExample implementation:\n\n```python\nclass MyModuleState(ModuleState):\n    config: MyConfig = MyConfig()\n\n    value_a: str = \"\"\n    value_b: int = \"\"\n    time: datetime = Field(defautl_factory=datetime.now)\n```",
+      "type": "object",
+      "properties": {
+        "config": {
+          "title": "Config",
+          "default": {
+            "enabled": true,
+            "blink_interval": 5.0,
+            "flash_duration": 0.1
+          },
+          "allOf": [
+            {
+              "$ref": "#/definitions/TimeMonitorConfig"
+            }
+          ]
+        }
+      }
+    },
+    "TmateConfig": {
+      "title": "TmateConfig",
+      "description": "A config model based on pydantic. All parameters must have defaults.\n\nExample implementation:\n\n```python\nclass MyConfig(ModuleConfig):\n    a: bool = True\n    b: float = 1.0\n```",
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "title": "Enabled",
+          "default": false,
+          "type": "boolean"
+        },
+        "api_key": {
+          "title": "Api Key",
+          "default": "",
+          "type": "string"
+        },
+        "profile": {
+          "title": "Profile",
+          "default": "tmate.io",
+          "enum": [
+            "tmate.io",
+            "ssh.quakesaver.net"
+          ],
+          "type": "string"
+        }
+      }
+    },
+    "TmateState": {
+      "title": "TmateState",
+      "description": "Reflects a module's state. Based on pydantic.\n\nExample implementation:\n\n```python\nclass MyModuleState(ModuleState):\n    config: MyConfig = MyConfig()\n\n    value_a: str = \"\"\n    value_b: int = \"\"\n    time: datetime = Field(defautl_factory=datetime.now)\n```",
+      "type": "object",
+      "properties": {
+        "config": {
+          "title": "Config",
+          "default": {
+            "enabled": false,
+            "api_key": "",
+            "profile": "tmate.io"
+          },
+          "allOf": [
+            {
+              "$ref": "#/definitions/TmateConfig"
+            }
+          ]
+        },
+        "active": {
+          "title": "Active",
+          "default": false,
+          "type": "boolean"
+        },
+        "session_token": {
+          "title": "Session Token",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "UserEnvironmentConfig": {
+      "title": "UserEnvironmentConfig",
+      "description": "A config model based on pydantic. All parameters must have defaults.\n\nExample implementation:\n\n```python\nclass MyConfig(ModuleConfig):\n    a: bool = True\n    b: float = 1.0\n```",
+      "type": "object",
+      "properties": {
+        "language": {
+          "title": "Language",
+          "default": "eng",
+          "type": "string"
+        },
+        "instituion": {
+          "title": "Instituion",
+          "default": "",
+          "type": "string"
+        },
+        "institution_branding": {
+          "title": "Institution Branding",
+          "default": "QuakeSaver",
+          "enum": [
+            "QuakeSaver",
+            "EDream"
+          ],
+          "type": "string"
+        },
+        "contact_person": {
+          "title": "Contact Person",
+          "default": "",
+          "type": "string"
+        },
+        "contact_email": {
+          "title": "Contact Email",
+          "default": "",
+          "type": "string"
+        },
+        "contact_phone": {
+          "title": "Contact Phone",
+          "default": "",
+          "type": "string"
+        }
+      }
+    },
+    "UserEnvironment": {
+      "title": "UserEnvironment",
+      "description": "Reflects a module's state. Based on pydantic.\n\nExample implementation:\n\n```python\nclass MyModuleState(ModuleState):\n    config: MyConfig = MyConfig()\n\n    value_a: str = \"\"\n    value_b: int = \"\"\n    time: datetime = Field(defautl_factory=datetime.now)\n```",
+      "type": "object",
+      "properties": {
+        "config": {
+          "title": "Config",
+          "default": {
+            "language": "eng",
+            "instituion": "",
+            "institution_branding": "QuakeSaver",
+            "contact_person": "",
+            "contact_email": "",
+            "contact_phone": ""
+          },
+          "allOf": [
+            {
+              "$ref": "#/definitions/UserEnvironmentConfig"
+            }
+          ]
+        }
+      }
+    },
+    "VirtualSensorConfig": {
+      "title": "VirtualSensorConfig",
+      "description": "A config model based on pydantic. All parameters must have defaults.\n\nExample implementation:\n\n```python\nclass MyConfig(ModuleConfig):\n    a: bool = True\n    b: float = 1.0\n```",
+      "type": "object",
+      "properties": {
+        "sampling_rate": {
+          "title": "Sampling Rate",
+          "default": 100,
+          "enum": [
+            100,
+            200
+          ],
+          "type": "integer"
+        }
+      }
+    },
+    "VirtualSensorStatistics": {
+      "title": "VirtualSensorStatistics",
+      "description": "A measurement model.\n\nMeasurements consist of `field` names, a tuple of `tags` and\nthe actual measurements. The fields have to be of type int/float/bool or str.\nA measurement needs to be attached to a `ModuleState` object.\n\nExample implementation:\n\n```python\nclass ExampleMeasurement(MeasurementModel):\n    measurement: str = \"foo_measurement\"\n    tags: Tuple[str] = (\"machine_a\",)\n\n    value_a: float\n    value_b: int\n    value_c: bool\n```",
+      "type": "object",
+      "properties": {
+        "timestamp": {
+          "title": "Timestamp",
+          "type": "string",
+          "format": "date-time"
+        },
+        "latitude": {
+          "title": "Latitude",
+          "type": "number"
+        },
+        "longitude": {
+          "title": "Longitude",
+          "type": "number"
+        },
+        "measurement": {
+          "title": "Measurement",
+          "default": "sensor",
+          "type": "string"
+        },
+        "tags": {
+          "title": "Tags",
+          "default": {
+            "sensor": "virtual"
+          },
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "active": {
+          "title": "Active",
+          "default": false,
+          "type": "boolean"
+        },
+        "sampling_rate": {
+          "title": "Sampling Rate",
+          "default": 0,
+          "type": "integer"
+        },
+        "nsamples": {
+          "title": "Nsamples",
+          "default": 0,
+          "type": "integer"
+        },
+        "deltat": {
+          "title": "Deltat",
+          "default": 0.0,
+          "type": "number"
+        }
+      }
+    },
+    "VirtualSensorState": {
+      "title": "VirtualSensorState",
+      "description": "Reflects a module's state. Based on pydantic.\n\nExample implementation:\n\n```python\nclass MyModuleState(ModuleState):\n    config: MyConfig = MyConfig()\n\n    value_a: str = \"\"\n    value_b: int = \"\"\n    time: datetime = Field(defautl_factory=datetime.now)\n```",
+      "type": "object",
+      "properties": {
+        "config": {
+          "title": "Config",
+          "default": {
+            "sampling_rate": 100
+          },
+          "allOf": [
+            {
+              "$ref": "#/definitions/VirtualSensorConfig"
+            }
+          ]
+        },
+        "stats": {
+          "title": "Stats",
+          "default": {
+            "timestamp": "2023-03-07T09:17:51.462796+00:00",
+            "latitude": null,
+            "longitude": null,
+            "measurement": "sensor",
+            "tags": {
+              "sensor": "virtual",
+              "uid": "SUB54I40",
+              "platform": "unknown"
+            },
+            "active": false,
+            "sampling_rate": 0,
+            "nsamples": 0,
+            "deltat": 0.0
+          },
+          "allOf": [
+            {
+              "$ref": "#/definitions/VirtualSensorStatistics"
+            }
+          ]
+        }
+      }
+    },
+    "WatchdogConfig": {
+      "title": "WatchdogConfig",
+      "description": "A config model based on pydantic. All parameters must have defaults.\n\nExample implementation:\n\n```python\nclass MyConfig(ModuleConfig):\n    a: bool = True\n    b: float = 1.0\n```",
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "title": "Enabled",
+          "default": false,
+          "type": "boolean"
+        },
+        "tame_recorded_samples": {
+          "title": "Tame Recorded Samples",
+          "default": 1000,
+          "exclusiveMinimum": 0,
+          "type": "integer"
+        }
+      }
+    },
+    "WatchdogEnvironment": {
+      "title": "WatchdogEnvironment",
+      "description": "Base class for settings, allowing values to be overridden by environment variables.\n\nThis is useful in production for secrets you do not wish to save in code, it plays nicely with docker(-compose),\nHeroku and any 12 factor app design.",
+      "type": "object",
+      "properties": {
+        "WATCHDOG_KENNEL": {
+          "title": "Watchdog Kennel",
+          "default": "/dev/watchdog",
+          "env_names": [
+            "qs_watchdog_kennel"
+          ],
+          "type": "string",
+          "format": "path"
+        }
+      },
+      "additionalProperties": false
+    },
+    "WatchdogState": {
+      "title": "WatchdogState",
+      "description": "System Watchdog based on incoming samples from the sensor.",
+      "type": "object",
+      "properties": {
+        "config": {
+          "title": "Config",
+          "default": {
+            "enabled": false,
+            "tame_recorded_samples": 1000
+          },
+          "allOf": [
+            {
+              "$ref": "#/definitions/WatchdogConfig"
+            }
+          ]
+        },
+        "environment": {
+          "title": "Environment",
+          "default": {
+            "WATCHDOG_KENNEL": "/dev/watchdog"
+          },
+          "allOf": [
+            {
+              "$ref": "#/definitions/WatchdogEnvironment"
+            }
+          ]
+        },
+        "status": {
+          "title": "Status",
+          "default": "inactive",
+          "enum": [
+            "active",
+            "inactive"
+          ],
+          "type": "string"
+        }
+      }
+    },
+    "WaveformArchiveConfig": {
+      "title": "WaveformArchiveConfig",
+      "description": "A config model based on pydantic. All parameters must have defaults.\n\nExample implementation:\n\n```python\nclass MyConfig(ModuleConfig):\n    a: bool = True\n    b: float = 1.0\n```",
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "title": "Enabled",
+          "default": false,
+          "type": "boolean"
+        },
+        "record_length": {
+          "title": "Record Length",
+          "default": 4096,
+          "enum": [
+            256,
+            512,
+            1024,
+            2048,
+            4096,
+            8192,
+            16384,
+            32768,
+            65536,
+            131072,
+            262144,
+            524288
+          ],
+          "type": "integer"
+        },
+        "time_length": {
+          "title": "Time Length",
+          "default": 600,
+          "suffix": "s",
+          "maximum": 86400,
+          "type": "integer"
+        },
+        "max_archive_size_percent": {
+          "title": "Max Archive Size Percent",
+          "default": 90.0,
+          "suffix": "%",
+          "minimum": 5.0,
+          "maximum": 100.0,
+          "type": "number"
+        },
+        "data_path": {
+          "title": "Data Path",
+          "default": "/home/king/quakesaver_data/mseed_data",
+          "type": "string",
+          "format": "path"
+        }
+      }
+    },
+    "WaveformArchiveStatistics": {
+      "title": "WaveformArchiveStatistics",
+      "description": "A measurement model.\n\nMeasurements consist of `field` names, a tuple of `tags` and\nthe actual measurements. The fields have to be of type int/float/bool or str.\nA measurement needs to be attached to a `ModuleState` object.\n\nExample implementation:\n\n```python\nclass ExampleMeasurement(MeasurementModel):\n    measurement: str = \"foo_measurement\"\n    tags: Tuple[str] = (\"machine_a\",)\n\n    value_a: float\n    value_b: int\n    value_c: bool\n```",
+      "type": "object",
+      "properties": {
+        "timestamp": {
+          "title": "Timestamp",
+          "type": "string",
+          "format": "date-time"
+        },
+        "latitude": {
+          "title": "Latitude",
+          "type": "number"
+        },
+        "longitude": {
+          "title": "Longitude",
+          "type": "number"
+        },
+        "measurement": {
+          "title": "Measurement",
+          "default": "waveform_archive",
+          "type": "string"
+        },
+        "tags": {
+          "title": "Tags",
+          "default": {},
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "disk_total_bytes": {
+          "title": "Disk Total Bytes",
+          "default": 0,
+          "type": "integer"
+        },
+        "disk_free_bytes": {
+          "title": "Disk Free Bytes",
+          "default": 0,
+          "type": "integer"
+        },
+        "disk_usage_percent": {
+          "title": "Disk Usage Percent",
+          "default": 0.0,
+          "type": "number"
+        },
+        "used_bytes": {
+          "title": "Used Bytes",
+          "default": 0,
+          "type": "integer"
+        }
+      }
+    },
+    "WaveformArchiveState": {
+      "title": "WaveformArchiveState",
+      "description": "Local waveform archive for storage of waveform data on the system.",
+      "type": "object",
+      "properties": {
+        "config": {
+          "title": "Config",
+          "default": {
+            "enabled": false,
+            "record_length": 4096,
+            "time_length": 600,
+            "max_archive_size_percent": 90.0,
+            "data_path": "/home/king/quakesaver_data/mseed_data"
+          },
+          "allOf": [
+            {
+              "$ref": "#/definitions/WaveformArchiveConfig"
+            }
+          ]
+        },
+        "stats": {
+          "title": "Stats",
+          "default": {
+            "timestamp": "2023-03-07T09:17:51.417303+00:00",
+            "latitude": null,
+            "longitude": null,
+            "measurement": "waveform_archive",
+            "tags": {
+              "uid": "SUB54I40",
+              "platform": "unknown"
+            },
+            "disk_total_bytes": 0,
+            "disk_free_bytes": 0,
+            "disk_usage_percent": 0.0,
+            "used_bytes": 0
+          },
+          "allOf": [
+            {
+              "$ref": "#/definitions/WaveformArchiveStatistics"
+            }
+          ]
+        }
+      }
+    },
+    "WaveformDispatcherConfig": {
+      "title": "WaveformDispatcherConfig",
+      "description": "Configuration model for the Waveform Requester.",
+      "type": "object",
+      "properties": {
+        "max_requests": {
+          "title": "Max Requests",
+          "default": 5,
+          "exclusiveMinimum": 0,
+          "type": "integer"
+        },
+        "max_request_time": {
+          "title": "Max Request Time",
+          "default": 300.0,
+          "type": "number",
+          "format": "time-delta"
+        }
+      }
+    },
+    "WaveformDispatcherStats": {
+      "title": "WaveformDispatcherStats",
+      "description": "Status model for the Waveform requester.",
+      "type": "object",
+      "properties": {
+        "timestamp": {
+          "title": "Timestamp",
+          "type": "string",
+          "format": "date-time"
+        },
+        "latitude": {
+          "title": "Latitude",
+          "type": "number"
+        },
+        "longitude": {
+          "title": "Longitude",
+          "type": "number"
+        },
+        "measurement": {
+          "title": "Measurement",
+          "default": "waveform_dispatcher",
+          "type": "string"
+        },
+        "tags": {
+          "title": "Tags",
+          "default": {},
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "served_requests": {
+          "title": "Served Requests",
+          "default": 0,
+          "type": "integer"
+        },
+        "served_chunks": {
+          "title": "Served Chunks",
+          "default": 0,
+          "type": "integer"
+        },
+        "served_bytes": {
+          "title": "Served Bytes",
+          "default": 0,
+          "type": "integer"
+        }
+      }
+    },
+    "WaveformDispatcherState": {
+      "title": "WaveformDispatcherState",
+      "description": "Reflects a module's state. Based on pydantic.\n\nExample implementation:\n\n```python\nclass MyModuleState(ModuleState):\n    config: MyConfig = MyConfig()\n\n    value_a: str = \"\"\n    value_b: int = \"\"\n    time: datetime = Field(defautl_factory=datetime.now)\n```",
+      "type": "object",
+      "properties": {
+        "config": {
+          "title": "Config",
+          "default": {
+            "max_requests": 5,
+            "max_request_time": 300.0
+          },
+          "allOf": [
+            {
+              "$ref": "#/definitions/WaveformDispatcherConfig"
+            }
+          ]
+        },
+        "stats": {
+          "title": "Stats",
+          "default": {
+            "timestamp": "2023-03-07T09:17:51.420465+00:00",
+            "latitude": null,
+            "longitude": null,
+            "measurement": "waveform_dispatcher",
+            "tags": {
+              "uid": "SUB54I40",
+              "platform": "unknown"
+            },
+            "served_requests": 0,
+            "served_chunks": 0,
+            "served_bytes": 0
+          },
+          "allOf": [
+            {
+              "$ref": "#/definitions/WaveformDispatcherStats"
+            }
+          ]
+        },
+        "serving": {
+          "title": "Serving",
+          "default": false,
+          "type": "boolean"
+        },
+        "tasks": {
+          "title": "Tasks",
+          "default": 0,
+          "type": "integer"
+        }
+      }
+    },
+    "WaveformPolarisationConfig": {
+      "title": "WaveformPolarisationConfig",
+      "description": "A config model based on pydantic. All parameters must have defaults.\n\nExample implementation:\n\n```python\nclass MyConfig(ModuleConfig):\n    a: bool = True\n    b: float = 1.0\n```",
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "title": "Enabled",
+          "default": true,
+          "type": "boolean"
+        },
+        "window_length_seconds": {
+          "title": "Window Length Seconds",
+          "default": 20.0,
+          "suffix": "s",
+          "minimum": 5.0,
+          "maximum": 60.0,
+          "type": "number"
+        },
+        "lowpass_freq": {
+          "title": "Lowpass Frequency",
+          "default": 1.0,
+          "exclusiveMinimum": 0,
+          "type": "number"
+        }
+      }
+    },
+    "WaveformPolarisationMeasurement": {
+      "title": "WaveformPolarisationMeasurement",
+      "description": "A measurement model.\n\nMeasurements consist of `field` names, a tuple of `tags` and\nthe actual measurements. The fields have to be of type int/float/bool or str.\nA measurement needs to be attached to a `ModuleState` object.\n\nExample implementation:\n\n```python\nclass ExampleMeasurement(MeasurementModel):\n    measurement: str = \"foo_measurement\"\n    tags: Tuple[str] = (\"machine_a\",)\n\n    value_a: float\n    value_b: int\n    value_c: bool\n```",
+      "type": "object",
+      "properties": {
+        "timestamp": {
+          "title": "Timestamp",
+          "type": "string",
+          "format": "date-time"
+        },
+        "latitude": {
+          "title": "Latitude",
+          "type": "number"
+        },
+        "longitude": {
+          "title": "Longitude",
+          "type": "number"
+        },
+        "measurement": {
+          "title": "Measurement",
+          "default": "waveform_polarisation",
+          "type": "string"
+        },
+        "tags": {
+          "title": "Tags",
+          "default": {},
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "WaveformPolarisationState": {
+      "title": "WaveformPolarisationState",
+      "description": "Calculation of the waveform polarisation\nbased on principal component analysis (PCA)",
+      "type": "object",
+      "properties": {
+        "config": {
+          "title": "Config",
+          "default": {
+            "enabled": true,
+            "window_length_seconds": 20.0,
+            "lowpass_freq": 1.0
+          },
+          "allOf": [
+            {
+              "$ref": "#/definitions/WaveformPolarisationConfig"
+            }
+          ]
+        },
+        "measurement": {
+          "title": "Measurement",
+          "default": {
+            "timestamp": "2023-03-07T09:17:51.452541+00:00",
+            "latitude": null,
+            "longitude": null,
+            "measurement": "waveform_polarisation",
+            "tags": {
+              "uid": "SUB54I40",
+              "platform": "unknown"
+            }
+          },
+          "allOf": [
+            {
+              "$ref": "#/definitions/WaveformPolarisationMeasurement"
+            }
+          ]
+        }
+      }
+    },
+    "WifiAccessPointState": {
+      "title": "WifiAccessPointState",
+      "description": "Reflects a module's state. Based on pydantic.\n\nExample implementation:\n\n```python\nclass MyModuleState(ModuleState):\n    config: MyConfig = MyConfig()\n\n    value_a: str = \"\"\n    value_b: int = \"\"\n    time: datetime = Field(defautl_factory=datetime.now)\n```",
+      "type": "object",
+      "properties": {
+        "config": {
+          "title": "Config",
+          "default": {},
+          "allOf": [
+            {
+              "$ref": "#/definitions/ModuleConfig"
+            }
+          ]
+        },
+        "activated": {
+          "title": "Activated",
+          "default": false,
+          "type": "boolean"
+        }
+      }
+    },
+    "ZMQStreamConfig": {
+      "title": "ZMQStreamConfig",
+      "description": "A config model based on pydantic. All parameters must have defaults.\n\nExample implementation:\n\n```python\nclass MyConfig(ModuleConfig):\n    a: bool = True\n    b: float = 1.0\n```",
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "title": "Enabled",
+          "default": true,
+          "type": "boolean"
+        },
+        "nsamples": {
+          "title": "Nsamples",
+          "default": 100,
+          "minimum": 50,
+          "maximum": 1000,
+          "type": "integer"
+        },
+        "address": {
+          "title": "Address",
+          "default": "0.0.0.0",
+          "type": "string",
+          "format": "ipv4"
+        },
+        "port": {
+          "title": "Port",
+          "default": 5556,
+          "minimum": 1000,
+          "maximum": 65335,
+          "type": "integer"
+        }
+      }
+    },
+    "ZMQStreamState": {
+      "title": "ZMQStreamState",
+      "description": "Reflects a module's state. Based on pydantic.\n\nExample implementation:\n\n```python\nclass MyModuleState(ModuleState):\n    config: MyConfig = MyConfig()\n\n    value_a: str = \"\"\n    value_b: int = \"\"\n    time: datetime = Field(defautl_factory=datetime.now)\n```",
+      "type": "object",
+      "properties": {
+        "config": {
+          "title": "Config",
+          "default": {
+            "enabled": true,
+            "nsamples": 100,
+            "address": "0.0.0.0",
+            "port": 5556
+          },
+          "allOf": [
+            {
+              "$ref": "#/definitions/ZMQStreamConfig"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

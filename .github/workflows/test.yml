@@ -1,9 +1,9 @@
 name: Test
 
 on:
-  push:
-    branches:
-      - main
+  schedule:
+    # Run every day at 6 am
+    - cron:  '0 6 * * *'
 
 env:
   TEST_CLIENT_EMAIL: '${{ secrets.TEST_USER_EMAIL }}'
@@ -11,9 +11,6 @@ env:
 
 jobs:
   test:
-    environment:
-      name: test
-      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -24,8 +21,6 @@ jobs:
           python-version: "3.11"
       - name: Set up poetry
         uses: Gr1N/setup-poetry@v8
-      - name: Add poetry plugin
-        run: poetry self add 'poetry-dynamic-versioning[plugin]'
       - name: Install
         run: make install
       - name: test

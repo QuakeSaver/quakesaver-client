@@ -10,6 +10,7 @@ def client():
     client = QSClient(
         email=os.environ.get("TEST_CLIENT_EMAIL"),
         password=os.environ.get("TEST_CLIENT_PASSWORD"),
+        base_domain=os.environ.get("TEST_CLIENT_DOMAIN")
     )
     yield client
 

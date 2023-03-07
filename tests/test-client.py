@@ -1,5 +1,5 @@
 import datetime
-
+import logging
 import pytest
 import os
 from quakesaver_client import QSClient
@@ -17,7 +17,9 @@ def client():
 
 @pytest.fixture
 def sensor(client):
-    yield client.get_sensor(client.get_sensor_ids()[0])
+    sensor_uid = client.get_sensor_ids()[0]
+    logging.info(f"Test sensor: {sensor_uid}")
+    yield client.get_sensor(sensor_uid)
 
 
 def test_sensor_first_seen(sensor):

@@ -1,0 +1,32 @@
+name: Test
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  TEST_CLIENT_EMAIL: '${{ secrets.TEST_USER_EMAIL }}'
+  TEST_CLIENT_PASSWORD: '${{ secrets.TEST_USER_PASSWORD }}'
+
+jobs:
+  test:
+    environment:
+      name: test
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+      - name: Set up poetry
+        uses: Gr1N/setup-poetry@v8
+      - name: Add poetry plugin
+        run: poetry self add 'poetry-dynamic-versioning[plugin]'
+      - name: Install
+        run: make install
+      - name: test
+        run: make test

@@ -1,0 +1,31 @@
+name: Test
+
+on:
+  push:
+  schedule:
+    # Run every day at 6 am
+    - cron:  '0 6 * * *'
+
+permissions:
+  contents: write
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+      - name: Set up poetry
+        uses: Gr1N/setup-poetry@v8
+      - name: Install
+        run: make install
+      - name: test
+        env:
+          TEST_CLIENT_EMAIL: '${{ secrets.TEST_USER_EMAIL }}'
+          TEST_CLIENT_PASSWORD: '${{ secrets.TEST_USER_PASSWORD }}'
+          TEST_CLIENT_DOMAIN: '${{ secrets.TEST_CLIENT_DOMAIN }}'
+        run: make test

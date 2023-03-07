@@ -27,8 +27,7 @@ lint:
 	poetry run pre-commit run --all-files
 
 test:
-	poetry run py.test -vv --cov-report html --cov=$(PROJ_SLUG)
-	${BROWSER} htmlcov/index.html
+	poetry run py.test tests/* -vv --cov-report html --cov=$(PROJ_SLUG)
 
 docs: clean
 	poetry run sphinx-apidoc -o ./docs/source/modules $(PROJ_SLUG)

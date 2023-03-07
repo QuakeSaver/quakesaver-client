@@ -27,7 +27,7 @@ lint:
 	poetry run pre-commit run --all-files
 
 test:
-	poetry run py.test -vv --cov-report html --cov=$(PROJ_SLUG)
+	poetry run py.test tests/* -vv --cov-report html --cov=$(PROJ_SLUG)
 	${BROWSER} htmlcov/index.html
 
 docs: clean

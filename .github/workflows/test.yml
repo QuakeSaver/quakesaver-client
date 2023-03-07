@@ -2,15 +2,9 @@ name: Test
 
 on:
   push:
-    branches:
-      - *
   schedule:
     # Run every day at 6 am
     - cron:  '0 6 * * *'
-
-env:
-  TEST_CLIENT_EMAIL: '${{ secrets.TEST_USER_EMAIL }}'
-  TEST_CLIENT_PASSWORD: '${{ secrets.TEST_USER_PASSWORD }}'
 
 jobs:
   test:
@@ -27,4 +21,7 @@ jobs:
       - name: Install
         run: make install
       - name: test
+        env:
+          TEST_CLIENT_EMAIL: '${{ secrets.TEST_USER_EMAIL }}'
+          TEST_CLIENT_PASSWORD: '${{ secrets.TEST_USER_PASSWORD }}'
         run: make test

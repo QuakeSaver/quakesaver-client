@@ -88,7 +88,7 @@ class Sensor(SensorState):
             raise CorruptedDataError() from e
         return result
 
-    def get_hv_spectres(self: Sensor, query: DataProductQuery) -> HVSpectraQueryResult:
+    def get_hv_spectra(self: Sensor, query: DataProductQuery) -> HVSpectraQueryResult:
         """Get HV Spectres of the sensor.
 
         Args:

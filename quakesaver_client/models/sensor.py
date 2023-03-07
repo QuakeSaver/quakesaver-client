@@ -9,6 +9,12 @@ import requests
 from pydantic import Extra, ValidationError
 
 from quakesaver_client.errors import CorruptedDataError
+from quakesaver_client.models.data_product_query import (
+    DataProductQuery,
+    EventRecordQueryResult,
+    HVSpectraQueryResult,
+    NoiseAutocorrelationQueryResult,
+)
 from quakesaver_client.models.measurement import (
     MeasurementQuery,
     MeasurementQueryFull,
@@ -43,9 +49,80 @@ class Sensor(SensorState):
         self._api_base_url = api_base_url
         self._fdsn_base_url = fdsn_base_url
 
-    def get_data_product(self: Sensor) -> None:
+    def _get_data_product(
+        self: Sensor,
+        data_product_name: str,
+        query: DataProductQuery,
+    ) -> dict:
         """Request data products of the sensor."""
-        pass
+        logging.debug(
+            "QSClient requesting data product %s for sensor %s.",
+            data_product_name,
+            self.uid,
+        )
+        response = requests.post(
+            url=f"{self._api_base_url}/sensors/{self.uid}/data_products/{data_product_name}",
+            headers=self._headers,
+            params=query.dict(),
+            data=[],
+        )
+        response_data = handle_response(response)
+        return response_data
+
+    def get_event_records(
+        self: Sensor, query: DataProductQuery
+    ) -> EventRecordQueryResult:
+        """Get Event Records of the sensor.
+
+        Args:
+            query: The query parameters like time limit and time frame.
+
+        Returns:
+            EventRecordQueryResult: The queried data products.
+        """
+        result = self._get_data_product("EventRecord", query)
+
+        try:
+            result = EventRecordQueryResult.parse_obj(result)
+        except ValidationError as e:
+            raise CorruptedDataError() from e
+        return result
+
+    def get_hv_spectres(self: Sensor, query: DataProductQuery) -> HVSpectraQueryResult:
+        """Get HV Spectres of the sensor.
+
+        Args:
+            query: The query parameters like time limit and time frame.
+
+        Returns:
+            HVSpectraQueryResult: The queried data products.
+        """
+        result = self._get_data_product("HVSpectra", query)
+
+        try:
+            result = HVSpectraQueryResult.parse_obj(result)
+        except ValidationError as e:
+            raise CorruptedDataError() from e
+        return result
+
+    def get_noise_autocorrelations(
+        self: Sensor, query: DataProductQuery
+    ) -> NoiseAutocorrelationQueryResult:
+        """Get the Event Records of the sensor.
+
+        Args:
+            query: The query parameters like time limit and time frame.
+
+        Returns:
+            NoiseAutocorrelationQueryResult: The queried data products.
+        """
+        result = self._get_data_product("NoiseAutocorrelation", query)
+
+        try:
+            result = NoiseAutocorrelationQueryResult.parse_obj(result)
+        except ValidationError as e:
+            raise CorruptedDataError() from e
+        return result
 
     def _get_measurement(
         self: Sensor, query: MeasurementQueryFull

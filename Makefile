@@ -28,7 +28,6 @@ lint:
 
 test:
 	poetry run py.test tests/* -vv --cov-report html --cov=$(PROJ_SLUG)
-	${BROWSER} htmlcov/index.html
 
 docs: clean
 	poetry run sphinx-apidoc -o ./docs/source/modules $(PROJ_SLUG)

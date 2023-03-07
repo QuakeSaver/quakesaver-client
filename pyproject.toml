@@ -1,11 +1,14 @@
 [tool.poetry]
 name = "quakesaver-client"
-version = "0.0.0"
+version = "0.1.0-pre1"
 description = ""
 authors = ["QuakeSaver <info@quakesaver.net>"]
 license = "BSD-3-Clause"
 readme = "README.md"
 packages = [{include = "quakesaver_client"}]
+homepage = "https://quakesaver.net/"
+repository = "https://github.com/QuakeSaver/quakesaver-client"
+documentation = "https://quakesaver.github.io/quakesaver-client/"
 
 [tool.poetry.dependencies]
 python = ">=3.9, <3.12"
@@ -25,7 +28,7 @@ sphinx-autodoc-typehints = "^1.22"
 furo = "^2022.12.7"
 
 [tool.poetry-dynamic-versioning]
-enable = true
+enable = false
 vcs = "git"
 style = "semver"
 

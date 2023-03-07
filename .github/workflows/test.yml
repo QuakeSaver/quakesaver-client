@@ -6,6 +6,9 @@ on:
     # Run every day at 6 am
     - cron:  '0 6 * * *'
 
+permissions:
+  contents: write
+
 jobs:
   test:
     runs-on: ubuntu-latest

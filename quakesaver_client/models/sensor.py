@@ -141,7 +141,7 @@ class Sensor(SensorState):
             raise CorruptedDataError() from e
         return result
 
-    def get_peak_ground_acceleration(
+    def get_peak_horizontal_acceleration(
         self: Sensor, query: MeasurementQuery
     ) -> MeasurementResult:
         """Get the PGA measurement of the sensor.

@@ -11,3 +11,11 @@ class WrongAuthenticationError(ValueError):
 
 class CorruptedDataError(ValueError):
     """An error to raise if data was incomplete or wrong."""
+
+
+class SessionExpiredError(RuntimeError):
+    """An error to raise if the token is expired."""
+
+
+class InsufficientPermissionError(RuntimeError):
+    """An error to raise if the user is not allowed to read or do things."""

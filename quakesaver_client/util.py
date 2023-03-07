@@ -7,6 +7,8 @@ from requests import HTTPError, Response
 
 from quakesaver_client.errors import (
     CorruptedDataError,
+    InsufficientPermissionError,
+    SessionExpiredError,
     UnknownError,
     WrongAuthenticationError,
 )
@@ -25,6 +27,11 @@ def handle_response(response: Response) -> dict:
         response.raise_for_status()
     except HTTPError as e:
         if e.response.status_code == 401:
+            reason = response.json()["detail"]
+            if reason == "Insufficient permissions.":
+                raise InsufficientPermissionError() from e
+            if reason == "Session expired, please log in again.":
+                raise SessionExpiredError() from e
             raise WrongAuthenticationError() from e
         if e.response.status_code == 422:
             raise CorruptedDataError() from e

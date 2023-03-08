@@ -1,4 +1,4 @@
-name: Build and deploy package to pypi
+name: Deploy PyPI package
 
 on:
   create:

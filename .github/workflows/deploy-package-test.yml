@@ -1,4 +1,4 @@
-name: Build and deploy package to test-pypi
+name: Deploy Test-PyPI package
 
 on:
   push:

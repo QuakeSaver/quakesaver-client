@@ -1,6 +1,6 @@
-# Getting Started
+## Getting Started
 
-## Setting up the client
+### Setting up the client
 
 `EMAIL` and `PASSWORD` correspond to the credentials you use to log in at [https://network.quakesaver.net](https://network.quakesaver.net).
 
@@ -13,7 +13,7 @@ PASSWORD = "!verstrongpassword1"
 client = QSClient(email=EMAIL, password=PASSWORD)
 ```
 
-## Full example script
+### Full example script
 
 Authenticate against the quakesaver server and download raw, as well as processed data.
 

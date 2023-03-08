@@ -2,6 +2,7 @@
 import logging
 import os
 from datetime import datetime, timedelta
+from pathlib import PosixPath
 
 import pytest
 
@@ -65,3 +66,15 @@ def test_data_products(sensor: Sensor, aggregator: str, query_method: str) -> No
     method = getattr(sensor, query_method)
     result = method(query)
     assert isinstance(result, MeasurementResult)
+
+
+def test_waveforms(sensor: Sensor) -> None:
+    """Test downloading raw waveforms."""
+    end_time = datetime.utcnow()
+    start_time = end_time - timedelta(minutes=30)
+
+    result = sensor.get_waveform_data(
+        start_time=start_time,
+        end_time=end_time,
+    )
+    assert isinstance(result, PosixPath)

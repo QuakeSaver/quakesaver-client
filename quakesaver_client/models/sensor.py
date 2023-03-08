@@ -219,8 +219,8 @@ class Sensor(SensorState):
 
     def get_waveform_data(
         self: Sensor,
-        starttime: datetime,
-        endtime: datetime,
+        start_time: datetime,
+        end_time: datetime,
         location_to_store: Path | str = None,
     ) -> Path | None:
         """Request FDSN waveform dat of the sensor."""
@@ -228,7 +228,7 @@ class Sensor(SensorState):
 
         location_to_store = assure_output_path(location_to_store)
 
-        params = {"starttime": starttime, "endtime": endtime, "sensor_uids": self.uid}
+        params = {"starttime": start_time, "endtime": end_time, "sensor_uids": self.uid}
         response = requests.get(
             url=f"{self._fdsn_base_url}/dataselect/1/queryauth_jwt_by_id",
             headers=self._headers,
@@ -246,8 +246,8 @@ class Sensor(SensorState):
 
     def get_stationxml(
         self: Sensor,
-        starttime: datetime,
-        endtime: datetime,
+        start_time: datetime,
+        end_time: datetime,
         minlatitude: float = -90,
         maxlatitude: float = 90,
         minlongitude: float = -180,
@@ -261,8 +261,8 @@ class Sensor(SensorState):
         location_to_store = assure_output_path(location_to_store)
 
         params = {
-            "starttime": starttime,
-            "endtime": endtime,
+            "starttime": start_time,
+            "endtime": end_time,
             "sensor_uids": self.uid,
             "minlatitude": minlatitude,
             "maxlatitude": maxlatitude,

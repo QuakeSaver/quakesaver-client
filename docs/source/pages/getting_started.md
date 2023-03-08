@@ -112,7 +112,7 @@ with open(file_path, "r") as file:
 # Download raw full waveforms from the sensor. Note that you can only query what is in
 # the sensor's ringbuffer (usually the last ~ 48 hours).
 file_path = sensor.get_waveform_data(
-    starttime=start_time, endtime=end_time, location_to_store=DATA_PATH
+    start_time=start_time, end_time=end_time, location_to_store=DATA_PATH
 )
 
 # Read the file into obspy for further processing...

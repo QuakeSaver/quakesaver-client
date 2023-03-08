@@ -1,9 +1,7 @@
-name: Deploy Test-PyPI package
+name: Lint
 
 on:
   push:
-    branches:
-      - "main"
 
   workflow_dispatch:
 
@@ -11,13 +9,11 @@ permissions:
   contents: write
 
 concurrency:
-  group: "test-pypi"
+  group: "lint"
   cancel-in-progress: true
 
 jobs:
-  deploy:
-    environment:
-      name: pypi-test
+  lint:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -30,13 +26,7 @@ jobs:
         uses: Gr1N/setup-poetry@v8
       - name: Add poetry plugin
         run: poetry self add 'poetry-dynamic-versioning[plugin]'
-      - name: Configure Poetry
-        run: poetry config repositories.testpypi "https://test.pypi.org/legacy/"
       - name: Install dependencies
-        run: make install_dependencies
-      - name: Build the package
-        run: make build
-      - name: Publish package
-        env:
-          TEST_PYPI_TOKEN: ${{ secrets.TEST_PYPI_TOKEN }}
-        run: poetry publish -r testpypi -u "__token__" -p "$TEST_PYPI_TOKEN"
+        run: make install
+      - name: Lint Code
+        run: make lint

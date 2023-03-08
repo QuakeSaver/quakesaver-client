@@ -1,4 +1,4 @@
-name: Build and deploy package to pypi
+name: Deploy PyPI package
 
 on:
   create:
@@ -9,8 +9,6 @@ on:
 
 permissions:
   contents: write
-  pages: write
-  id-token: write
 
 concurrency:
   group: "pypi"
@@ -33,9 +31,9 @@ jobs:
       - name: Add poetry plugin
         run: poetry self add 'poetry-dynamic-versioning[plugin]'
       - name: Install dependencies
-        run: make install
+        run: make install_dependencies
       - name: Build the package
-        run: poetry build
+        run: make build
       - name: Publish package
         env:
           PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}

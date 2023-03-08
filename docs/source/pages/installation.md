@@ -1,18 +1,18 @@
-# Installation
+## Installation
 
-## pip
+### pip
 
 ```shell
 pip install quakesaver-client
 ```
 
-## poetry
+### poetry
 
 ```shell
 poetry add quakesaver-client
 ```
 
-## pipenv
+### pipenv
 
 ```shell
 pipenv install quakesaver-client

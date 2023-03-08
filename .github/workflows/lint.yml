@@ -1,9 +1,7 @@
-name: Build and deploy package to pypi
+name: Lint
 
 on:
-  create:
-    tags:
-      - "*.*.*"
+  push:
 
   workflow_dispatch:
 
@@ -11,13 +9,11 @@ permissions:
   contents: write
 
 concurrency:
-  group: "pypi"
+  group: "lint"
   cancel-in-progress: true
 
 jobs:
   deploy:
-    environment:
-      name: pypi
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -31,10 +27,6 @@ jobs:
       - name: Add poetry plugin
         run: poetry self add 'poetry-dynamic-versioning[plugin]'
       - name: Install dependencies
-        run: make install_dependencies
-      - name: Build the package
-        run: make build
-      - name: Publish package
-        env:
-          PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
-        run: poetry publish -u "__token__" -p "$PYPI_TOKEN"
+        run: make install
+      - name: Lint Code
+        run: make lint

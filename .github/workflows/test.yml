@@ -22,8 +22,8 @@ jobs:
       - name: Set up poetry
         uses: Gr1N/setup-poetry@v8
       - name: Install
-        run: make install
-      - name: test
+        run: make install_dependencies
+      - name: Run tests
         env:
           TEST_CLIENT_EMAIL: '${{ secrets.TEST_USER_EMAIL }}'
           TEST_CLIENT_PASSWORD: '${{ secrets.TEST_USER_PASSWORD }}'

@@ -1,7 +1,8 @@
 .DEFAULT_GOAL := build
 .PHONY: clean \
-		install \
-		docs lint test build
+		install install_dependencies install_pre_commit \
+		docs lint test build \
+		generate_models
 
 # general variables
 PROJ_SLUG = quakesaver_client
@@ -16,9 +17,13 @@ clean:
 	rm -rf htmlcov
 	rm -rf .coverage
 
-
-install:
+install_dependencies:
 	poetry install
+
+install_pre_commit:
+	poetry run pre-commit install
+
+install: install_dependencies install_pre_commit
 
 build:
 	poetry build

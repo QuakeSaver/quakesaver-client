@@ -1,12 +1,16 @@
+"""Tests for the QuakeSaver client."""
 import datetime
 import logging
-import pytest
 import os
-from quakesaver_client import QSClient
+
+import pytest
+
+from quakesaver_client import QSClient, Sensor
 
 
 @pytest.fixture
-def client():
+def client() -> QSClient:
+    """Get a set-up client."""
     client = QSClient(
         email=os.environ.get("TEST_CLIENT_EMAIL"),
         password=os.environ.get("TEST_CLIENT_PASSWORD"),
@@ -16,7 +20,8 @@ def client():
 
 
 @pytest.fixture
-def sensor(client):
+def sensor(client: QSClient) -> Sensor:
+    """Get the first available sensor."""
     sensor_uids = client.get_sensor_ids()
 
     if len(sensor_uids) == 0:
@@ -26,5 +31,6 @@ def sensor(client):
     yield client.get_sensor(sensor_uids[0])
 
 
-def test_sensor_first_seen(sensor):
+def test_sensor_first_seen(sensor: Sensor) -> None:
+    """Test that the sensors 'first_seen' attribute is set."""
     assert isinstance(sensor.first_seen, datetime.datetime)

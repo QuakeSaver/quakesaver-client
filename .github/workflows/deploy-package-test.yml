@@ -9,8 +9,6 @@ on:
 
 permissions:
   contents: write
-  pages: write
-  id-token: write
 
 concurrency:
   group: "test-pypi"
@@ -35,9 +33,9 @@ jobs:
       - name: Configure Poetry
         run: poetry config repositories.testpypi "https://test.pypi.org/legacy/"
       - name: Install dependencies
-        run: make install
+        run: make install_dependencies
       - name: Build the package
-        run: poetry build
+        run: make build
       - name: Publish package
         env:
           TEST_PYPI_TOKEN: ${{ secrets.TEST_PYPI_TOKEN }}

@@ -18,6 +18,30 @@ from quakesaver_client.util import handle_response
 DecoratedFunction = TypeVar("DecoratedFunction", bound=Callable[..., Any])
 
 
+def _needs_token(function: DecoratedFunction) -> DecoratedFunction:
+    @wraps(function)
+    def request_token_if_needed(
+        self: QSClient, *args: list, **kwargs: dict
+    ) -> DecoratedFunction:
+        if not self._token:
+            logging.debug("QSClient requesting user _token.")
+            response = requests.post(
+                url=f"{self._api_base_url}/user/get_token",
+                data=f"username={self._email}&password={self._password}",
+                headers={"Content-Type": "application/x-www-form-urlencoded"},
+            )
+            response_data = handle_response(response)
+            try:
+                token = Token(**response_data)
+            except ValidationError as e:
+                raise CorruptedDataError() from e
+            self._token = token
+
+        return function(self, *args, **kwargs)
+
+    return request_token_if_needed
+
+
 class QSClient:
     """A class representing a client to the backend."""
 
@@ -51,30 +75,6 @@ class QSClient:
 
         self._api_base_url = f"https://api.{base_domain}/api/v1"
         self._fdsn_base_url = f"https://fdsnws.{base_domain}/fdsnws"
-
-    @staticmethod
-    def _needs_token(function: DecoratedFunction) -> DecoratedFunction:
-        @wraps(function)
-        def request_token_if_needed(
-            self: QSClient, *args: list, **kwargs: dict
-        ) -> DecoratedFunction:
-            if not self._token:
-                logging.debug("QSClient requesting user _token.")
-                response = requests.post(
-                    url=f"{self._api_base_url}/user/get_token",
-                    data=f"username={self._email}&password={self._password}",
-                    headers={"Content-Type": "application/x-www-form-urlencoded"},
-                )
-                response_data = handle_response(response)
-                try:
-                    token = Token(**response_data)
-                except ValidationError as e:
-                    raise CorruptedDataError() from e
-                self._token = token
-
-            return function(self, *args, **kwargs)
-
-        return request_token_if_needed
 
     @_needs_token
     def _get_authorization_headers(self: QSClient) -> dict:

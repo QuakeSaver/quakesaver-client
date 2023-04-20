@@ -11,7 +11,7 @@ repository = "https://github.com/QuakeSaver/quakesaver-client"
 documentation = "https://quakesaver.github.io/quakesaver-client/"
 
 [tool.poetry.dependencies]
-python = ">=3.9, <3.12"
+python = ">=3.8, <3.12"
 pydantic = "~=1.10.5"
 requests = "~=2.28.2"
 

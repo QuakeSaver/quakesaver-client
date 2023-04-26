@@ -11,7 +11,7 @@ from pydantic import ValidationError
 from quakesaver_client.errors import (
     CorruptedDataError,
 )
-from quakesaver_client.models.sensor import Sensor
+from quakesaver_client.models.cloud_sensor import CloudSensor
 from quakesaver_client.models.token import Token
 from quakesaver_client.util import handle_response
 
@@ -94,14 +94,14 @@ class QSClient:
         response_data = handle_response(response)
         return list(response_data.keys())
 
-    def get_sensor(self: QSClient, sensor_uid: str) -> Sensor:
+    def get_sensor(self: QSClient, sensor_uid: str) -> CloudSensor:
         """Fetch sensor data.
 
         Args:
             sensor_uid: The UID to request data from.
 
         Returns:
-            Sensor: A sensor model to work with.
+            CloudSensor: A sensor model to work with.
         """
         logging.debug("QSClient requesting sensor %s.", sensor_uid)
         response = requests.get(
@@ -110,7 +110,7 @@ class QSClient:
         )
         response_data = handle_response(response)
         try:
-            sensor = Sensor(
+            sensor = CloudSensor(
                 api_base_url=self._api_base_url,
                 fdsn_base_url=self._fdsn_base_url,
                 headers=self._get_authorization_headers(),

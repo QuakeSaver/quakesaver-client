@@ -27,7 +27,7 @@ from quakesaver_client.types import StationDetailLevel
 from quakesaver_client.util import assure_output_path, handle_response
 
 
-class Sensor(SensorState):
+class CloudSensor(SensorState):
     """A base schema for other schemas to derive from."""
 
     _headers: dict
@@ -41,7 +41,7 @@ class Sensor(SensorState):
     max_data_product_count: int
 
     def __init__(
-        self: Sensor, api_base_url: str, fdsn_base_url: str, headers: dict, **data: dict
+        self: CloudSensor, api_base_url: str, fdsn_base_url: str, headers: dict, **data: dict
     ) -> None:
         """Create an instance of the class."""
         super().__init__(**data)
@@ -50,7 +50,7 @@ class Sensor(SensorState):
         self._fdsn_base_url = fdsn_base_url
 
     def _get_data_product(
-        self: Sensor,
+        self: CloudSensor,
         data_product_name: str,
         query: DataProductQuery,
     ) -> dict:
@@ -70,7 +70,7 @@ class Sensor(SensorState):
         return response_data
 
     def get_event_records(
-        self: Sensor, query: DataProductQuery
+        self: CloudSensor, query: DataProductQuery
     ) -> EventRecordQueryResult:
         """Get Event Records of the sensor.
 
@@ -88,7 +88,7 @@ class Sensor(SensorState):
             raise CorruptedDataError() from e
         return result
 
-    def get_hv_spectra(self: Sensor, query: DataProductQuery) -> HVSpectraQueryResult:
+    def get_hv_spectra(self: CloudSensor, query: DataProductQuery) -> HVSpectraQueryResult:
         """Get HV Spectres of the sensor.
 
         Args:
@@ -106,7 +106,7 @@ class Sensor(SensorState):
         return result
 
     def get_noise_autocorrelations(
-        self: Sensor, query: DataProductQuery
+        self: CloudSensor, query: DataProductQuery
     ) -> NoiseAutocorrelationQueryResult:
         """Get the Event Records of the sensor.
 
@@ -125,7 +125,7 @@ class Sensor(SensorState):
         return result
 
     def _get_measurement(
-        self: Sensor, query: MeasurementQueryFull
+        self: CloudSensor, query: MeasurementQueryFull
     ) -> MeasurementResult:
         """Request measurements of the sensor."""
         logging.debug("QSClient requesting measurement for sensor %s.", self.uid)
@@ -142,7 +142,7 @@ class Sensor(SensorState):
         return result
 
     def get_peak_horizontal_acceleration(
-        self: Sensor, query: MeasurementQuery
+        self: CloudSensor, query: MeasurementQuery
     ) -> MeasurementResult:
         """Get the PGA measurement of the sensor.
 
@@ -157,7 +157,7 @@ class Sensor(SensorState):
         )
         return self._get_measurement(query=full_query)
 
-    def get_jma_intensity(self: Sensor, query: MeasurementQuery) -> MeasurementResult:
+    def get_jma_intensity(self: CloudSensor, query: MeasurementQuery) -> MeasurementResult:
         """Get the JMA Intensity measurement of the sensor.
 
         Args:
@@ -171,7 +171,7 @@ class Sensor(SensorState):
         )
         return self._get_measurement(query=full_query)
 
-    def get_rms_amplitude(self: Sensor, query: MeasurementQuery) -> MeasurementResult:
+    def get_rms_amplitude(self: CloudSensor, query: MeasurementQuery) -> MeasurementResult:
         """Get the RMS Amplitude measurement of the sensor.
 
         Args:
@@ -186,7 +186,7 @@ class Sensor(SensorState):
         return self._get_measurement(query=full_query)
 
     def get_spectral_intensity(
-        self: Sensor, query: MeasurementQuery
+        self: CloudSensor, query: MeasurementQuery
     ) -> MeasurementResult:
         """Get the Spectral Intensity measurement of the sensor.
 
@@ -203,7 +203,7 @@ class Sensor(SensorState):
         )
         return self._get_measurement(query=full_query)
 
-    def get_rms_offset(self: Sensor, query: MeasurementQuery) -> MeasurementResult:
+    def get_rms_offset(self: CloudSensor, query: MeasurementQuery) -> MeasurementResult:
         """Get the RMS Offset measurement of the sensor.
 
         Args:
@@ -218,7 +218,7 @@ class Sensor(SensorState):
         return self._get_measurement(query=full_query)
 
     def get_waveform_data(
-        self: Sensor,
+        self: CloudSensor,
         start_time: datetime,
         end_time: datetime,
         location_to_store: Path | str = None,
@@ -245,7 +245,7 @@ class Sensor(SensorState):
         return storage_path
 
     def get_stationxml(
-        self: Sensor,
+        self: CloudSensor,
         start_time: datetime,
         end_time: datetime,
         minlatitude: float = -90,

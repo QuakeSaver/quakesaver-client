@@ -6,7 +6,7 @@ from pathlib import PosixPath
 
 import pytest
 
-from quakesaver_client import QSClient, Sensor
+from quakesaver_client import QSClient, CloudSensor
 from quakesaver_client.models.measurement import (
     InfluxAggregator,
     MeasurementQuery,
@@ -26,7 +26,7 @@ def client() -> QSClient:
 
 
 @pytest.fixture
-def sensor(client: QSClient) -> Sensor:
+def sensor(client: QSClient) -> CloudSensor:
     """Get the first available sensor."""
     sensor_uids = client.get_sensor_ids()
 
@@ -37,7 +37,7 @@ def sensor(client: QSClient) -> Sensor:
     yield client.get_sensor(sensor_uids[0])
 
 
-def test_sensor_first_seen(sensor: Sensor) -> None:
+def test_sensor_first_seen(sensor: CloudSensor) -> None:
     """Test that the sensors 'first_seen' attribute is set."""
     assert isinstance(sensor.first_seen, datetime)
 
@@ -52,7 +52,7 @@ def test_sensor_first_seen(sensor: Sensor) -> None:
         "get_spectral_intensity",
     ],
 )
-def test_data_products(sensor: Sensor, aggregator: str, query_method: str) -> None:
+def test_data_products(sensor: CloudSensor, aggregator: str, query_method: str) -> None:
     """Test all dataproduct endpoints with all available aggregators."""
     end_time = datetime.utcnow()
     start_time = end_time - timedelta(minutes=30)
@@ -68,7 +68,7 @@ def test_data_products(sensor: Sensor, aggregator: str, query_method: str) -> No
     assert isinstance(result, MeasurementResult)
 
 
-def test_waveforms(sensor: Sensor) -> None:
+def test_waveforms(sensor: CloudSensor) -> None:
     """Test downloading raw waveforms."""
     end_time = datetime.utcnow()
     start_time = end_time - timedelta(minutes=30)

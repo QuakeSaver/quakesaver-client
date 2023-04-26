@@ -132,15 +132,21 @@ for trace in stream.traces:
     print(trace.stats)
 ```
 
-## Example to stream from a local sensor
+## Example to stream from a local sensor asynchronously
 
 ```python
+import asyncio
 from quakesaver_client import QSLocal
 
 
-client = QSLocal()
-sensor = client.get_sensor("qssensor.local")
-stream = sensor.get_waveform_stream()
-async for chunk in stream.start():
-    print(chunk)
+async def run():
+    client = QSLocal()
+
+    sensor = client.get_sensor("qssensor.local")
+    stream = sensor.get_waveform_stream()
+    async for chunk in stream.start():
+        print(chunk)
+
+asyncio.run(run())
+
 ```

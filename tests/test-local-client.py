@@ -2,10 +2,12 @@ from quakesaver_client import QSLocal
 
 
 async def test_locally():
+    """connect to a sensor on the local network."""
     client = QSLocal()
     sensor = client.get_sensor("qssensor.local")
     stream = sensor.get_waveform_stream()
-    async for chunk in stream.start():
-        if chunk:
+
+    async for trace_segment in stream.start():
+        if trace_segment:
             await stream.stop()
             break

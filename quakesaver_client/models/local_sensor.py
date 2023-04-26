@@ -1,11 +1,9 @@
+"""Sensor on the local network."""
 from __future__ import annotations
 
-import asyncio
-import logging
 from datetime import datetime
 from pathlib import Path
 
-import aiohttp
 from pydantic import Extra
 
 from quakesaver_client.client_websocket import WebsocketHandler
@@ -16,11 +14,10 @@ from quakesaver_client.models.data_product_query import (
     NoiseAutocorrelationQueryResult,
 )
 from quakesaver_client.models.measurement import (
-    MeasurementResult,
-    MeasurementQueryFull,
     MeasurementQuery,
+    MeasurementQueryFull,
+    MeasurementResult,
 )
-import requests
 from quakesaver_client.models.sensor_state import SensorState
 from quakesaver_client.types import StationDetailLevel
 
@@ -149,7 +146,8 @@ class LocalSensor(SensorState):
         """
         ...
 
-    def get_waveform_stream(self):
+    def get_waveform_stream(self: LocalSensor) -> WebsocketHandler:
+        """Get a `WebsocketHandler` to server waveform data."""
         return WebsocketHandler(self.url)
 
     def get_waveform_data(
@@ -180,16 +178,3 @@ class LocalSensor(SensorState):
 
         extra = Extra.allow
         underscore_attrs_are_private = True
-
-
-#
-# async def main():
-#     url = "qssensor.local"
-#     sensor = await get_sensor(url)
-#     async for chunk in sensor.stream_waveform_data():
-#         print(chunk)
-#
-#
-# if __name__ == "__main__":
-#     logging.basicConfig(level=logging.DEBUG)
-#     asyncio.run(main())

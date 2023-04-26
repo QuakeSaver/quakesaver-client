@@ -6,7 +6,7 @@ from pathlib import PosixPath
 
 import pytest
 
-from quakesaver_client import QSCloud, CloudSensor
+from quakesaver_client import CloudSensor, QSCloud
 from quakesaver_client.models.measurement import (
     InfluxAggregator,
     MeasurementQuery,

@@ -6,7 +6,7 @@ from pathlib import PosixPath
 
 import pytest
 
-from quakesaver_client import QSClient, CloudSensor
+from quakesaver_client import QSCloud, CloudSensor
 from quakesaver_client.models.measurement import (
     InfluxAggregator,
     MeasurementQuery,
@@ -15,9 +15,9 @@ from quakesaver_client.models.measurement import (
 
 
 @pytest.fixture
-def client() -> QSClient:
+def client() -> QSCloud:
     """Get a set-up client."""
-    client = QSClient(
+    client = QSCloud(
         email=os.environ.get("TEST_CLIENT_EMAIL"),
         password=os.environ.get("TEST_CLIENT_PASSWORD"),
         base_domain=os.environ.get("TEST_CLIENT_DOMAIN"),
@@ -26,7 +26,7 @@ def client() -> QSClient:
 
 
 @pytest.fixture
-def sensor(client: QSClient) -> CloudSensor:
+def sensor(client: QSCloud) -> CloudSensor:
     """Get the first available sensor."""
     sensor_uids = client.get_sensor_ids()
 

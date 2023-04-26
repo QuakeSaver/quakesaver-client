@@ -41,7 +41,11 @@ class CloudSensor(SensorState):
     max_data_product_count: int
 
     def __init__(
-        self: CloudSensor, api_base_url: str, fdsn_base_url: str, headers: dict, **data: dict
+        self: CloudSensor,
+        api_base_url: str,
+        fdsn_base_url: str,
+        headers: dict,
+        **data: dict,
     ) -> None:
         """Create an instance of the class."""
         super().__init__(**data)
@@ -56,7 +60,7 @@ class CloudSensor(SensorState):
     ) -> dict:
         """Request data products of the sensor."""
         logging.debug(
-            "QSClient requesting data product %s for sensor %s.",
+            "QSCloud requesting data product %s for sensor %s.",
             data_product_name,
             self.uid,
         )
@@ -88,7 +92,9 @@ class CloudSensor(SensorState):
             raise CorruptedDataError() from e
         return result
 
-    def get_hv_spectra(self: CloudSensor, query: DataProductQuery) -> HVSpectraQueryResult:
+    def get_hv_spectra(
+        self: CloudSensor, query: DataProductQuery
+    ) -> HVSpectraQueryResult:
         """Get HV Spectres of the sensor.
 
         Args:
@@ -128,7 +134,7 @@ class CloudSensor(SensorState):
         self: CloudSensor, query: MeasurementQueryFull
     ) -> MeasurementResult:
         """Request measurements of the sensor."""
-        logging.debug("QSClient requesting measurement for sensor %s.", self.uid)
+        logging.debug("QSCloud requesting measurement for sensor %s.", self.uid)
         response = requests.post(
             url=f"{self._api_base_url}/sensors/{self.uid}/measurements",
             headers=self._headers,
@@ -157,7 +163,9 @@ class CloudSensor(SensorState):
         )
         return self._get_measurement(query=full_query)
 
-    def get_jma_intensity(self: CloudSensor, query: MeasurementQuery) -> MeasurementResult:
+    def get_jma_intensity(
+        self: CloudSensor, query: MeasurementQuery
+    ) -> MeasurementResult:
         """Get the JMA Intensity measurement of the sensor.
 
         Args:
@@ -171,7 +179,9 @@ class CloudSensor(SensorState):
         )
         return self._get_measurement(query=full_query)
 
-    def get_rms_amplitude(self: CloudSensor, query: MeasurementQuery) -> MeasurementResult:
+    def get_rms_amplitude(
+        self: CloudSensor, query: MeasurementQuery
+    ) -> MeasurementResult:
         """Get the RMS Amplitude measurement of the sensor.
 
         Args:
@@ -224,7 +234,7 @@ class CloudSensor(SensorState):
         location_to_store: Path | str = None,
     ) -> Path | None:
         """Request FDSN waveform dat of the sensor."""
-        logging.debug("QSClient requesting waveform data for sensor %s.", self.uid)
+        logging.debug("QSCloud requesting waveform data for sensor %s.", self.uid)
 
         location_to_store = assure_output_path(location_to_store)
 
@@ -256,7 +266,7 @@ class CloudSensor(SensorState):
         location_to_store: Path | str = None,
     ) -> Path:
         """Request FDSN StationXML metadata of the sensor."""
-        logging.debug("QSClient requesting stationxml for sensor %s.", self.uid)
+        logging.debug("QSCloud requesting stationxml for sensor %s.", self.uid)
 
         location_to_store = assure_output_path(location_to_store)
 

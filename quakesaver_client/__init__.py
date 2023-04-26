@@ -12,6 +12,7 @@ from quakesaver_client.errors import (
     CorruptedDataError,
 )
 from quakesaver_client.models.cloud_sensor import CloudSensor
+from quakesaver_client.models.local_sensor import LocalSensor
 from quakesaver_client.models.token import Token
 from quakesaver_client.util import handle_response
 
@@ -21,10 +22,10 @@ DecoratedFunction = TypeVar("DecoratedFunction", bound=Callable[..., Any])
 def _needs_token(function: DecoratedFunction) -> DecoratedFunction:
     @wraps(function)
     def request_token_if_needed(
-        self: QSClient, *args: list, **kwargs: dict
+        self: QSCloud, *args: list, **kwargs: dict
     ) -> DecoratedFunction:
         if not self._token:
-            logging.debug("QSClient requesting user _token.")
+            logging.debug("QSCloud requesting user _token.")
             response = requests.post(
                 url=f"{self._api_base_url}/user/get_token",
                 data=f"username={self._email}&password={self._password}",
@@ -42,7 +43,7 @@ def _needs_token(function: DecoratedFunction) -> DecoratedFunction:
     return request_token_if_needed
 
 
-class QSClient:
+class QSCloud:
     """A class representing a client to the backend."""
 
     _base_domain: str
@@ -55,7 +56,7 @@ class QSClient:
     _fdsn_base_url: str
 
     def __init__(
-        self: QSClient,
+        self: QSCloud,
         email: str,
         password: str,
         base_domain: str | None = "network.quakesaver.net",
@@ -77,16 +78,16 @@ class QSClient:
         self._fdsn_base_url = f"https://fdsnws.{base_domain}/fdsnws"
 
     @_needs_token
-    def _get_authorization_headers(self: QSClient) -> dict:
+    def _get_authorization_headers(self: QSCloud) -> dict:
         return {"Authorization": f"{self._token.token_type} {self._token.access_token}"}
 
-    def get_sensor_ids(self: QSClient) -> list[str]:
+    def get_sensor_ids(self: QSCloud) -> list[str]:
         """Fetch all sensor UIDs the user has access to.
 
         Returns:
             list[str]: The list of sensor UIDs.
         """
-        logging.debug("QSClient requesting sensor ids.")
+        logging.debug("QSCloud requesting sensor ids.")
         response = requests.get(
             url=f"{self._api_base_url}/user/me/sensors",
             headers=self._get_authorization_headers(),
@@ -94,7 +95,7 @@ class QSClient:
         response_data = handle_response(response)
         return list(response_data.keys())
 
-    def get_sensor(self: QSClient, sensor_uid: str) -> CloudSensor:
+    def get_sensor(self: QSCloud, sensor_uid: str) -> CloudSensor:
         """Fetch sensor data.
 
         Args:
@@ -103,7 +104,7 @@ class QSClient:
         Returns:
             CloudSensor: A sensor model to work with.
         """
-        logging.debug("QSClient requesting sensor %s.", sensor_uid)
+        logging.debug("QSCloud requesting sensor %s.", sensor_uid)
         response = requests.get(
             url=f"{self._api_base_url}/sensors/{sensor_uid}",
             headers=self._get_authorization_headers(),
@@ -118,4 +119,13 @@ class QSClient:
             )
         except ValidationError as e:
             raise CorruptedDataError from e
+        return sensor
+
+
+class QSLocal:
+    def get_sensor(self, sensor_url) -> LocalSensor:
+        url = f"http://{sensor_url}/state"
+        response = requests.get(url)
+        sensor = LocalSensor.parse_raw(response.text)
+        sensor.url = sensor_url
         return sensor

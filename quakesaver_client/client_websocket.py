@@ -1,4 +1,4 @@
-from models.websocket import *
+from .models.websocket import *
 import gzip
 
 import aiohttp
@@ -24,19 +24,39 @@ def payload_to_waveforms(data):
     return all_channels
 
 
-async def start_event_trigger_listener(sensor_url):
-    start_action = WebSocketRequest(action="startWaveformStream")
+START_ACTION = WebSocketRequest(action="startWaveformStream")
+STOP_ACTION = WebSocketRequest(action="stopWaveformStream")
 
-    async with aiohttp.ClientSession() as session:
-        async with session.ws_connect(f"ws://{sensor_url}/ws") as ws:
-            await ws.send_str(start_action.json())
 
-            async for msg in ws:
-                data = WebSocketPayload.parse_raw(msg.data)
+class WebsocketHandler:
+    def __init__(self, url):
+        self.session = None
+        self.url = url
 
-                if "data" not in data.payload:
-                    continue
+    async def start(self):
+        self.session = aiohttp.ClientSession()
+        async with self.session:
+            async with self.session.ws_connect(f"ws://{self.url}/ws") as ws:
+                try:
+                    await ws.send_str(START_ACTION.json())
 
-                waveforms = payload_to_waveforms(data)
-                logger.info(f"received {waveforms}")
-                yield waveforms
+                    async for msg in ws:
+                        data = WebSocketPayload.parse_raw(msg.data)
+
+                        if "data" not in data.payload:
+                            continue
+
+                        waveforms = payload_to_waveforms(data)
+                        logger.info(f"received {waveforms}")
+                        yield waveforms
+                except Exception as e:
+                    await ws.send_str(STOP_ACTION.json())
+                    raise e
+
+    async def stop(self):
+        if self.session is None:
+            logger.info("no waveform stream session")
+
+        async with self.session:
+            async with self.session.ws_connect(f"ws://{self.url}/ws") as ws:
+                await ws.send_str(STOP_ACTION.json())

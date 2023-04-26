@@ -8,7 +8,7 @@ from pathlib import Path
 import aiohttp
 from pydantic import Extra
 
-from quakesaver_client.client_websocket import start_event_trigger_listener
+from quakesaver_client.client_websocket import WebsocketHandler
 from quakesaver_client.models.data_product_query import (
     DataProductQuery,
     EventRecordQueryResult,
@@ -20,18 +20,9 @@ from quakesaver_client.models.measurement import (
     MeasurementQueryFull,
     MeasurementQuery,
 )
+import requests
 from quakesaver_client.models.sensor_state import SensorState
 from quakesaver_client.types import StationDetailLevel
-
-
-async def get_sensor(sensor_url) -> LocalSensor:
-    url = f"http://{sensor_url}/state"
-    async with aiohttp.ClientSession() as client:
-        async with client.get(url) as resp:
-            state = await resp.text()
-            sensor = LocalSensor.parse_raw(state)
-            sensor.url = sensor_url
-            return sensor
 
 
 class LocalSensor(SensorState):
@@ -43,15 +34,15 @@ class LocalSensor(SensorState):
         self.url = None
 
     def _get_data_product(
-            self: LocalSensor,
-            data_product_name: str,
-            query: DataProductQuery,
+        self: LocalSensor,
+        data_product_name: str,
+        query: DataProductQuery,
     ) -> dict:
         """Request data products of the sensor."""
         ...
 
     def get_event_records(
-            self: LocalSensor, query: DataProductQuery
+        self: LocalSensor, query: DataProductQuery
     ) -> EventRecordQueryResult:
         """Get Event Records of the sensor.
 
@@ -63,7 +54,9 @@ class LocalSensor(SensorState):
         """
         ...
 
-    def get_hv_spectra(self: LocalSensor, query: DataProductQuery) -> HVSpectraQueryResult:
+    def get_hv_spectra(
+        self: LocalSensor, query: DataProductQuery
+    ) -> HVSpectraQueryResult:
         """Get HV Spectres of the sensor.
 
         Args:
@@ -75,7 +68,7 @@ class LocalSensor(SensorState):
         ...
 
     def get_noise_autocorrelations(
-            self: LocalSensor, query: DataProductQuery
+        self: LocalSensor, query: DataProductQuery
     ) -> NoiseAutocorrelationQueryResult:
         """Get the Event Records of the sensor.
 
@@ -88,13 +81,13 @@ class LocalSensor(SensorState):
         ...
 
     def _get_measurement(
-            self: LocalSensor, query: MeasurementQueryFull
+        self: LocalSensor, query: MeasurementQueryFull
     ) -> MeasurementResult:
         """Request measurements of the sensor."""
         ...
 
     def get_peak_horizontal_acceleration(
-            self: LocalSensor, query: MeasurementQuery
+        self: LocalSensor, query: MeasurementQuery
     ) -> MeasurementResult:
         """Get the PGA measurement of the sensor.
 
@@ -106,7 +99,9 @@ class LocalSensor(SensorState):
         """
         ...
 
-    def get_jma_intensity(self: LocalSensor, query: MeasurementQuery) -> MeasurementResult:
+    def get_jma_intensity(
+        self: LocalSensor, query: MeasurementQuery
+    ) -> MeasurementResult:
         """Get the JMA Intensity measurement of the sensor.
 
         Args:
@@ -117,7 +112,9 @@ class LocalSensor(SensorState):
         """
         ...
 
-    def get_rms_amplitude(self: LocalSensor, query: MeasurementQuery) -> MeasurementResult:
+    def get_rms_amplitude(
+        self: LocalSensor, query: MeasurementQuery
+    ) -> MeasurementResult:
         """Get the RMS Amplitude measurement of the sensor.
 
         Args:
@@ -129,7 +126,7 @@ class LocalSensor(SensorState):
         ...
 
     def get_spectral_intensity(
-            self: LocalSensor, query: MeasurementQuery
+        self: LocalSensor, query: MeasurementQuery
     ) -> MeasurementResult:
         """Get the Spectral Intensity measurement of the sensor.
 
@@ -152,28 +149,28 @@ class LocalSensor(SensorState):
         """
         ...
 
-    def stream_waveform_data(self):
-        return start_event_trigger_listener(self.url)
+    def get_waveform_stream(self):
+        return WebsocketHandler(self.url)
 
     def get_waveform_data(
-            self: LocalSensor,
-            start_time: datetime,
-            end_time: datetime,
-            location_to_store: Path | str = None,
+        self: LocalSensor,
+        start_time: datetime,
+        end_time: datetime,
+        location_to_store: Path | str = None,
     ) -> Path | None:
         """Request FDSN waveform dat of the sensor."""
         ...
 
     def get_stationxml(
-            self: LocalSensor,
-            start_time: datetime,
-            end_time: datetime,
-            minlatitude: float = -90,
-            maxlatitude: float = 90,
-            minlongitude: float = -180,
-            maxlongitude: float = 180,
-            level: StationDetailLevel = "station",
-            location_to_store: Path | str = None,
+        self: LocalSensor,
+        start_time: datetime,
+        end_time: datetime,
+        minlatitude: float = -90,
+        maxlatitude: float = 90,
+        minlongitude: float = -180,
+        maxlongitude: float = 180,
+        level: StationDetailLevel = "station",
+        location_to_store: Path | str = None,
     ) -> Path:
         """Request FDSN StationXML metadata of the sensor."""
         ...
@@ -185,13 +182,14 @@ class LocalSensor(SensorState):
         underscore_attrs_are_private = True
 
 
-async def main():
-    url = "qssensor.local"
-    sensor = await get_sensor(url)
-    async for chunk in sensor.stream_waveform_data():
-        print(chunk)
-
-
-if __name__ == "__main__":
-    logging.basicConfig(level=logging.DEBUG)
-    asyncio.run(main())
+#
+# async def main():
+#     url = "qssensor.local"
+#     sensor = await get_sensor(url)
+#     async for chunk in sensor.stream_waveform_data():
+#         print(chunk)
+#
+#
+# if __name__ == "__main__":
+#     logging.basicConfig(level=logging.DEBUG)
+#     asyncio.run(main())

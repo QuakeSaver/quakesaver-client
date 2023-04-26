@@ -16,15 +16,15 @@ You can find the documentation [here](https://quakesaver.github.io/quakesaver-cl
 `EMAIL` and `PASSWORD` correspond to the credentials you use to log in at [https://network.quakesaver.net](https://network.quakesaver.net).
 
 ```python
-from quakesaver_client import QSClient
+from quakesaver_client import QSCloud
 
 EMAIL = "user@yourorganisation.net"
 PASSWORD = "!verstrongpassword1"
 
-client = QSClient(email=EMAIL, password=PASSWORD)
+client = QSCloud(email=EMAIL, password=PASSWORD)
 ```
 
-### Full example script
+### Example to stream from the cloud
 
 Authenticate against the quakesaver server and download raw, as well as processed data.
 
@@ -40,7 +40,7 @@ from pprint import pp
 import obspy
 from obspy import Stream
 
-from quakesaver_client import QSClient
+from quakesaver_client import QSCloudClient
 from quakesaver_client.models.data_product_query import DataProductQuery
 from quakesaver_client.models.measurement import MeasurementQuery
 
@@ -48,7 +48,7 @@ EMAIL = "user@yourorganisation.net"
 PASSWORD = "!verstrongpassword1"
 DATA_PATH = "./data"
 
-client = QSClient(email=EMAIL, password=PASSWORD)
+client = QSCloudClient(email=EMAIL, password=PASSWORD)
 
 # Get a list of all available sensor IDs:
 sensor_ids = client.get_sensor_ids()
@@ -130,4 +130,17 @@ file_path = sensor.get_waveform_data(
 stream: Stream = obspy.read(file_path)
 for trace in stream.traces:
     print(trace.stats)
+```
+
+## Example to stream from a local sensor
+
+```python
+from quakesaver_client import QSLocal
+
+
+client = QSLocal()
+sensor = client.get_sensor("qssensor.local")
+stream = sensor.get_waveform_stream()
+async for chunk in stream.start():
+    print(chunk)
 ```

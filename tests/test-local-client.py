@@ -1,8 +1,9 @@
+"""local sensor tests."""
 from quakesaver_client import QSLocal
 
 
-async def test_locally():
-    """connect to a sensor on the local network."""
+async def test_locally() -> None:
+    """Connect to a sensor on the local network."""
     client = QSLocal()
     sensor = client.get_sensor("qssensor.local")
     stream = sensor.get_waveform_stream()

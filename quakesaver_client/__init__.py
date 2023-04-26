@@ -125,7 +125,8 @@ class QSCloud:
 class QSLocal:
     """Client to interact with sensors on your local network."""
 
-    def get_sensor(self: QSLocal, sensor_url: str) -> LocalSensor:
+    @classmethod
+    def get_sensor(cls: QSLocal, sensor_url: str) -> LocalSensor:
         """Get a `LocalSensor` from the url."""
         url = f"http://{sensor_url}/state"
         response = requests.get(url)

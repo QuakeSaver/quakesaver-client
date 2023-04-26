@@ -1,7 +1,10 @@
 """local sensor tests."""
+import pytest
+
 from quakesaver_client import QSLocal
 
 
+@pytest.mark.local
 async def test_locally() -> None:
     """Connect to a sensor on the local network."""
     client = QSLocal()

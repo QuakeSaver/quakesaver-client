@@ -78,6 +78,7 @@ exclude = [
     "__pypackages__",
     "build",
     "dist",
+    "tests/conftest.py"
 ]
 line-length = 88
 target-version = "py310"

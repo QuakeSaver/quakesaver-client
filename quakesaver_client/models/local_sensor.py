@@ -187,4 +187,3 @@ class LocalSensor(SensorState):
 
         extra = Extra.allow
         underscore_attrs_are_private = True
-

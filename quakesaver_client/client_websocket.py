@@ -48,11 +48,11 @@ class WebsocketHandler:
         Args:
             url: hostname (without protocol and route).
         """
-        self.session = None
+        self._session = None
         self.url = url
 
-    async def create_websocket(self: WebsocketHandler):
-        async with self.session.ws_connect(f"ws://{self.url}/ws") as ws:
+    async def create_websocket(self: WebsocketHandler, session):
+        async with session.ws_connect(f"ws://{self.url}/ws") as ws:
             await ws.send_str(START_ACTION.json())
 
             async for msg in ws:
@@ -66,22 +66,25 @@ class WebsocketHandler:
                 logger.debug(f"received data from uid: {trace.uid}")
                 yield trace
 
+    def get_session(self):
+        if self._session is None:
+            self._session = aiohttp.ClientSession()
+        return self._session
+
     async def start(self: WebsocketHandler) -> Generator[TraceModel]:
         """Start the websocket connection."""
-        self.session = aiohttp.ClientSession()
-        async with self.session:
+        session = self.get_session()
+        async with session:
             while True:
                 try:
-                    async for trace in self.create_websocket():
+                    async for trace in self.create_websocket(session):
                         yield trace
                 except Exception as e:
                     logger.warning(f"{e}")
 
     async def stop(self: WebsocketHandler) -> None:
         """Stop the websocket connection."""
-        if self.session is None:
-            logger.info("no waveform stream session")
-
-        async with self.session:
-            async with self.session.ws_connect(f"ws://{self.url}/ws") as ws:
+        session = self.get_session()
+        async with session:
+            async with session.ws_connect(f"ws://{self.url}/ws") as ws:
                 await ws.send_str(STOP_ACTION.json())

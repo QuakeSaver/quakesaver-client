@@ -5,6 +5,7 @@ from datetime import datetime
 from pathlib import Path
 
 import requests
+from pydantic import Extra
 
 from quakesaver_client.client_websocket import WebsocketHandler
 from quakesaver_client.models.data_product_query import (
@@ -28,14 +29,14 @@ class LocalSensor(SensorState):
     def __init__(self: LocalSensor, **data: dict) -> None:
         """Create an instance of the class."""
         super().__init__(**data)
-        self.url = None
+        self._url = None
 
     @classmethod
     def get_sensor(cls, sensor_url: str) -> LocalSensor:
         url = f"http://{sensor_url}/state"
         response = requests.get(url)
         sensor = LocalSensor.parse_raw(response.text)
-        sensor.url = sensor_url
+        sensor._url = sensor_url
         return sensor
 
     def _get_data_product(
@@ -156,7 +157,7 @@ class LocalSensor(SensorState):
 
     def get_waveform_stream(self: LocalSensor) -> WebsocketHandler:
         """Get a `WebsocketHandler` to server waveform data."""
-        return WebsocketHandler(self.url)
+        return WebsocketHandler(self._url)
 
     def get_waveform_data(
         self: LocalSensor,
@@ -180,3 +181,10 @@ class LocalSensor(SensorState):
     ) -> Path:
         """Request FDSN StationXML metadata of the sensor."""
         ...
+
+    class Config:  # noqa
+        """Configuration subclass for pydantics BaseModel."""
+
+        extra = Extra.allow
+        underscore_attrs_are_private = True
+

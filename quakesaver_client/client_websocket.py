@@ -75,7 +75,7 @@ class WebsocketHandler:
                     async for trace in self.create_websocket():
                         yield trace
                 except Exception as e:
-                    logger.exception(f"{e}")
+                    logger.warning(f"{e}")
 
     async def stop(self: WebsocketHandler) -> None:
         """Stop the websocket connection."""

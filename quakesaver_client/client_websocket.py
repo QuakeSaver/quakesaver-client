@@ -67,7 +67,7 @@ class WebsocketHandler:
 
                         trace = TraceModel(**data.payload)
                         convert_waveform_data(trace)
-                        logger.info(f"received {trace}")
+                        logger.debug(f"received data from uid: {trace.uid}")
                         yield trace
                 except Exception as e:
                     await ws.send_str(STOP_ACTION.json())

@@ -16,12 +16,12 @@ You can find the documentation [here](https://quakesaver.github.io/quakesaver-cl
 `EMAIL` and `PASSWORD` correspond to the credentials you use to log in at [https://network.quakesaver.net](https://network.quakesaver.net).
 
 ```python
-from quakesaver_client import QSCloud
+from quakesaver_client import QSCloudClient
 
 EMAIL = "user@yourorganisation.net"
 PASSWORD = "!verstrongpassword1"
 
-client = QSCloud(email=EMAIL, password=PASSWORD)
+client = QSCloudClient(email=EMAIL, password=PASSWORD)
 ```
 
 ### Example to stream from the cloud
@@ -136,16 +136,17 @@ for trace in stream.traces:
 
 ```python
 import asyncio
-from quakesaver_client import QSLocal
+from quakesaver_client import QSLocalClient
 
 
 async def run():
-    client = QSLocal()
+    client = QSLocalClient()
 
     sensor = client.get_sensor("qssensor.local")
     stream = sensor.get_waveform_stream()
     async for chunk in stream.start():
         print(chunk)
+
 
 asyncio.run(run())
 

@@ -5,12 +5,12 @@
 `EMAIL` and `PASSWORD` correspond to the credentials you use to log in at [https://network.quakesaver.net](https://network.quakesaver.net).
 
 ```python
-from quakesaver_client import QSCloud
+from quakesaver_client import QSCloudClient
 
 EMAIL = "user@yourorganisation.net"
 PASSWORD = "!verstrongpassword1"
 
-client = QSCloud(email=EMAIL, password=PASSWORD)
+client = QSCloudClient(email=EMAIL, password=PASSWORD)
 ```
 
 ### Full example script
@@ -29,7 +29,7 @@ from pprint import pp
 import obspy
 from obspy import Stream
 
-from quakesaver_client import QSCloud
+from quakesaver_client import QSCloudClient
 from quakesaver_client.models.data_product_query import DataProductQuery
 from quakesaver_client.models.measurement import MeasurementQuery
 
@@ -37,7 +37,7 @@ EMAIL = "user@yourorganisation.net"
 PASSWORD = "!verstrongpassword1"
 DATA_PATH = "./data"
 
-client = QSCloud(email=EMAIL, password=PASSWORD)
+client = QSCloudClient(email=EMAIL, password=PASSWORD)
 
 # Get a list of all available sensor IDs:
 sensor_ids = client.get_sensor_ids()

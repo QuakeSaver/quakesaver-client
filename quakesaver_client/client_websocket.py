@@ -1,7 +1,6 @@
 """Manage sensor websocket connections."""
 from __future__ import annotations
 
-import asyncio
 import base64
 import gzip
 import logging
@@ -73,8 +72,8 @@ class WebsocketHandler:
         async with self.session:
             while True:
                 try:
-                    async for chunk in self.create_websocket():
-                        yield chunk
+                    async for trace in self.create_websocket():
+                        yield trace
                 except Exception as e:
                     logger.exception(f"{e}")
 

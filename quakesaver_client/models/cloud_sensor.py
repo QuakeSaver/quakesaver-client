@@ -60,7 +60,7 @@ class CloudSensor(SensorState):
     ) -> dict:
         """Request data products of the sensor."""
         logging.debug(
-            "QSCloud requesting data product %s for sensor %s.",
+            "QSCloudClient requesting data product %s for sensor %s.",
             data_product_name,
             self.uid,
         )
@@ -134,7 +134,7 @@ class CloudSensor(SensorState):
         self: CloudSensor, query: MeasurementQueryFull
     ) -> MeasurementResult:
         """Request measurements of the sensor."""
-        logging.debug("QSCloud requesting measurement for sensor %s.", self.uid)
+        logging.debug("QSCloudClient requesting measurement for sensor %s.", self.uid)
         response = requests.post(
             url=f"{self._api_base_url}/sensors/{self.uid}/measurements",
             headers=self._headers,
@@ -234,7 +234,7 @@ class CloudSensor(SensorState):
         location_to_store: Path | str = None,
     ) -> Path | None:
         """Request FDSN waveform dat of the sensor."""
-        logging.debug("QSCloud requesting waveform data for sensor %s.", self.uid)
+        logging.debug("QSCloudClient requesting waveform data for sensor %s.", self.uid)
 
         location_to_store = assure_output_path(location_to_store)
 
@@ -266,7 +266,7 @@ class CloudSensor(SensorState):
         location_to_store: Path | str = None,
     ) -> Path:
         """Request FDSN StationXML metadata of the sensor."""
-        logging.debug("QSCloud requesting stationxml for sensor %s.", self.uid)
+        logging.debug("QSCloudClient requesting stationxml for sensor %s.", self.uid)
 
         location_to_store = assure_output_path(location_to_store)
 

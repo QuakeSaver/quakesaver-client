@@ -133,4 +133,3 @@ class QSLocal:
         sensor = LocalSensor.parse_raw(response.text)
         sensor.url = sensor_url
         return sensor
-

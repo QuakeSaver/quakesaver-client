@@ -1,6 +1,7 @@
 """Manage sensor websocket connections."""
 from __future__ import annotations
 
+import asyncio
 import base64
 import gzip
 import logging
@@ -51,27 +52,31 @@ class WebsocketHandler:
         self.session = None
         self.url = url
 
+    async def create_websocket(self: WebsocketHandler):
+        async with self.session.ws_connect(f"ws://{self.url}/ws") as ws:
+            await ws.send_str(START_ACTION.json())
+
+            async for msg in ws:
+                data = WebSocketPayload.parse_raw(msg.data)
+
+                if "data" not in data.payload:
+                    continue
+
+                trace = TraceModel(**data.payload)
+                convert_waveform_data(trace)
+                logger.debug(f"received data from uid: {trace.uid}")
+                yield trace
+
     async def start(self: WebsocketHandler) -> Generator[TraceModel]:
         """Start the websocket connection."""
         self.session = aiohttp.ClientSession()
         async with self.session:
-            async with self.session.ws_connect(f"ws://{self.url}/ws") as ws:
+            while True:
                 try:
-                    await ws.send_str(START_ACTION.json())
-
-                    async for msg in ws:
-                        data = WebSocketPayload.parse_raw(msg.data)
-
-                        if "data" not in data.payload:
-                            continue
-
-                        trace = TraceModel(**data.payload)
-                        convert_waveform_data(trace)
-                        logger.debug(f"received data from uid: {trace.uid}")
-                        yield trace
+                    async for chunk in self.create_websocket():
+                        yield chunk
                 except Exception as e:
-                    await ws.send_str(STOP_ACTION.json())
-                    raise e
+                    logger.exception(f"{e}")
 
     async def stop(self: WebsocketHandler) -> None:
         """Stop the websocket connection."""

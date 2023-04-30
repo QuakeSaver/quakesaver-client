@@ -128,4 +128,10 @@ class QSLocalClient:
     @classmethod
     def get_sensor(cls: QSLocalClient, sensor_url: str) -> LocalSensor:
         """Get a `LocalSensor` from the url."""
-        return LocalSensor.get_sensor(sensor_url)
+        try:
+            sensor = LocalSensor.get_sensor(sensor_url)
+
+        except Exception as e:
+            raise Exception(f"Failed to get sensor at {sensor_url}") from e
+
+        return sensor

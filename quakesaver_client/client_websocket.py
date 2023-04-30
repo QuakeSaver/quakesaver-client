@@ -38,6 +38,9 @@ def convert_waveform_data(trace: TraceModel) -> None:
             data = gzip.decompress(data)
         trace.data[channel] = np.frombuffer(data, dtype=DTYPE_MAP[trace.data_unit])
 
+    if trace.compressed:
+        trace.compressed = False
+
 
 class WebsocketHandler:
     """Manage a sensor websocket connection."""

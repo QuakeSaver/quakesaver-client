@@ -1,6 +1,7 @@
 """Manage sensor websocket connections."""
 from __future__ import annotations
 
+import asyncio
 import base64
 import gzip
 import logging
@@ -85,8 +86,12 @@ class WebsocketHandler:
                 try:
                     async for trace in self.create_websocket(session):
                         yield trace
+                except aiohttp.ServerDisconnectedError as e:
+                    logger.warning(f"{e}. Trying to reconnect.")
+                    await asyncio.sleep(1)
+
                 except Exception as e:
-                    logger.warning(f"{e}")
+                    logger.exception(f"{e}")
 
     async def stop(self: WebsocketHandler) -> None:
         """Stop the websocket connection."""

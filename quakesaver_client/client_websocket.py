@@ -51,7 +51,10 @@ class WebsocketHandler:
         self._session = None
         self.url = url
 
-    async def create_websocket(self: WebsocketHandler, session):
+    async def create_websocket(
+        self: WebsocketHandler, session: aiohttp.ClientSession
+    ) -> Generator[TraceModel]:
+        """Create a websocket the yields data chunks as `TraceModel` instances."""
         async with session.ws_connect(f"ws://{self.url}/ws") as ws:
             await ws.send_str(START_ACTION.json())
 
@@ -66,14 +69,14 @@ class WebsocketHandler:
                 logger.debug(f"received data from uid: {trace.uid}")
                 yield trace
 
-    def get_session(self):
+    def _get_session(self: WebsocketHandler) -> aiohttp.ClientSession:
         if self._session is None:
             self._session = aiohttp.ClientSession()
         return self._session
 
     async def start(self: WebsocketHandler) -> Generator[TraceModel]:
         """Start the websocket connection."""
-        session = self.get_session()
+        session = self._get_session()
         async with session:
             while True:
                 try:
@@ -84,7 +87,7 @@ class WebsocketHandler:
 
     async def stop(self: WebsocketHandler) -> None:
         """Stop the websocket connection."""
-        session = self.get_session()
+        session = self._get_session()
         async with session:
             async with session.ws_connect(f"ws://{self.url}/ws") as ws:
                 await ws.send_str(STOP_ACTION.json())

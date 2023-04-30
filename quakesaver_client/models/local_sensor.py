@@ -32,7 +32,8 @@ class LocalSensor(SensorState):
         self._url = None
 
     @classmethod
-    def get_sensor(cls, sensor_url: str) -> LocalSensor:
+    def get_sensor(cls: LocalSensor, sensor_url: str) -> LocalSensor:
+        """Get a sensor which is available at `sensor_url`."""
         url = f"http://{sensor_url}/state"
         response = requests.get(url)
         sensor = LocalSensor.parse_raw(response.text)
@@ -156,7 +157,7 @@ class LocalSensor(SensorState):
         ...
 
     def get_waveform_stream(self: LocalSensor) -> WebsocketHandler:
-        """Get a `WebsocketHandler` to server waveform data."""
+        """Get a `WebsocketHandler` to serve waveform data."""
         return WebsocketHandler(self._url)
 
     def get_waveform_data(

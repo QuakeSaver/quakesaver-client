@@ -248,7 +248,9 @@ class CloudSensor(SensorState):
         if response.status_code != 200:
             raise CorruptedDataError(response.text)
 
-        filename = response.headers["Content-Disposition"].split("=")[1]
+        filename = response.headers.get(
+            "Content-Disposition", "filename=qsdata.mseed"
+        ).split("=")[1]
         storage_path = location_to_store / filename
         with open(storage_path, "wb") as file:
             file.write(response.content)

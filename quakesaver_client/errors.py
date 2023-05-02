@@ -13,6 +13,10 @@ class CorruptedDataError(ValueError):
     """An error to raise if data was incomplete or wrong."""
 
 
+class NoDataError(ValueError):
+    """An error to raise if no data is available."""
+
+
 class SessionExpiredError(RuntimeError):
     """An error to raise if the token is expired."""
 

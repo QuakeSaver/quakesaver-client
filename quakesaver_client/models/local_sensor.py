@@ -1,13 +1,18 @@
 """Sensor on the local network."""
 from __future__ import annotations
 
-from datetime import datetime
+import logging
+from datetime import datetime, timezone
 from pathlib import Path
 
 import requests
 from pydantic import Extra
 
 from quakesaver_client.client_websocket import WebsocketHandler
+from quakesaver_client.fdsnws import (
+    FDSNWSDataselectQuery,
+)
+from quakesaver_client.fdsnws import dataselect as fdsnws_dataselect
 from quakesaver_client.models.data_product_query import (
     DataProductQuery,
     EventRecordQueryResult,
@@ -21,6 +26,7 @@ from quakesaver_client.models.measurement import (
 )
 from quakesaver_client.models.sensor_state import SensorState
 from quakesaver_client.types import StationDetailLevel
+from quakesaver_client.util import assure_output_path
 
 
 class LocalSensor(SensorState):
@@ -163,11 +169,22 @@ class LocalSensor(SensorState):
     def get_waveform_data(
         self: LocalSensor,
         start_time: datetime,
-        end_time: datetime,
+        end_time: datetime.now(timezone.utc),
         location_to_store: Path | str = None,
-    ) -> Path | None:
+    ) -> Path:
         """Request FDSN waveform dat of the sensor."""
-        ...
+        logging.debug("QSLocalClient requesting waveform data for sensor %s.", self.uid)
+        location_to_store = assure_output_path(location_to_store)
+        params = FDSNWSDataselectQuery(start_time=start_time, end_time=end_time)
+        data_path = fdsnws_dataselect(
+            uri=f"http://{self._url}",
+            params=params,
+            location_to_store=location_to_store,
+        )
+
+        logging.info(f"{self.uid} wrote waveforms to {data_path}")
+
+        return data_path
 
     def get_stationxml(
         self: LocalSensor,

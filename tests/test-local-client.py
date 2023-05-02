@@ -31,6 +31,6 @@ async def test_stream(local_test_sensor) -> None:
 async def test_waveform_fetch(local_test_sensor) -> None:
     """Connect to a sensor on the local network."""
     tmax = datetime.datetime.utcnow()
-    tmin = tmax - datetime.timedelta(hours=30)
+    tmin = tmax - datetime.timedelta(minutes=1)
     data = local_test_sensor.get_waveform_data(tmin, tmax)
     print(data)

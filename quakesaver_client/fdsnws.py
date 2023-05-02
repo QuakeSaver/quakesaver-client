@@ -40,7 +40,7 @@ def dataselect(
     params: FDSNWSDataselectQuery,
     location_to_store: Path | str = None,
 ) -> Path:
-    """Request FDSN waveform dat of the sensor."""
+    """Request FDSN waveform data of the sensor and stores in as a miniseed file."""
     logging.debug("requesting waveform data for sensor %s.", uri)
     location_to_store = assure_output_path(location_to_store)
     response = requests.get(
@@ -51,7 +51,9 @@ def dataselect(
     if response.status_code != 200:
         raise CorruptedDataError(response.text)
 
-    filename = response.headers["Content-Disposition"].split("=")[1]
+    filename = response.headers.get(
+        "Content-Disposition", "filename=qsdata.mseed"
+    ).split("=")[1]
     storage_path = location_to_store / filename
     with open(storage_path, "wb") as file:
         file.write(response.content)

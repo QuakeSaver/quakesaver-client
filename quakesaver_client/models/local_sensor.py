@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 import logging
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 
 import requests
@@ -169,7 +169,7 @@ class LocalSensor(SensorState):
     def get_waveform_data(
         self: LocalSensor,
         start_time: datetime,
-        end_time: datetime.utcnow(),
+        end_time: datetime.now(timezone.utc),
         location_to_store: Path | str = None,
     ) -> Path:
         """Request FDSN waveform dat of the sensor."""
@@ -181,6 +181,9 @@ class LocalSensor(SensorState):
             params=params,
             location_to_store=location_to_store,
         )
+
+        logging.info(f"{self.uid} wrote waveforms to {data_path}")
+
         return data_path
 
     def get_stationxml(

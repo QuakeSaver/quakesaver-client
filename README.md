@@ -132,7 +132,11 @@ for trace in stream.traces:
     print(trace.stats)
 ```
 
-## Example to stream from a local sensor asynchronously
+## `QSLocalClient` Examples
+
+Interact with sensors on your local network using the `QSLocalClient`.
+
+### Streaming Data
 
 ```python
 import asyncio
@@ -149,5 +153,21 @@ async def run():
 
 
 asyncio.run(run())
+```
 
+### Downloading Data
+
+Download the latest 10 minutes from a local sensor and write that into a file:
+
+```python
+import datetime
+from quakesaver_client import QSLocalClient
+
+client = QSLocalClient()
+sensor = client.get_sensor("qssensor.local")
+
+tmax = datetime.datetime.utcnow()
+tmin = tmax - datetime.timedelta(minutes=10)
+file_path = sensor.get_waveform_data(tmin, tmax)
+print(file_path)
 ```

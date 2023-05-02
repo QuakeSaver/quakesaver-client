@@ -1,3 +1,5 @@
+"""FDSNWS client."""
+
 from __future__ import annotations
 
 import logging
@@ -8,7 +10,7 @@ from typing import Literal, Optional
 import requests
 from pydantic import BaseModel, Field, PositiveFloat, constr
 
-from quakesaver_client import CorruptedDataError
+from quakesaver_client.errors import NoDataError
 from quakesaver_client.util import assure_output_path
 
 NoData = Literal[204, 404]  # HTTP Error codes
@@ -17,6 +19,8 @@ DataQuality = Literal["D", "R", "Q", "M", "B"]
 
 
 class FDSNWSDataselectQuery(BaseModel):
+    """Query for fdsn requests against QuakeSaver local and cloud endpoints."""
+
     starttime: Optional[datetime] = None
     endtime: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
@@ -48,8 +52,9 @@ def dataselect(
         params=params.json(),
     )
 
-    if response.status_code != 200:
-        raise CorruptedDataError(response.text)
+    response.raise_for_status()
+    if response.status_code in NoData.__args__:
+        raise NoDataError(response.text)
 
     filename = response.headers.get(
         "Content-Disposition", "filename=qsdata.mseed"

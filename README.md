@@ -160,13 +160,13 @@ asyncio.run(run())
 Download the latest 10 minutes from a local sensor and write that into a file:
 
 ```python
-import datetime
+from datetime import datetime, timezone
 from quakesaver_client import QSLocalClient
 
 client = QSLocalClient()
 sensor = client.get_sensor("qssensor.local")
 
-tmax = datetime.datetime.utcnow()
+tmax = datetime.datetime.now(tz=timezone.utc)
 tmin = tmax - datetime.timedelta(minutes=10)
 file_path = sensor.get_waveform_data(tmin, tmax)
 print(file_path)

@@ -2,6 +2,7 @@
 import datetime
 from typing import Callable
 
+import numpy as np
 import pytest
 
 from quakesaver_client import LocalSensor, QSLocalClient
@@ -15,6 +16,13 @@ def local_test_sensor() -> LocalSensor:
     return sensor
 
 
+SCALE_FACTOR: dict[int, float] = {2: 3.9e-6, 4: 7.8e-6, 8: 15.6e-6}
+
+
+def convert_to_acceleration(data: np.ndarray[int]):
+    return data * 3.9e-6  # Valid for range +- 2g
+
+
 @pytest.mark.local
 async def test_stream(local_test_sensor: Callable) -> None:
     """Connect to a sensor on the local network."""
@@ -22,9 +30,15 @@ async def test_stream(local_test_sensor: Callable) -> None:
 
     async for trace_segment in stream.start():
         assert not trace_segment.compressed
-        if trace_segment:
-            await stream.stop()
-            break
+        # print(trace.data['EN1'])
+        # if trace_segment:
+        #     await stream.stop()
+        #     break
+
+        # according to casing labels
+        # EN1 -> x
+        # EN2 -> y
+        # EN3 -> z
 
 
 @pytest.mark.local

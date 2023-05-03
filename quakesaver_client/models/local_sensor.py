@@ -26,7 +26,6 @@ from quakesaver_client.models.measurement import (
 )
 from quakesaver_client.models.sensor_state import SensorState
 from quakesaver_client.types import StationDetailLevel
-from quakesaver_client.util import assure_output_path
 
 
 class LocalSensor(SensorState):
@@ -170,16 +169,14 @@ class LocalSensor(SensorState):
         self: LocalSensor,
         start_time: datetime,
         end_time: datetime.now(timezone.utc),
-        location_to_store: Path | str = None,
+        file_handle,
     ) -> Path:
         """Request FDSN waveform dat of the sensor."""
         logging.debug("QSLocalClient requesting waveform data for sensor %s.", self.uid)
-        location_to_store = assure_output_path(location_to_store)
         params = FDSNWSDataselectQuery(start_time=start_time, end_time=end_time)
         data_path = fdsnws_dataselect(
             uri=f"http://{self._url}",
             params=params,
-            location_to_store=location_to_store,
         )
 
         logging.info(f"{self.uid} wrote waveforms to {data_path}")

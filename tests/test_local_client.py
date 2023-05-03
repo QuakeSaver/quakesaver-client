@@ -48,3 +48,12 @@ async def test_waveform_fetch(local_test_sensor: Callable) -> None:
     tmin = tmax - datetime.timedelta(minutes=1)
     data = local_test_sensor.get_waveform_data(tmin, tmax)
     assert data
+
+
+@pytest.mark.local
+async def test_waveform_obspy(local_test_sensor: Callable) -> None:
+    """Connect to a sensor on the local network."""
+    tmax = datetime.datetime.utcnow()
+    tmin = tmax - datetime.timedelta(minutes=1)
+    data = local_test_sensor.get_waveforms_obspy(tmin, tmax)
+    assert data

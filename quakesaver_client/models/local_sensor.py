@@ -32,13 +32,13 @@ from quakesaver_client.types import StationDetailLevel
 class LocalSensor(SensorState):
     """A base schema for other schemas to derive from."""
 
-    def __init__(self: LocalSensor, **data: dict) -> None:
+    def __init__(self, **data: dict) -> None:
         """Create an instance of the class."""
         super().__init__(**data)
         self._url = None
 
     @classmethod
-    def get_sensor(cls: LocalSensor, sensor_url: str) -> LocalSensor:
+    def connect(cls, sensor_url: str) -> LocalSensor:
         """Get a sensor which is available at `sensor_url`."""
         url = f"http://{sensor_url}/state"
         response = requests.get(url)
@@ -47,16 +47,14 @@ class LocalSensor(SensorState):
         return sensor
 
     def _get_data_product(
-        self: LocalSensor,
+        self,
         data_product_name: str,
         query: DataProductQuery,
     ) -> dict:
         """Request data products of the sensor."""
         ...
 
-    def get_event_records(
-        self: LocalSensor, query: DataProductQuery
-    ) -> EventRecordQueryResult:
+    def get_event_records(self, query: DataProductQuery) -> EventRecordQueryResult:
         """Get Event Records of the sensor.
 
         Args:
@@ -67,9 +65,7 @@ class LocalSensor(SensorState):
         """
         ...
 
-    def get_hv_spectra(
-        self: LocalSensor, query: DataProductQuery
-    ) -> HVSpectraQueryResult:
+    def get_hv_spectra(self, query: DataProductQuery) -> HVSpectraQueryResult:
         """Get HV Spectres of the sensor.
 
         Args:
@@ -81,7 +77,7 @@ class LocalSensor(SensorState):
         ...
 
     def get_noise_autocorrelations(
-        self: LocalSensor, query: DataProductQuery
+        self, query: DataProductQuery
     ) -> NoiseAutocorrelationQueryResult:
         """Get the Event Records of the sensor.
 
@@ -93,14 +89,12 @@ class LocalSensor(SensorState):
         """
         ...
 
-    def _get_measurement(
-        self: LocalSensor, query: MeasurementQueryFull
-    ) -> MeasurementResult:
+    def _get_measurement(self, query: MeasurementQueryFull) -> MeasurementResult:
         """Request measurements of the sensor."""
         ...
 
     def get_peak_horizontal_acceleration(
-        self: LocalSensor, query: MeasurementQuery
+        self, query: MeasurementQuery
     ) -> MeasurementResult:
         """Get the PGA measurement of the sensor.
 
@@ -112,9 +106,7 @@ class LocalSensor(SensorState):
         """
         ...
 
-    def get_jma_intensity(
-        self: LocalSensor, query: MeasurementQuery
-    ) -> MeasurementResult:
+    def get_jma_intensity(self, query: MeasurementQuery) -> MeasurementResult:
         """Get the JMA Intensity measurement of the sensor.
 
         Args:
@@ -125,9 +117,7 @@ class LocalSensor(SensorState):
         """
         ...
 
-    def get_rms_amplitude(
-        self: LocalSensor, query: MeasurementQuery
-    ) -> MeasurementResult:
+    def get_rms_amplitude(self, query: MeasurementQuery) -> MeasurementResult:
         """Get the RMS Amplitude measurement of the sensor.
 
         Args:
@@ -138,9 +128,7 @@ class LocalSensor(SensorState):
         """
         ...
 
-    def get_spectral_intensity(
-        self: LocalSensor, query: MeasurementQuery
-    ) -> MeasurementResult:
+    def get_spectral_intensity(self, query: MeasurementQuery) -> MeasurementResult:
         """Get the Spectral Intensity measurement of the sensor.
 
         Args:
@@ -151,7 +139,7 @@ class LocalSensor(SensorState):
         """
         ...
 
-    def get_rms_offset(self: LocalSensor, query: MeasurementQuery) -> MeasurementResult:
+    def get_rms_offset(self, query: MeasurementQuery) -> MeasurementResult:
         """Get the RMS Offset measurement of the sensor.
 
         Args:
@@ -162,12 +150,12 @@ class LocalSensor(SensorState):
         """
         ...
 
-    def get_waveform_stream(self: LocalSensor) -> WebsocketHandler:
+    def get_waveform_stream(self) -> WebsocketHandler:
         """Get a `WebsocketHandler` to serve waveform data."""
         return WebsocketHandler(self._url)
 
     def get_waveform_data(
-        self: LocalSensor,
+        self,
         file: Path,
         start_time: datetime | None = None,
         end_time: datetime | None = None,
@@ -183,7 +171,7 @@ class LocalSensor(SensorState):
         else:
             filename = file
 
-        with filename.open("rb") as buffer:
+        with filename.open("wb") as buffer:
             out_name = fdsnws_dataselect(
                 uri=f"http://{self._url}",
                 params=params,
@@ -191,11 +179,11 @@ class LocalSensor(SensorState):
             )
 
         if file.is_dir():
-            filename.rename(out_name)
+            return filename.rename(file / out_name.replace(":", ""))
         return file
 
     def get_waveforms_obspy(
-        self: LocalSensor,
+        self,
         start_time: datetime | None = None,
         end_time: datetime | None = None,
     ) -> Stream:
@@ -216,7 +204,7 @@ class LocalSensor(SensorState):
         return read(buffer)
 
     def get_stationxml(
-        self: LocalSensor,
+        self,
         start_time: datetime,
         end_time: datetime,
         minlatitude: float = -90,

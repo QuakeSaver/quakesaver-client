@@ -164,10 +164,10 @@ from datetime import datetime, timezone
 from quakesaver_client import QSLocalClient
 
 client = QSLocalClient()
-sensor = client.get_sensor("qssensor.local")
+sensor = client.get_sensor(url="qssensor.local")
 
-tmax = datetime.datetime.now(tz=timezone.utc)
-tmin = tmax - datetime.timedelta(minutes=10)
+tmax = datetime.now(tz=timezone.utc)
+tmin = tmax - timedelta(minutes=10)
 file_path = sensor.get_waveform_data(tmin, tmax)
 print(file_path)
 ```

@@ -3,15 +3,16 @@ from __future__ import annotations
 
 import logging
 from datetime import datetime, timezone
+from io import BytesIO
 from pathlib import Path
+from uuid import uuid4
 
 import requests
+from obspy import Stream, read
 from pydantic import Extra
 
 from quakesaver_client.client_websocket import WebsocketHandler
-from quakesaver_client.fdsnws import (
-    FDSNWSDataselectQuery,
-)
+from quakesaver_client.fdsnws import FDSNWSDataselectQuery
 from quakesaver_client.fdsnws import dataselect as fdsnws_dataselect
 from quakesaver_client.models.data_product_query import (
     DataProductQuery,
@@ -167,21 +168,52 @@ class LocalSensor(SensorState):
 
     def get_waveform_data(
         self: LocalSensor,
-        start_time: datetime,
-        end_time: datetime.now(timezone.utc),
-        file_handle,
+        file: Path,
+        start_time: datetime | None = None,
+        end_time: datetime | None = None,
     ) -> Path:
         """Request FDSN waveform dat of the sensor."""
         logging.debug("QSLocalClient requesting waveform data for sensor %s.", self.uid)
-        params = FDSNWSDataselectQuery(start_time=start_time, end_time=end_time)
-        data_path = fdsnws_dataselect(
+
+        end_time = end_time or datetime.now(tz=timezone.utc)
+        params = FDSNWSDataselectQuery(starttime=start_time, endtime=end_time)
+
+        if file.is_dir():
+            filename = file / f"mseed-tmp-{uuid4()}"
+        else:
+            filename = file
+
+        with filename.open("rb") as buffer:
+            out_name = fdsnws_dataselect(
+                uri=f"http://{self._url}",
+                params=params,
+                buffer=buffer,
+            )
+
+        if file.is_dir():
+            filename.rename(out_name)
+        return file
+
+    def get_waveforms_obspy(
+        self: LocalSensor,
+        start_time: datetime | None = None,
+        end_time: datetime | None = None,
+    ) -> Stream:
+        logging.debug("QSLocalClient requesting waveform data for sensor %s.", self.uid)
+
+        end_time = end_time or datetime.now(tz=timezone.utc)
+        params = FDSNWSDataselectQuery(starttime=start_time, endtime=end_time)
+
+        buffer = BytesIO()
+        fdsnws_dataselect(
             uri=f"http://{self._url}",
             params=params,
+            buffer=buffer,
         )
+        buffer.flush()
+        buffer.seek(0)
 
-        logging.info(f"{self.uid} wrote waveforms to {data_path}")
-
-        return data_path
+        return read(buffer)
 
     def get_stationxml(
         self: LocalSensor,

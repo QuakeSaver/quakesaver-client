@@ -4,13 +4,15 @@ from __future__ import annotations
 
 import logging
 from datetime import datetime, timezone
-from io import BufferedWriter
-from typing import Literal, Optional
+from typing import IO, TYPE_CHECKING, BinaryIO, Literal, Optional
 
 import requests
 from pydantic import BaseModel, Field, PositiveFloat, constr
 
 from quakesaver_client.errors import NoDataError
+
+if TYPE_CHECKING:
+    from io import BufferedWriter
 
 NoData = Literal[204, 404]  # HTTP Error codes
 DataFormat = Literal["miniseed"]
@@ -41,17 +43,26 @@ class FDSNWSDataselectQuery(BaseModel):
 def dataselect(
     uri: str,
     params: FDSNWSDataselectQuery,
-    file: BufferedWriter,
-) -> None:
-    """Request FDSN waveform data of the sensor and stores in as a miniseed file."""
+    buffer: BinaryIO,
+) -> str:
+    """Request FDSN waveform data of the sensor and stores in as a MiniSEED file."""
     logging.debug("requesting waveform data for sensor %s.", uri)
     response = requests.get(
         url=f"{uri}/fdsnws/dataselect/1/query",
         params=params.json(),
     )
 
-    response.raise_for_status()
-    if response.status_code in NoData.__args__:
+    if response.status_code in get_args(NoData):
         raise NoDataError(response.text)
+    response.raise_for_status()
 
-    file.write(response.content)
+    try:
+        filename = response.headers.get("Content-Disposition").split("=")[1]
+    except (KeyError, IndexError):
+        filename = "qssensor-data.mseed"
+
+    for content in response.iter_content(chunk_size=None):
+        buffer.write(content)
+
+    buffer.flush()
+    return filename

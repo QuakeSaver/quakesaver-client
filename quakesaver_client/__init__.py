@@ -8,11 +8,8 @@ from typing import Any, Callable, TypeVar
 import requests
 from pydantic import ValidationError
 
-from quakesaver_client.errors import (
-    CorruptedDataError,
-)
+from quakesaver_client.errors import CorruptedDataError
 from quakesaver_client.models.cloud_sensor import CloudSensor
-from quakesaver_client.models.local_sensor import LocalSensor
 from quakesaver_client.models.token import Token
 from quakesaver_client.util import handle_response
 
@@ -119,19 +116,4 @@ class QSCloudClient:
             )
         except ValidationError as e:
             raise CorruptedDataError from e
-        return sensor
-
-
-class QSLocalClient:
-    """Client to interact with sensors on your local network."""
-
-    @classmethod
-    def get_sensor(cls: QSLocalClient, sensor_url: str) -> LocalSensor:
-        """Get a `LocalSensor` from the url."""
-        try:
-            sensor = LocalSensor.get_sensor(sensor_url)
-
-        except Exception as e:
-            raise Exception(f"Failed to get sensor at {sensor_url}") from e
-
         return sensor

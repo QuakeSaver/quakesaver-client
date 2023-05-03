@@ -160,8 +160,22 @@ class LocalSensor(SensorState):
         start_time: datetime | None = None,
         end_time: datetime | None = None,
     ) -> Path:
-        """Request FDSN waveform dat of the sensor."""
-        logging.debug("QSLocalClient requesting waveform data for sensor %s.", self.uid)
+        """Request FDSN data from sensors and save to buffer.
+
+        Args:
+            file (Path): Outfile to write MiniSEED to, if file can be a directory.
+            start_time (datetime | None, optional): Start time, if `None` all
+                available data is returned. Defaults to None.
+            end_time (datetime | None, optional):  if `None` it defaults
+                to the current time. Defaults to None. Defaults to None.
+
+        Returns:
+            Path: Written MiniSEED file.
+        """
+        logging.debug("requesting waveform data for sensor %s.", self.uid)
+
+        if start_time and end_time and start_time > end_time:
+            raise ValueError("start_time is before end_time")
 
         end_time = end_time or datetime.now(tz=timezone.utc)
         params = FDSNWSDataselectQuery(starttime=start_time, endtime=end_time)
@@ -187,7 +201,20 @@ class LocalSensor(SensorState):
         start_time: datetime | None = None,
         end_time: datetime | None = None,
     ) -> Stream:
-        logging.debug("QSLocalClient requesting waveform data for sensor %s.", self.uid)
+        """Request FDSN data from sensors and return as an ObsPy stream.
+
+        Args:
+            start_time (datetime | None, optional): Start time, if `None` all
+                available data is returned. Defaults to None.
+            end_time (datetime | None, optional):  if `None` it defaults
+                to the current time. Defaults to None. Defaults to None.
+
+        Returns:
+            Stream: The retrieved waveform data as obspy.stream.
+        """
+        logging.debug("requesting waveform data for sensor %s.", self.uid)
+        if start_time and end_time and start_time > end_time:
+            raise ValueError("start_time is before end_time")
 
         end_time = end_time or datetime.now(tz=timezone.utc)
         params = FDSNWSDataselectQuery(starttime=start_time, endtime=end_time)

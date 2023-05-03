@@ -5,7 +5,7 @@ description = "Client library for interacting with the QuakeSaver sensor fleet."
 authors = ["QuakeSaver <info@quakesaver.net>"]
 license = "BSD-3-Clause"
 readme = "README.md"
-packages = [{include = "quakesaver_client"}]
+packages = [{ include = "quakesaver_client" }]
 homepage = "https://quakesaver.net/"
 repository = "https://github.com/QuakeSaver/quakesaver-client"
 documentation = "https://quakesaver.github.io/quakesaver-client/"
@@ -37,7 +37,7 @@ style = "semver"
 [tool.pytest.ini_options]
 log_cli = "True"
 log_cli_level = "WARNING"
-asyncio_mode= "auto"
+asyncio_mode = "auto"
 
 [tool.black]
 line-length = 88
@@ -49,19 +49,18 @@ min_confidence = 70
 paths = ["quakesaver_client"]
 sort_by_size = true
 verbose = false
-ignore_names=["cls"]
+ignore_names = ["cls"]
 
 [tool.ruff]
 select = [
-    "ANN", # flake8-bugbear
-    "B",   # flake8-bugbear
-    "C",   # flake8-comprehensions
-    "D",   # pydocstyle
-    "E",   # pycodestyle errors
-    "F",   # pyflakes
-    "I",   # isort
-    "N",   # naming
-    "W",   # pycodestyle warnings
+    "B", # flake8-bugbear
+    "C", # flake8-comprehensions
+    "D", # pydocstyle
+    "E", # pycodestyle errors
+    "F", # pyflakes
+    "I", # isort
+    "N", # naming
+    "W", # pycodestyle warnings
 ]
 ignore = [
     "D203", # no-blank-line-before-class
@@ -78,15 +77,28 @@ exclude = [
     "__pypackages__",
     "build",
     "dist",
-    "tests/conftest.py"
+    "tests/conftest.py",
 ]
 line-length = 88
 target-version = "py310"
 
 [tool.ruff.per-file-ignores]
 # due to autogeneration
-"quakesaver_client/models/data_products.py" = ["D100", "D101", "D106", "F722", "F821"]
-"quakesaver_client/models/sensor_state.py" = ["D100", "D101", "D106", "F722", "F821"]
+"quakesaver_client/models/data_products.py" = [
+    "D100",
+    "D101",
+    "D106",
+    "F722",
+    "F821",
+]
+"quakesaver_client/models/sensor_state.py" = [
+    "D100",
+    "D101",
+    "D106",
+    "F722",
+    "F821",
+]
+"tests/**/*.py" = ["D103"]
 
 [tool.ruff.mccabe]
 max-complexity = 10

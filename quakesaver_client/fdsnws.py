@@ -7,7 +7,7 @@ from datetime import datetime, timezone
 from typing import BinaryIO, Literal, Optional, get_args
 
 import requests
-from pydantic import BaseModel, Field, PositiveFloat, constr
+from pydantic import BaseModel, Field, constr
 
 from quakesaver_client.errors import NoDataError
 

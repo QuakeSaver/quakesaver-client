@@ -5,13 +5,13 @@ from typing import Callable
 import numpy as np
 import pytest
 
-from quakesaver_client import LocalSensor
+from quakesaver_client.models.local_sensor import LocalSensor
 
 
 @pytest.fixture()
 def local_test_sensor() -> LocalSensor:
     """Get a local sensor for testing."""
-    return LocalSensor.connect("localhost:5533")
+    return LocalSensor("localhost:5533")
 
 
 SCALE_FACTOR: dict[int, float] = {2: 3.9e-6, 4: 7.8e-6, 8: 15.6e-6}

@@ -300,5 +300,5 @@ class CloudSensor(SensorState):
     class Config:  # noqa
         """Configuration subclass for pydantics BaseModel."""
 
-        extra = Extra.allow
+        extra = Extra.forbid
         underscore_attrs_are_private = True

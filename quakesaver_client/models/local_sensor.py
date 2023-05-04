@@ -29,22 +29,20 @@ from quakesaver_client.models.sensor_state import SensorState
 from quakesaver_client.types import StationDetailLevel
 
 
-class LocalSensor(SensorState):
+class LocalSensor:
     """A base schema for other schemas to derive from."""
 
-    def __init__(self, **data: dict) -> None:
+    def __init__(self, url) -> None:
         """Create an instance of the class."""
-        super().__init__(**data)
-        self._url = None
+        self.url = url
+        self.sensor = self.connect(self.url)
 
     @classmethod
-    def connect(cls, sensor_url: str) -> LocalSensor:
+    def connect(cls, sensor_url: str) -> SensorState:
         """Get a sensor which is available at `sensor_url`."""
         url = f"http://{sensor_url}/state"
         response = requests.get(url)
-        sensor = LocalSensor.parse_raw(response.text)
-        sensor._url = sensor_url
-        return sensor
+        return SensorState.parse_raw(response.text)
 
     def _get_data_product(
         self,
@@ -152,7 +150,7 @@ class LocalSensor(SensorState):
 
     def get_waveform_stream(self) -> WebsocketHandler:
         """Get a `WebsocketHandler` to serve waveform data."""
-        return WebsocketHandler(self._url)
+        return WebsocketHandler(self.url)
 
     def get_waveform_data(
         self,
@@ -187,7 +185,7 @@ class LocalSensor(SensorState):
 
         with filename.open("wb") as buffer:
             out_name = fdsnws_dataselect(
-                uri=f"http://{self._url}",
+                uri=f"http://{self.url}",
                 params=params,
                 buffer=buffer,
             )
@@ -221,7 +219,7 @@ class LocalSensor(SensorState):
 
         buffer = BytesIO()
         fdsnws_dataselect(
-            uri=f"http://{self._url}",
+            uri=f"http://{self.url}",
             params=params,
             buffer=buffer,
         )
@@ -247,5 +245,5 @@ class LocalSensor(SensorState):
     class Config:  # noqa
         """Configuration subclass for pydantics BaseModel."""
 
-        extra = Extra.allow
+        extra = Extra.forbid
         underscore_attrs_are_private = True

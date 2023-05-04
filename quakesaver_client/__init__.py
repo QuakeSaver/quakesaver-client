@@ -10,6 +10,7 @@ from pydantic import ValidationError
 
 from quakesaver_client.errors import CorruptedDataError
 from quakesaver_client.models.cloud_sensor import CloudSensor
+from quakesaver_client.models.local_sensor import LocalSensor  # noqa
 from quakesaver_client.models.token import Token
 from quakesaver_client.util import handle_response
 

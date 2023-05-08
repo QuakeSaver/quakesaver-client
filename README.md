@@ -140,13 +140,11 @@ Interact with sensors on your local network using the `QSLocalClient`.
 
 ```python
 import asyncio
-from quakesaver_client import QSLocalClient
+from quakesaver_client import LocalSensor
 
 
 async def run():
-    client = QSLocalClient()
-
-    sensor = client.get_sensor("qssensor.local")
+    sensor = LocalSensor.connect("qssensor.local")
     stream = sensor.get_waveform_stream()
     async for chunk in stream.start():
         print(chunk)
@@ -164,10 +162,16 @@ from datetime import datetime, timezone
 from quakesaver_client import QSLocalClient
 
 client = QSLocalClient()
-sensor = client.get_sensor("qssensor.local")
+sensor = client.connect(url="qssensor.local")
 
-tmax = datetime.datetime.now(tz=timezone.utc)
-tmin = tmax - datetime.timedelta(minutes=10)
-file_path = sensor.get_waveform_data(tmin, tmax)
+end_time = datetime.now(tz=timezone.utc)
+start_time = end_time - timedelta(minutes=10)
+
+file = Path('/tmp/my-miniseed.mseed')
+file_path = sensor.get_waveform_data(file, start_time, end_time)
 print(file_path)
+
+# Or get an obspy.stream
+st = sensor.get_waveforms_obspy(start_time, end_time)
+st.plot()
 ```

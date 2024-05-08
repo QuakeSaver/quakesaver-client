@@ -1,6 +1,7 @@
 import asyncio
 import logging
 from functools import wraps
+from typing import Optional
 
 import click
 
@@ -42,28 +43,32 @@ async def probe_sensor(host):
 
 
 @cli.command()
-@click.argument("hosts")
+@click.argument("hosts", default=None, required=False, type=str)
 @click_coro
-async def detect(hosts: str) -> None:
+async def detect(hosts: Optional[str]) -> None:
     """Detect QuakeSaver sensors.
 
     Args:
         hosts (str): IP range to scan for sensors in CIDR notation.
+        Defaults to local ip range.
     """
     logger.info(f"detecting hosts at {hosts}")
+    if hosts is None:
+        import socket
+
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect(("8.8.8.8", 80))
+        local_ip = s.getsockname()[0]
+        hosts = local_ip + "/24"
+
     hosts_and_range = hosts.split("/")
     fn_alive_sensors = "sensors-alive.csv"
 
-    assert len(hosts_and_range) <= 2
-    if len(hosts_and_range) == 1:
-        hosts = [hosts_and_range]
-
-    else:
-        host, ip_range = hosts_and_range
-        host = host.split(".")[0:3]
-        hosts = []
-        for i in range(1, 256):
-            hosts.append(f"{'.'.join(host)}.{i}")
+    host, ip_range = hosts_and_range
+    host = host.split(".")[0:3]
+    hosts = []
+    for i in range(1, 256):
+        hosts.append(f"{'.'.join(host)}.{i}")
 
     logger.info(f"scanning {len(hosts)} hosts")
 

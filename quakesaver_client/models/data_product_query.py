@@ -1,4 +1,5 @@
 """This module provides schemas to query Data Products."""
+
 from datetime import datetime
 from typing import Optional
 

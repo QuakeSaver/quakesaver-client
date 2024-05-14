@@ -1,4 +1,5 @@
 """Sensor on the local network."""
+
 from __future__ import annotations
 
 import logging

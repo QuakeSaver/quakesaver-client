@@ -1,8 +1,8 @@
 import asyncio
 import logging
 from functools import wraps
-from ipaddress import ip_network
-from typing import Optional
+from ipaddress import IPv4Address, ip_network
+from typing import Optional, Tuple
 
 import click
 
@@ -29,7 +29,7 @@ def click_coro(f):
     return wrapper
 
 
-async def probe_sensor(host):
+async def probe_sensor(host) -> Optional[Tuple[str, IPv4Address]]:
     logger.debug(f"probing {host}")
     sensor = SensorActor(host)
     alive = await sensor.is_alive()
@@ -77,7 +77,7 @@ async def detect(hosts: Optional[str]) -> None:
         await save_sensors(sensors)
 
 
-async def save_sensors(sensors):
+async def save_sensors(sensors) -> None:
     fn_alive_sensors = "sensors-alive.csv"
     with open(fn_alive_sensors, "w") as f:
         f.write("uid,ip_address\n")

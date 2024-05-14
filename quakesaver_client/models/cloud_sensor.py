@@ -1,4 +1,5 @@
 """Module containing the sensor model."""
+
 from __future__ import annotations
 
 import logging

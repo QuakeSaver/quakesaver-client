@@ -1,4 +1,5 @@
 """This module provides schemas to interact with the InfluxDB."""
+
 from __future__ import annotations
 
 from datetime import datetime, timedelta

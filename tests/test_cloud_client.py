@@ -16,11 +16,20 @@ from quakesaver_client.models.measurement import (
 
 @pytest.fixture
 def client() -> QSCloudClient:
+    email = os.environ.get("TEST_CLIENT_EMAIL")
+    password = os.environ.get("TEST_CLIENT_PASSWORD")
+    base_domain = os.environ.get("TEST_CLIENT_DOMAIN")
+    if any([email is None, password is None, base_domain is None]):
+        raise Exception(
+            "TEST_CLIENT_EMAIL, TEST_CLIENT_PASSWORD, TEST_CLIENT_DOMAIN "
+            "environment variables required."
+        )
+
     """Get a set-up client."""
     client = QSCloudClient(
-        email=os.environ.get("TEST_CLIENT_EMAIL"),
-        password=os.environ.get("TEST_CLIENT_PASSWORD"),
-        base_domain=os.environ.get("TEST_CLIENT_DOMAIN"),
+        email,
+        password,
+        base_domain,
     )
     yield client
 

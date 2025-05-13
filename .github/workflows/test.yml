@@ -2,9 +2,7 @@ name: Test
 
 on:
   push:
-  schedule:
-    # Run every day at 6 am
-    - cron:  '0 6 * * *'
+  pull_request:
 
 permissions:
   contents: write

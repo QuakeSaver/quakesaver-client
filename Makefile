@@ -18,10 +18,10 @@ clean:
 	rm -rf .coverage
 
 install_dependencies:
-	poetry install
+	uv install
 
 install_pre_commit:
-	poetry run pre-commit install
+	uv run pre-commit install
 
 install: install_dependencies install_pre_commit
 

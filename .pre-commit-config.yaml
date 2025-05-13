@@ -35,4 +35,4 @@ repos:
         name: codespell
         args:
           - "--write-changes"
-        exclude: \.(jinja2|js)$
+        exclude: \.(jinja2|js)|uv.lock$

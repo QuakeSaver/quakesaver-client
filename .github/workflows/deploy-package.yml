@@ -26,10 +26,8 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: "3.11"
-      - name: Set up poetry
-        uses: Gr1N/setup-poetry@v8
-      - name: Add poetry plugin
-        run: poetry self add 'poetry-dynamic-versioning[plugin]'
+      - name: Install the latest version of uv
+        uses: astral-sh/setup-uv@v6
       - name: Install dependencies
         run: make install_dependencies
       - name: Build the package
@@ -37,4 +35,4 @@ jobs:
       - name: Publish package
         env:
           PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
-        run: poetry publish -u "__token__" -p "$PYPI_TOKEN"
+        run: uv publish -u "__token__" -p "$PYPI_TOKEN"

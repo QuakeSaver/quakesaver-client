@@ -18,7 +18,7 @@ clean:
 	rm -rf .coverage
 
 install_dependencies:
-	uv install
+	make build
 
 install_pre_commit:
 	uv run pre-commit install

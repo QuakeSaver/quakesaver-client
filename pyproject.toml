@@ -1,8 +1,8 @@
 [project]
 name = "quakesaver-client"
 version = "0.0.0"
-description = "Client library for interacting with the QuakeSaver sensor fleet."
-authors = [{ name = "QuakeSaver", email = "info@quakesaver.net" }]
+description = "Client library for interacting with the seismiq sensor fleet."
+authors = [{ name = "seismiq", email = "info@quakesaver.net" }]
 requires-python = ">=3.9, <3.12"
 readme = "README.md"
 license = "BSD-3-Clause"

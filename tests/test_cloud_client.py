@@ -64,12 +64,12 @@ def test_sensor_first_seen(sensor: CloudSensor) -> None:
 def test_data_products(sensor: CloudSensor, aggregator: str, query_method: str) -> None:
     """Test all dataproduct endpoints with all available aggregators."""
     end_time = datetime.utcnow()
-    start_time = end_time - timedelta(minutes=30)
+    start_time = end_time - timedelta(minutes=2)
 
     query = MeasurementQuery(
         start_time=start_time,
         end_time=end_time,
-        interval=timedelta(minutes=5),
+        interval=timedelta(minutes=1),
         aggregator=aggregator,
     )
     method = getattr(sensor, query_method)
@@ -80,7 +80,7 @@ def test_data_products(sensor: CloudSensor, aggregator: str, query_method: str) 
 def test_waveforms(sensor: CloudSensor) -> None:
     """Test downloading raw waveforms."""
     end_time = datetime.utcnow()
-    start_time = end_time - timedelta(minutes=30)
+    start_time = end_time - timedelta(minutes=1)
 
     result = sensor.get_waveform_data(
         start_time=start_time,

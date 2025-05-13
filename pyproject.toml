@@ -1,33 +1,45 @@
-[tool.poetry]
+[project]
 name = "quakesaver-client"
 version = "0.0.0"
 description = "Client library for interacting with the QuakeSaver sensor fleet."
-authors = ["QuakeSaver <info@quakesaver.net>"]
-license = "BSD-3-Clause"
+authors = [{ name = "QuakeSaver", email = "info@quakesaver.net" }]
+requires-python = ">=3.9, <3.12"
 readme = "README.md"
-packages = [{ include = "quakesaver_client" }]
-homepage = "https://quakesaver.net/"
-repository = "https://github.com/QuakeSaver/quakesaver-client"
-documentation = "https://quakesaver.github.io/quakesaver-client/"
+license = "BSD-3-Clause"
+dependencies = [
+    "pydantic~=1.10.5",
+    "requests~=2.28.2",
+    "aiohttp>=3.8.4,<4",
+]
 
-[tool.poetry.dependencies]
-python = ">=3.9, <3.12"
-pydantic = "~=1.10.5"
-requests = "~=2.28.2"
-aiohttp = "^3.8.4"
+[project.urls]
+Homepage = "https://quakesaver.net/"
+Repository = "https://github.com/QuakeSaver/quakesaver-client"
+Documentation = "https://quakesaver.github.io/quakesaver-client/"
 
-[tool.poetry.group.dev.dependencies]
-pytest = "^7.2.0"
-pytest-asyncio = "^0.20.3"
-pytest-cov = "^4.0.0"
-Sphinx = "^6.1.0"
-pre-commit = "^3.1.0"
-obspy = "^1.4.0"
-myst-parser = "^0.19.1"
-toml = "^0.10.2"
-sphinx-autodoc-typehints = "^1.22"
-furo = "^2022.12.7"
-datamodel-code-generator = "^0.17.1"
+[project.scripts]
+qs-client = "quakesaver_client.cli:cli"
+
+[dependency-groups]
+dev = [
+    "pytest>=7.2.0,<8",
+    "pytest-asyncio>=0.20.3,<0.21",
+    "pytest-cov>=4.0.0,<5",
+    "Sphinx>=6.1.0,<7",
+    "pre-commit>=3.1.0,<4",
+    "obspy>=1.4.0,<2",
+    "myst-parser>=0.19.1,<0.20",
+    "toml>=0.10.2,<0.11",
+    "sphinx-autodoc-typehints~=1.22",
+    "furo>=2022.12.7,<2023",
+    "datamodel-code-generator>=0.17.1,<0.18",
+]
+
+[tool.hatch.build.targets.sdist]
+include = ["quakesaver_client"]
+
+[tool.hatch.build.targets.wheel]
+include = ["quakesaver_client"]
 
 [tool.poetry-dynamic-versioning]
 enable = true
@@ -112,6 +124,3 @@ convention = "google"
 [build-system]
 requires = ["poetry-core>=1.0.0", "poetry-dynamic-versioning"]
 build-backend = "poetry_dynamic_versioning.backend"
-
-[tool.poetry.scripts]
-qs-client = 'quakesaver_client.cli:cli'

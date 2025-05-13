@@ -26,22 +26,22 @@ install_pre_commit:
 install: install_dependencies install_pre_commit
 
 build:
-	poetry build
+	uv build
 
 lint:
-	poetry run pre-commit run --all-files
+	uv run pre-commit run --all-files
 
 test:
-	poetry run py.test tests/* -vv --cov-report html --cov=$(PROJ_SLUG) -s
+	uv run py.test tests/* -vv --cov-report html --cov=$(PROJ_SLUG) -s
 
 docs: clean
-	poetry run sphinx-apidoc -o ./docs/source/modules $(PROJ_SLUG)
-	poetry dynamic-versioning && cd docs && poetry run make html
+	uv run sphinx-apidoc -o ./docs/source/modules $(PROJ_SLUG)
+	uv run cd docs && uv run make html
 
 generate_models:
 	# can be deleted no usage
 	rm pydantic_schemas/sensor_actions.schema.json || true
 	# can be deleted due to state includes config
 	rm pydantic_schemas/sensor_configs.schema.json || true
-	poetry run datamodel-codegen --input-file-type jsonschema --input pydantic_schemas/data_products.schema.json --output quakesaver_client/models/data_products.py
-	poetry run datamodel-codegen --input-file-type jsonschema --input pydantic_schemas/sensor_state.schema.json --output quakesaver_client/models/sensor_state.py
+	uv run datamodel-codegen --input-file-type jsonschema --input pydantic_schemas/data_products.schema.json --output quakesaver_client/models/data_products.py
+	uv run datamodel-codegen --input-file-type jsonschema --input pydantic_schemas/sensor_state.schema.json --output quakesaver_client/models/sensor_state.py

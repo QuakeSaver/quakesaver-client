@@ -12,10 +12,42 @@ Subpackages
 Submodules
 ----------
 
+quakesaver\_client.cli module
+-----------------------------
+
+.. automodule:: quakesaver_client.cli
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+quakesaver\_client.client\_websocket module
+-------------------------------------------
+
+.. automodule:: quakesaver_client.client_websocket
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 quakesaver\_client.errors module
 --------------------------------
 
 .. automodule:: quakesaver_client.errors
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+quakesaver\_client.fdsnws module
+--------------------------------
+
+.. automodule:: quakesaver_client.fdsnws
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+quakesaver\_client.sensor\_actor module
+---------------------------------------
+
+.. automodule:: quakesaver_client.sensor_actor
    :members:
    :undoc-members:
    :show-inheritance:

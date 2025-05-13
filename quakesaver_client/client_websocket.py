@@ -1,4 +1,5 @@
 """Manage sensor websocket connections."""
+
 from __future__ import annotations
 
 import asyncio

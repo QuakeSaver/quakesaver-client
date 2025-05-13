@@ -1,4 +1,5 @@
 """Package containing a client for the QuakeSaver application."""
+
 from __future__ import annotations
 
 import logging

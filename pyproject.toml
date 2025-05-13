@@ -63,6 +63,9 @@ select = [
     "W", # pycodestyle warnings
 ]
 ignore = [
+    "D100", # Missing docstring in public module
+    "D101", # Missing docstring in public class
+    "D103", # Missing docstring in public function
     "D203", # no-blank-line-before-class
     "D213", # multi-line-summary-second-line
     "N805", # First argument of a method should be named `self`
@@ -109,3 +112,6 @@ convention = "google"
 [build-system]
 requires = ["poetry-core>=1.0.0", "poetry-dynamic-versioning"]
 build-backend = "poetry_dynamic_versioning.backend"
+
+[tool.poetry.scripts]
+qs-client = 'quakesaver_client.cli:cli'
